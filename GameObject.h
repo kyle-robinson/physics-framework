@@ -61,6 +61,9 @@ public:
 
 	void SetParent(GameObject * parent) { _parent = parent; }
 
+	void moveForward();
+	void moveBackward();
+
 	void Update(float t);
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 

@@ -14,6 +14,20 @@ GameObject::~GameObject()
 {
 }
 
+void GameObject::moveForward()
+{
+	XMFLOAT3 position = this->GetPosition();
+	position.z -= 0.02f;
+	this->SetPosition(position);
+}
+
+void GameObject::moveBackward()
+{
+	XMFLOAT3 position = this->GetPosition();
+	position.z += 0.02f;
+	this->SetPosition(position);
+}
+
 void GameObject::Update(float t)
 {
 	// Calculate world matrix

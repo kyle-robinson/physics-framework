@@ -115,9 +115,6 @@ private:
 	bool InitVertexBuffer();
 	bool InitIndexBuffer();
 
-	void moveForward(int objectNumber);
-	void moveBackward(int objectNumber);
-
 public:
 	Application();
 	~Application();

@@ -6,8 +6,8 @@ template<typename T>
 class Vector3D
 {
 public:
-	Vector3D() : x( 0 ), y( 0 ) {}
-	Vector3D( T x, T y, T z ) : x( x ), y( y ) {}
+	Vector3D() : x( 0 ), y( 0 ), z( 0 ) {}
+	Vector3D( T x, T y, T z ) : x( x ), y( y ), z( z ) {}
 	Vector3D( const Vector3D& vec ) : x( vec.x ), y( vec.y ), z( vec.z ) {}
 
 	T magnitude() { return sqrt( x * x + y * y + z * z ); }

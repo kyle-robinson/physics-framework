@@ -655,20 +655,6 @@ void Application::Cleanup()
 	}
 }
 
-void Application::moveForward(int objectNumber)
-{
-	XMFLOAT3 position = _gameObjects[objectNumber]->GetPosition();
-	position.z -= 0.02f;
-	_gameObjects[objectNumber]->SetPosition(position);
-}
-
-void Application::moveBackward(int objectNumber)
-{
-	XMFLOAT3 position = _gameObjects[objectNumber-2]->GetPosition();
-	position.z += 0.02f;
-	_gameObjects[objectNumber-2]->SetPosition(position);
-}
-
 void Application::Update()
 {
     // Update our time
@@ -684,22 +670,17 @@ void Application::Update()
 
 	// Move gameobject
 	if (GetAsyncKeyState('1'))
-	{
-		moveForward(1);
-	}
+		_gameObjects[1]->moveForward();
+
 	if (GetAsyncKeyState('2'))
-	{
-		moveForward(2);
-	}
+		_gameObjects[2]->moveForward();
 
 	if (GetAsyncKeyState('3'))
-	{
-		moveBackward(3);
-	}
+		_gameObjects[1]->moveBackward();
+
 	if (GetAsyncKeyState('4'))
-	{
-		moveBackward(4);
-	}
+		_gameObjects[2]->moveBackward();
+
 	// Update camera
 	float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
 
