@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <windows.h>
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
@@ -10,32 +11,9 @@
 #include "Camera.h"
 #include "Structures.h"
 #include "OBJLoader.h"
-
-#include <vector>
-/*
-//#include <SpriteFont.h>
-#include "CommonStates.h"
-//#include "DDSTextureLoader.h"
-#include "Effects.h"
-#include "GeometricPrimitive.h"
-#include "Model.h"
-#include "PrimitiveBatch.h"
-#include "ScreenGrab.h"
-#include "SpriteBatch.h"
-#include "SpriteFont.h"
-#include "VertexTypes.h"
-*/
 #include "GameObject.h"
 
 using namespace DirectX;
-
-//struct SimpleVertex
-//{
-//    XMFLOAT3 PosL;
-//	XMFLOAT3 NormL;
-//	XMFLOAT2 Tex;
-//};
-
 
 struct SurfaceInfo
 {

@@ -376,6 +376,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
+    <ClCompile Include="StringConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DX11 Framework.fx">
@@ -390,6 +391,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="OBJLoader.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="StringConverter.h" />
     <ClInclude Include="Structures.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
   </ItemGroup>
