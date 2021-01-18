@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "ErrorLogger.h"
+#include "Vector3D.h"
+#include <sstream>
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -74,8 +76,16 @@ Application::Application()
 	CWcullMode= nullptr;
 	DSLessEqual = nullptr;
 	RSCullNone = nullptr;
-	 _WindowHeight = 0;
-	 _WindowWidth = 0;
+	_WindowHeight = 0;
+	_WindowWidth = 0;
+
+	wstringstream wss;
+	Vector3D<float> vec1 = { 1.5f, 2.3f, 3.1f };
+	Vector3D<float> vec2 = { 3.8f, 6.4f, 1.7f };
+	Vector3D<float> vec3 = vec1 + vec2;
+	for ( int i = 0; i < 3; i++ )
+		wss << vec3[i] << '\t';
+	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
 }
 
 Application::~Application()
@@ -87,26 +97,19 @@ bool Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 {
 	try
 	{
-		if ( !InitWindow( hInstance, nCmdShow ) )
-			return false;
-		//COM_ERROR_IF_FAILED( hr, "Failed to initialize window!" );
-
 		RECT rc;
 		GetClientRect(_hWnd, &rc);
 		_WindowWidth = rc.right - rc.left;
 		_WindowHeight = rc.bottom - rc.top;
 
-		if ( !InitDevice() )
-			return false;
-		//if ( FAILED( hr ) ) Cleanup();
-		//COM_ERROR_IF_FAILED( hr, "Failed to initialize device!" );
+		if ( !InitWindow( hInstance, nCmdShow ) ) return false;
+		if ( !InitDevice() ) return false;
 	}
 	catch ( COMException& exception )
 	{
 		ErrorLogger::Log( exception );
 		return false;
 	}
-
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\stone.dds", nullptr, &_pTextureRV);
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\floor.dds", nullptr, &_pGroundTextureRV);
