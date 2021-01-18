@@ -53,6 +53,12 @@
     <ClInclude Include="StringConverter.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="COMException.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorLogger.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -74,6 +80,9 @@
       <Filter>Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="StringConverter.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorLogger.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
   </ItemGroup>
