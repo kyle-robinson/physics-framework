@@ -22,10 +22,6 @@ void Camera::Update()
 	XMVECTOR AtVector = XMLoadFloat4(&at);
 	XMVECTOR UpVector = XMLoadFloat4(&up);
 
-	XMMATRIX cameraRotation = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
-	XMVECTOR camTarget = XMVector3TransformCoord(DEFAULT_FORWARD_VECTOR, cameraRotation);
-	camTarget += posVector;
-
 	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(EyeVector, AtVector, UpVector));
 
     // Initialize the projection matrix

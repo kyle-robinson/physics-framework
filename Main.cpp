@@ -7,7 +7,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	Application * theApp = new Application();
 
-	if (FAILED(theApp->Initialise(hInstance, nCmdShow)))
+	if (!(theApp->Initialise(hInstance, nCmdShow)))
 	{
 		return -1;
 	}

@@ -107,13 +107,13 @@ private:
 	ID3D11RasterizerState* CWcullMode;
 
 private:
-	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
-	HRESULT InitDevice();
+	bool InitWindow(HINSTANCE hInstance, int nCmdShow);
+	bool InitDevice();
 	void Cleanup();
 	HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
-	HRESULT InitShadersAndInputLayout();
-	HRESULT InitVertexBuffer();
-	HRESULT InitIndexBuffer();
+	bool InitShadersAndInputLayout();
+	bool InitVertexBuffer();
+	bool InitIndexBuffer();
 
 	void moveForward(int objectNumber);
 	void moveBackward(int objectNumber);
@@ -122,7 +122,7 @@ public:
 	Application();
 	~Application();
 
-	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
+	bool Initialise(HINSTANCE hInstance, int nCmdShow);
 
 	bool HandleKeyboard(MSG msg);
 
