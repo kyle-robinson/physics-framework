@@ -392,6 +392,7 @@
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="OBJLoader.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="StringConverter.h" />

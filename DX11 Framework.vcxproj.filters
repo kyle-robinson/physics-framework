@@ -30,6 +30,9 @@
     <Filter Include="Headers\Utility">
       <UniqueIdentifier>{803398c2-eaf4-4359-aca0-d2164b37e2d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Math">
+      <UniqueIdentifier>{f81e1943-ba46-4b85-8071-c7d120cd73db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -60,7 +63,10 @@
       <Filter>Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Vector3D.h">
-      <Filter>Headers\Utility</Filter>
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Headers\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

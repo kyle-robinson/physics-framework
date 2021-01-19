@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ErrorLogger.h"
 #include "Vector3D.h"
+#include "Matrix.h"
 #include <sstream>
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -79,12 +80,26 @@ Application::Application()
 	_WindowHeight = 0;
 	_WindowWidth = 0;
 
+	// Vector3D Test Implementation
 	wstringstream wss;
 	Vector3D<float> vec1 = { 1.5f, 2.3f, 3.1f };
 	Vector3D<float> vec2 = { 3.8f, 6.4f, 1.7f };
 	Vector3D<float> vec3 = vec1 + vec2;
 	for ( int i = 0; i < 3; i++ )
 		wss << vec3[i] << '\t';
+	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
+
+	// Matrix Test Implementation
+	wss.str( std::wstring() );
+	Matrix<int> mat1( 4, 4, 1 );
+	Matrix<int> mat2( 4, 4, 5 );
+	Matrix<int> mat3 = mat1 + mat2;
+	for ( int i = 0; i < mat3.get_rows(); i++ )
+	{
+		for ( int j = 0; j < mat3.get_cols(); j++ )
+			wss << mat3( i, j ) << '\t';
+		wss << '\n';
+	}
 	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
 }
 
@@ -162,8 +177,6 @@ bool Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	noSpecMaterial.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	noSpecMaterial.specularPower = 0.0f;
-
-
 	
 	GameObject * gameObject = new GameObject("Floor", planeGeometry, noSpecMaterial);
 	gameObject->SetPosition(0.0f, 0.0f, 0.0f);
