@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+#include "Matrix.h"
 #include <windows.h>
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
@@ -10,9 +12,9 @@ using namespace DirectX;
 class Camera
 {
 private:
-	XMFLOAT3 _eye; 
-	XMFLOAT3 _at;
-	XMFLOAT3 _up;
+	v3df _eye; 
+	v3df _at;
+	v3df _up;
 
 	FLOAT _windowWidth;
 	FLOAT _windowHeight;
@@ -23,8 +25,7 @@ private:
 	XMFLOAT4X4 _projection;
 
 public:
-	Camera(XMFLOAT3 position, XMFLOAT3 at, XMFLOAT3 up, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth);
-	~Camera();
+	Camera( v3df position, v3df at, v3df up, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth );
 
 	void Update();
 
@@ -33,14 +34,14 @@ public:
 
 	XMFLOAT4X4 GetViewProjection() const;
 
-	XMFLOAT3 GetPosition() const { return _eye; }
-	XMFLOAT3 GetLookAt() const { return _at; }
-	XMFLOAT3 GetUp() const { return _up; }
+	v3df GetPosition() const { return _eye; }
+	v3df GetLookAt() const { return _at; }
+	v3df GetUp() const { return _up; }
 
-	void SetPosition(XMFLOAT3 position) { _eye = position; }
-	void SetLookAt(XMFLOAT3 lookAt) { _at = lookAt; }
-	void SetUp(XMFLOAT3 up) { _up = up; }
+	void SetPosition( v3df position ) { _eye = position; }
+	void SetLookAt( v3df lookAt ) { _at = lookAt; }
+	void SetUp( v3df up ) { _up = up; }
 
-	void Reshape(FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth);
+	void Reshape( FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth );
 };
 

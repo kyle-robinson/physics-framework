@@ -1,34 +1,32 @@
 #include "Camera.h"
 
-Camera::Camera(XMFLOAT3 position, XMFLOAT3 at, XMFLOAT3 up, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth)
-	: _eye(position), _at(at), _up(up), _windowWidth(windowWidth), _windowHeight(windowHeight), _nearDepth(nearDepth), _farDepth(farDepth)
+Camera::Camera( v3df position, v3df at, v3df up, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth ) :
+	_eye( position ), _at( at ), _up( up ),
+	_windowWidth( windowWidth ), _windowHeight( windowHeight ),
+	_nearDepth( nearDepth ), _farDepth( farDepth )
 {
 	Update();
-}
-
-Camera::~Camera()
-{
 }
 
 void Camera::Update()
 {
     // Initialize the view matrix
 
-	XMFLOAT4 eye = XMFLOAT4(_eye.x, _eye.y, _eye.z, 1.0f);
-	XMFLOAT4 at = XMFLOAT4(_at.x, _at.y, _at.z, 1.0f);
-	XMFLOAT4 up = XMFLOAT4(_up.x, _up.y, _up.z, 0.0f);
+	v4df eye( _eye[0], _eye[1], _eye[2], 1.0f );
+	v4df at( _at[0], _at[1], _at[2], 1.0f );
+	v4df up( _up[0], _up[1], _up[2], 0.0f );
 
-	XMVECTOR EyeVector = XMLoadFloat4(&eye);
-	XMVECTOR AtVector = XMLoadFloat4(&at);
-	XMVECTOR UpVector = XMLoadFloat4(&up);
+	XMVECTOR EyeVector = XMLoadFloat4( &reinterpret_cast<XMFLOAT4&>( eye ) );
+	XMVECTOR AtVector = XMLoadFloat4( &reinterpret_cast<XMFLOAT4&>( at ) );
+	XMVECTOR UpVector = XMLoadFloat4( &reinterpret_cast<XMFLOAT4&>( up ) );
 
-	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(EyeVector, AtVector, UpVector));
+	XMStoreFloat4x4( &_view, XMMatrixLookAtLH( EyeVector, AtVector, UpVector ) );
 
     // Initialize the projection matrix
-	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(0.25f * XM_PI, _windowWidth / _windowHeight, _nearDepth, _farDepth));
+	XMStoreFloat4x4( &_projection, XMMatrixPerspectiveFovLH( 0.25f * XM_PI, _windowWidth / _windowHeight, _nearDepth, _farDepth ) );
 }
 
-void Camera::Reshape(FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth)
+void Camera::Reshape( FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth )
 {
 	_windowWidth = windowWidth;
 	_windowHeight = windowHeight;
@@ -38,12 +36,11 @@ void Camera::Reshape(FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLO
 
 XMFLOAT4X4 Camera::GetViewProjection() const 
 { 
-	XMMATRIX view = XMLoadFloat4x4(&_view);
-	XMMATRIX projection = XMLoadFloat4x4(&_projection);
-
+	XMMATRIX view = XMLoadFloat4x4( &_view );
+	XMMATRIX projection = XMLoadFloat4x4( &_projection );
 	XMFLOAT4X4 viewProj;
 
-	XMStoreFloat4x4(&viewProj, view * projection);
+	XMStoreFloat4x4( &viewProj, view * projection );
 
 	return viewProj;
 }

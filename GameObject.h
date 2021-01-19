@@ -4,6 +4,9 @@
 #include <d3d11_1.h>
 #include <string>
 
+#include "Vector.h"
+#include "Matrix.h"
+
 using namespace DirectX;
 
 struct Geometry
@@ -18,9 +21,9 @@ struct Geometry
 
 struct Material
 {
-	XMFLOAT4 diffuse;
-	XMFLOAT4 ambient;
-	XMFLOAT4 specular;
+	v4df diffuse;
+	v4df ambient;
+	v4df specular;
 	float specularPower;
 };
 
@@ -30,22 +33,22 @@ public:
 	GameObject( std::string type, Geometry geometry, Material material );
 
 	// Setters and Getters for position/rotation/scale
-	void SetPosition( XMFLOAT3 position ) { _position = position; }
-	void SetPosition( float x, float y, float z ) { _position.x = x; _position.y = y; _position.z = z; }
-	XMFLOAT3 GetPosition() const { return _position; }
+	void SetPosition( v3df position ) { _position = position; }
+	void SetPosition( float x, float y, float z ) { _position[0] = x; _position[1] = y; _position[2] = z; }
+	v3df GetPosition() const { return _position; }
 
-	void SetScale( XMFLOAT3 scale ) { _scale = scale; }
-	void SetScale( float x, float y, float z ) { _scale.x = x; _scale.y = y; _scale.z = z; }
-	XMFLOAT3 GetScale() const { return _scale; }
+	void SetScale( v3df scale ) { _scale = scale; }
+	void SetScale( float x, float y, float z ) { _scale[0] = x; _scale[1] = y; _scale[2] = z; }
+	v3df GetScale() const { return _scale; }
 
-	void SetRotation( XMFLOAT3 rotation ) { _rotation = rotation; }
-	void SetRotation( float x, float y, float z ) { _rotation.x = x; _rotation.y = y; _rotation.z = z; }
-	XMFLOAT3 GetRotation() const { return _rotation; }
+	void SetRotation( v3df rotation ) { _rotation = rotation; }
+	void SetRotation( float x, float y, float z ) { _rotation[0] = x; _rotation[1] = y; _rotation[2] = z; }
+	v3df GetRotation() const { return _rotation; }
 
 	std::string GetType() const { return _type; }
 	Geometry GetGeometryData() const { return _geometry; }
 	Material GetMaterial() const { return _material; }
-	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }
+	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }
 
 	void SetTextureRV( ID3D11ShaderResourceView * textureRV ) { _textureRV = textureRV; }
 	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
@@ -59,12 +62,12 @@ public:
 	void Draw( ID3D11DeviceContext* pImmediateContext );
 
 private:
-	XMFLOAT3 _position;
-	XMFLOAT3 _rotation;
-	XMFLOAT3 _scale;
+	v3df _position;
+	v3df _rotation;
+	v3df _scale;
 
-	std::string _type;
 	XMFLOAT4X4 _world;
+	std::string _type;
 	GameObject* _parent;
 
 	Geometry _geometry;

@@ -10,11 +10,11 @@ class Matrix
 public:
 	Matrix( unsigned int _rows, unsigned int _cols, const T& _initial )
 	{
-		rows = _rows;
-		cols = _cols;
 		mat.resize( _rows );
 		for ( unsigned int i = 0; i < mat.size(); i++ )
 			mat[i].resize( _cols, _initial );
+		rows = _rows;
+		cols = _cols;
 	}
 	Matrix( const Matrix<T>& rhs ) { mat = rhs.mat; rows = rhs.get_rows(); cols = rhs.get_cols(); }
 	virtual ~Matrix() {}
@@ -177,5 +177,8 @@ private:
 	unsigned int cols;
 	std::vector<std::vector<T>> mat;
 };
+
+typedef Matrix<float> matf;
+typedef Matrix<int> mati;
 
 #endif

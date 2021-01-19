@@ -1,37 +1,31 @@
 #include "Application.h"
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+    UNREFERENCED_PARAMETER( hPrevInstance );
+    UNREFERENCED_PARAMETER( lpCmdLine );
 
 	Application * theApp = new Application();
-
-	if (!(theApp->Initialise(hInstance, nCmdShow)))
-	{
+	if ( !( theApp->Initialise( hInstance, nCmdShow ) ) )
 		return -1;
-	}
 
     // Main message loop
-    MSG msg = {0};
-
-    while (WM_QUIT != msg.message)
+    MSG msg = { 0 };
+    while ( WM_QUIT != msg.message )
     {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
         {
 			bool handled = false;
 
-			if (msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST)
-			{
-				handled = theApp->HandleKeyboard(msg);
-			}
-			else if (WM_QUIT == msg.message)
+			if ( msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST )
+				handled = theApp->HandleKeyboard( msg );
+			else if ( WM_QUIT == msg.message )
 				break;
 
-			if (!handled)
+			if ( !handled )
 			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
+				TranslateMessage( &msg );
+				DispatchMessage( &msg );
 			}
         }
         else

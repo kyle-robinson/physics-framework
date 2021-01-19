@@ -62,10 +62,10 @@
     <ClInclude Include="ErrorLogger.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3D.h">
+    <ClInclude Include="Matrix.h">
       <Filter>Headers\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
+    <ClInclude Include="Vector.h">
       <Filter>Headers\Math</Filter>
     </ClInclude>
   </ItemGroup>

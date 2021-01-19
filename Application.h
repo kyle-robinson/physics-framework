@@ -20,19 +20,19 @@ using namespace DirectX;
 
 struct SurfaceInfo
 {
-	XMFLOAT4 AmbientMtrl;
-	XMFLOAT4 DiffuseMtrl;
-	XMFLOAT4 SpecularMtrl;
+	v4df AmbientMtrl;
+	v4df DiffuseMtrl;
+	v4df SpecularMtrl;
 };
 
 struct Light
 {
-	XMFLOAT4 AmbientLight;
-	XMFLOAT4 DiffuseLight;
-	XMFLOAT4 SpecularLight;
+	v4df AmbientLight;
+	v4df DiffuseLight;
+	v4df SpecularLight;
 
 	float SpecularPower;
-	XMFLOAT3 LightVecW;
+	v3df LightVecW;
 };
 
 struct ConstantBuffer
@@ -45,7 +45,7 @@ struct ConstantBuffer
 
 	Light light;
 
-	XMFLOAT3 EyePosW;
+	v3df EyePosW;
 	float HasTexture;
 };
 
@@ -83,7 +83,7 @@ private:
 
 	Light basicLight;
 	MeshData objMeshData;
-	std::unique_ptr<Camera> _camera;
+	std::shared_ptr<Camera> _camera;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;
@@ -106,7 +106,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> CWcullMode;
 
 private:
-	bool InitWindow(HINSTANCE hInstance, int nCmdShow);
+	bool InitWindow( HINSTANCE hInstance, int nCmdShow );
 	bool InitDevice();
 	bool CompileShaderFromFile( WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut );
 	bool InitShadersAndInputLayout();
@@ -116,8 +116,8 @@ private:
 public:
 	Application();
 
-	bool Initialise(HINSTANCE hInstance, int nCmdShow);
-	bool HandleKeyboard(MSG msg);
+	bool Initialise( HINSTANCE hInstance, int nCmdShow );
+	bool HandleKeyboard( MSG msg );
 
 	void Update();
 	void Draw();

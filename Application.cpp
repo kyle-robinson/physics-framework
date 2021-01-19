@@ -1,7 +1,5 @@
 #include "Application.h"
 #include "ErrorLogger.h"
-#include "Vector3D.h"
-#include "Matrix.h"
 #include <sstream>
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
@@ -9,19 +7,19 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 	PAINTSTRUCT ps;
 	HDC hdc;
 
-	switch (message)
+	switch ( message )
 	{
 	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		EndPaint(hWnd, &ps);
+		hdc = BeginPaint( hWnd, &ps );
+		EndPaint( hWnd, &ps );
 		break;
 
 	case WM_DESTROY:
-		PostQuitMessage(0);
+		PostQuitMessage( 0 );
 		break;
 
 	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
+		return DefWindowProc( hWnd, message, wParam, lParam );
 	}
 
 	return 0;
@@ -29,17 +27,17 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 
 bool Application::HandleKeyboard( MSG msg )
 {
-	XMFLOAT3 cameraPosition = _camera->GetPosition();
+	v3df cameraPosition = _camera->GetPosition();
 
-	switch (msg.wParam)
+	switch ( msg.wParam )
 	{
 	case VK_UP:
-		_cameraOrbitRadius = max(_cameraOrbitRadiusMin, _cameraOrbitRadius - (_cameraSpeed * 0.2f));
+		_cameraOrbitRadius = max( _cameraOrbitRadiusMin, _cameraOrbitRadius - ( _cameraSpeed * 0.2f ) );
 		return true;
 		break;
 
 	case VK_DOWN:
-		_cameraOrbitRadius = min(_cameraOrbitRadiusMax, _cameraOrbitRadius + (_cameraSpeed * 0.2f));
+		_cameraOrbitRadius = min( _cameraOrbitRadiusMax, _cameraOrbitRadius + ( _cameraSpeed * 0.2f ) );
 		return true;
 		break;
 
@@ -60,63 +58,55 @@ bool Application::HandleKeyboard( MSG msg )
 Application::Application()
 {
 	// Vector3D Test Implementation
-	/*std::wstringstream wss;
-	Vector3D<float> vec1 = { 1.5f, 2.3f, 3.1f };
-	Vector3D<float> vec2 = { 3.8f, 6.4f, 1.7f };
-	Vector3D<float> vec3 = vec1 + vec2;
-	for ( int i = 0; i < 3; i++ )
+	std::wstringstream wss;
+	v4df vec1( 1.5f, 2.3f, 3.1f, 4.6f );
+	v4df vec2( 3.8f, 6.4f, 1.7f, 2.5f );
+	v4df vec3 = vec1 + vec2;
+	for ( int i = 0; i < 4; i++ )
 		wss << vec3[i] << '\t';
 	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
 
 	// Matrix Test Implementation
 	wss.str( std::wstring() );
-	Matrix<int> mat1( 4, 4, 1 );
-	Matrix<int> mat2( 4, 4, 5 );
-	Matrix<int> mat3 = mat1 + mat2;
+	matf mat1( 4, 4, 1.0f );
+	matf mat2( 4, 4, 5.0f );
+	matf mat3 = mat1.transpose() + mat2.transpose();
 	for ( int i = 0; i < mat3.get_rows(); i++ )
 	{
 		for ( int j = 0; j < mat3.get_cols(); j++ )
 			wss << mat3( i, j ) << '\t';
 		wss << '\n';
 	}
-	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );*/
+	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
 }
 
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 {
-	try
-	{
-		RECT rc;
-		GetClientRect(_hWnd, &rc);
-		_WindowWidth = rc.right - rc.left;
-		_WindowHeight = rc.bottom - rc.top;
+	RECT rc;
+	GetClientRect(_hWnd, &rc);
+	_WindowWidth = rc.right - rc.left;
+	_WindowHeight = rc.bottom - rc.top;
 
-		if ( !InitWindow( hInstance, nCmdShow ) ) return false;
-		if ( !InitDevice() ) return false;
-	}
-	catch ( COMException& exception )
-	{
-		ErrorLogger::Log( exception );
-		return false;
-	}
+	if ( !InitWindow( hInstance, nCmdShow ) ) return false;
+	if ( !InitDevice() ) return false;
 
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\stone.dds", nullptr, _pTextureRV.GetAddressOf() );
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\floor.dds", nullptr, _pGroundTextureRV.GetAddressOf() );
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Hercules_COLOR.dds", nullptr, _pHerculesTextureRV.GetAddressOf() );
 	
     // Setup Camera
-	XMFLOAT3 eye = XMFLOAT3( 0.0f, 2.0f, -1.0f );
-	XMFLOAT3 at = XMFLOAT3( 0.0f, 2.0f, 0.0f );
-	XMFLOAT3 up = XMFLOAT3( 0.0f, 1.0f, 0.0f );
+	v3df eye( 0.0f, 2.0f, -1.0f );
+	v3df at( 0.0f, 2.0f, 0.0f );
+	v3df up( 0.0f, 1.0f, 0.0f );
 
-	_camera = std::make_unique<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
+	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
 
 	// Setup the scene's light
-	basicLight.AmbientLight = XMFLOAT4( 0.5f, 0.5f, 0.5f, 1.0f );
-	basicLight.DiffuseLight = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
-	basicLight.SpecularLight = XMFLOAT4( 0.8f, 0.8f, 0.8f, 1.0f );
+	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
+	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
+	basicLight.SpecularLight = { 0.8f, 0.8f, 0.8f, 1.0f };
 	basicLight.SpecularPower = 20.0f;
-	basicLight.LightVecW = XMFLOAT3( 0.0f, 1.0f, -1.0f );
+	basicLight.LightVecW = { 0.0f, 1.0f, -1.0f };
 
 	Geometry herculesGeometry;
 	objMeshData = OBJLoader::Load( "donut.obj", _pd3dDevice.Get() );
@@ -141,15 +131,15 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	Material shinyMaterial;
-	shinyMaterial.ambient = XMFLOAT4( 0.3f, 0.3f, 0.3f, 1.0f );
-	shinyMaterial.diffuse = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
-	shinyMaterial.specular = XMFLOAT4( 0.5f, 0.5f, 0.5f, 1.0f );
+	shinyMaterial.ambient = { 0.3f, 0.3f, 0.3f, 1.0f };
+	shinyMaterial.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+	shinyMaterial.specular = { 0.5f, 0.5f, 0.5f, 1.0f };
 	shinyMaterial.specularPower = 10.0f;
 
 	Material noSpecMaterial;
-	noSpecMaterial.ambient = XMFLOAT4( 0.1f, 0.1f, 0.1f, 1.0f );
-	noSpecMaterial.diffuse = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
-	noSpecMaterial.specular = XMFLOAT4( 0.0f, 0.0f, 0.0f, 0.0f );
+	noSpecMaterial.ambient = { 0.1f, 0.1f, 0.1f, 1.0f };
+	noSpecMaterial.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+	noSpecMaterial.specular = { 0.0f, 0.0f, 0.0f, 0.0f };
 	noSpecMaterial.specularPower = 0.0f;
 	
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor", planeGeometry, noSpecMaterial );
@@ -524,11 +514,11 @@ bool Application::InitDevice()
 
 		// Create the constant buffer
 		D3D11_BUFFER_DESC bd = { 0 };
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof( ConstantBuffer );
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		bd.CPUAccessFlags = 0;
-		hr = _pd3dDevice->CreateBuffer( &bd, nullptr, &_pConstantBuffer );
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.ByteWidth = static_cast<UINT>( sizeof( ConstantBuffer ) + ( 16 - ( sizeof( ConstantBuffer ) % 16 ) ) );
+		hr = _pd3dDevice->CreateBuffer( &bd, nullptr, _pConstantBuffer.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create constant buffer!" );
 
 		D3D11_TEXTURE2D_DESC depthStencilDesc = { 0 };
@@ -596,7 +586,7 @@ void Application::Update()
 
     DWORD dwTimeCur = GetTickCount64();
 
-    if (dwTimeStart == 0)
+    if ( dwTimeStart == 0 )
         dwTimeStart = dwTimeCur;
 
 	timeSinceStart = ( dwTimeCur - dwTimeStart ) / 1000.0f;
@@ -620,9 +610,9 @@ void Application::Update()
 	float x = _cameraOrbitRadius * cos( angleAroundZ );
 	float z = _cameraOrbitRadius * sin( angleAroundZ );
 
-	XMFLOAT3 cameraPos = _camera->GetPosition();
-	cameraPos.x = x;
-	cameraPos.z = z;
+	v3df cameraPos = _camera->GetPosition();
+	cameraPos[0] = x;
+	cameraPos[2] = z;
 
 	_camera->SetPosition(cameraPos);
 	_camera->Update();
@@ -649,16 +639,10 @@ void Application::Draw()
 	_pImmediateContext->PSSetConstantBuffers( 0, 1, _pConstantBuffer.GetAddressOf() );
 	_pImmediateContext->PSSetSamplers( 0, 1, _pSamplerLinear.GetAddressOf() );
 
-    ConstantBuffer cb;
+	ConstantBuffer cb;
 
-	XMFLOAT4X4 viewAsFloats = _camera->GetView();
-	XMFLOAT4X4 projectionAsFloats = _camera->GetProjection();
-
-	XMMATRIX view = XMLoadFloat4x4( &viewAsFloats );
-	XMMATRIX projection = XMLoadFloat4x4( &projectionAsFloats );
-
-	cb.View = XMMatrixTranspose( view );
-	cb.Projection = XMMatrixTranspose( projection );
+	cb.View = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetView() ) );
+	cb.Projection = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetProjection() ) );
 	
 	cb.light = basicLight;
 	cb.EyePosW = _camera->GetPosition();
