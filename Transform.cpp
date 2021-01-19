@@ -1,5 +1,6 @@
 #include "PCH.h"
 #include "Transform.h"
+#include "GameObject.h"
 
 void Transform::MoveForward( GameObject& object )
 {

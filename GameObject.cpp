@@ -4,19 +4,19 @@
 GameObject::GameObject( std::string type, Geometry geometry, Material material ) : _geometry( geometry ), _type( type ), _material( material )
 {
 	_parent = nullptr;
-	_position = { };
-	_rotation = { };
-	_scale = { 1.0f, 1.0f, 1.0f };
-
 	_textureRV = nullptr;
+
+	SetPosition( 0.0f, 0.0f, 0.0f );
+	SetRotation( 0.0f, 0.0f, 0.0f );
+	SetScale( 1.0f, 1.0f, 1.0f );
 }
 
 void GameObject::Update( float t )
 {
 	// Calculate world matrix
-	XMMATRIX scale = XMMatrixScaling( _scale[0], _scale[1], _scale[2] );
-	XMMATRIX rotation = XMMatrixRotationX( _rotation[0] ) * XMMatrixRotationY( _rotation[1] ) * XMMatrixRotationZ( _rotation[2] );
-	XMMATRIX translation = XMMatrixTranslation( _position[0], _position[1], _position[2] );
+	XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );
+	XMMATRIX rotation = XMMatrixRotationX( GetRotation()[0] ) * XMMatrixRotationY( GetRotation()[1] ) * XMMatrixRotationZ( GetRotation()[2] );
+	XMMATRIX translation = XMMatrixTranslation( GetPosition()[0], GetPosition()[1], GetPosition()[2] );
 
 	XMStoreFloat4x4( &_world, scale * rotation * translation );
 

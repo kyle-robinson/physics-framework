@@ -613,8 +613,7 @@ void Application::Update()
 	float z = _cameraOrbitRadius * sin( angleAroundZ );
 
 	v3df cameraPos = _camera->GetPosition();
-	cameraPos[0] = x;
-	cameraPos[2] = z;
+	cameraPos = { x, cameraPos[1], z };
 
 	_camera->SetPosition( cameraPos );
 	_camera->Update();
