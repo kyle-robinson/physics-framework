@@ -1,3 +1,4 @@
+#include "PCH.h"
 #include "Camera.h"
 
 Camera::Camera( v3df position, v3df at, v3df up, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth ) :

@@ -1,11 +1,6 @@
 #pragma once
-
-#include "Vector.h"
-#include "Matrix.h"
-#include <windows.h>
-#include <d3d11_1.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
+#ifndef CAMERA_H
+#define CAMERA_H
 
 using namespace DirectX;
 
@@ -45,3 +40,4 @@ public:
 	void Reshape( FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth );
 };
 
+#endif

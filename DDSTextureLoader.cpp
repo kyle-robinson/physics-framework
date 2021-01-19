@@ -18,9 +18,8 @@
 // http://go.microsoft.com/fwlink/?LinkId=248929
 //--------------------------------------------------------------------------------------
 
+#include "PCH.h"
 #include <assert.h>
-#include <algorithm>
-#include <memory>
 
 #include "DDSTextureLoader.h"
 

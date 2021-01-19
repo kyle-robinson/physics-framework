@@ -1,4 +1,4 @@
-#include "ErrorLogger.h"
+#include "PCH.h"
 #include <comdef.h>
 
 void ErrorLogger::Log(const std::string& message) noexcept

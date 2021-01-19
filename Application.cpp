@@ -1,6 +1,5 @@
+#include "PCH.h"
 #include "Application.h"
-#include "ErrorLogger.h"
-#include <sstream>
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {

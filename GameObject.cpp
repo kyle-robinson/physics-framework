@@ -1,3 +1,4 @@
+#include "PCH.h"
 #include "GameObject.h"
 
 GameObject::GameObject( std::string type, Geometry geometry, Material material ) : _geometry( geometry ), _type( type ), _material( material )

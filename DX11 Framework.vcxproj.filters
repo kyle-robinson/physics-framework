@@ -30,25 +30,25 @@
     <Filter Include="Headers\Utility">
       <UniqueIdentifier>{803398c2-eaf4-4359-aca0-d2164b37e2d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Model">
+      <UniqueIdentifier>{34e2995e-f451-44c9-abc5-81fcdf205a48}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Headers\Math">
       <UniqueIdentifier>{f81e1943-ba46-4b85-8071-c7d120cd73db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Model">
+      <UniqueIdentifier>{61ca7639-b814-40e3-9686-fb12c0b48b1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="OBJLoader.h">
-      <Filter>Headers\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Headers\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="DDSTextureLoader.h">
-      <Filter>Headers\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Structures.h">
       <Filter>Headers\Utility</Filter>
@@ -68,6 +68,18 @@
     <ClInclude Include="Vector.h">
       <Filter>Headers\Math</Filter>
     </ClInclude>
+    <ClInclude Include="OBJLoader.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="PCH.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -82,16 +94,22 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="OBJLoader.cpp">
-      <Filter>Source\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="DDSTextureLoader.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="StringConverter.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="ErrorLogger.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJLoader.cpp">
+      <Filter>Source\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp">
+      <Filter>Source\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="PCH.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
   </ItemGroup>

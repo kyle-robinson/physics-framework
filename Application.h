@@ -1,18 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-#include <windows.h>
-#include <d3d11_1.h>
-#include <wrl/client.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
-#include <directxcolors.h>
-
 #include "Camera.h"
 #include "resource.h"
 #include "OBJLoader.h"
-#include "Structures.h"
 #include "GameObject.h"
 #include "DDSTextureLoader.h"
 

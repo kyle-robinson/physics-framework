@@ -1,12 +1,5 @@
 #pragma once
 
-#include <directxmath.h>
-#include <d3d11_1.h>
-#include <string>
-
-#include "Vector.h"
-#include "Matrix.h"
-
 using namespace DirectX;
 
 struct Geometry
