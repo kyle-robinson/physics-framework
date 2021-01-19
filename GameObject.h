@@ -48,9 +48,6 @@ public:
 	bool HasTexture() const { return _textureRV ? true : false; }
 	void SetParent( GameObject* parent ) { _parent = parent; }
 
-	void moveForward();
-	void moveBackward();
-
 	void Update(float t);
 	void Draw( ID3D11DeviceContext* pImmediateContext );
 

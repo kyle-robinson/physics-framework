@@ -11,20 +11,6 @@ GameObject::GameObject( std::string type, Geometry geometry, Material material )
 	_textureRV = nullptr;
 }
 
-void GameObject::moveForward()
-{
-	v3df position = this->GetPosition();
-	position[2] -= 0.02f;
-	this->SetPosition( position );
-}
-
-void GameObject::moveBackward()
-{
-	v3df position = this->GetPosition();
-	position[2] += 0.02f;
-	this->SetPosition( position );
-}
-
 void GameObject::Update( float t )
 {
 	// Calculate world matrix

@@ -1,5 +1,6 @@
 #include "PCH.h"
 #include "Application.h"
+#include "Transform.h"
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -594,16 +595,16 @@ void Application::Update()
 
 	// Move gameobject
 	if ( GetAsyncKeyState( '1' ) )
-		_gameObjects[1]->moveForward();
+		Transform::MoveForward( *_gameObjects[1] );
 
 	if ( GetAsyncKeyState( '2' ) )
-		_gameObjects[2]->moveForward();
+		Transform::MoveForward( *_gameObjects[2] );
 
 	if ( GetAsyncKeyState( '3' ) )
-		_gameObjects[1]->moveBackward();
+		Transform::MoveBackward( *_gameObjects[1] );
 
 	if ( GetAsyncKeyState( '4' ) )
-		_gameObjects[2]->moveBackward();
+		Transform::MoveBackward( *_gameObjects[2] );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
