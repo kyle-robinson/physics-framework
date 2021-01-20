@@ -2,14 +2,9 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-class GameObject;
-
 class Transform
 {
 public:
-	static void MoveForward( GameObject& object );
-	static void MoveBackward( GameObject& object );
-
 	void SetPosition( v3df position ) { _position = position; }
 	void SetPosition( float x, float y, float z ) { _position = { x, y, z }; }
 	v3df GetPosition() const { return _position; }

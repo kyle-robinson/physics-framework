@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Transform.h"
+#include "ParticleModel.h"
 
 using namespace DirectX;
 
@@ -22,23 +23,22 @@ struct Material
 	float specularPower;
 };
 
-class GameObject : public Transform
+class GameObject : public Transform, public ParticleModel
 {
 public:
 	GameObject( std::string type, Geometry geometry, Material material );
 
-	// Setters and Getters for position/rotation/scale
 	std::string GetType() const { return _type; }
 	Geometry GetGeometryData() const { return _geometry; }
 	Material GetMaterial() const { return _material; }
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }
 
-	void SetTextureRV( ID3D11ShaderResourceView * textureRV ) { _textureRV = textureRV; }
+	void SetTextureRV( ID3D11ShaderResourceView* textureRV ) { _textureRV = textureRV; }
 	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
 	bool HasTexture() const { return _textureRV ? true : false; }
 	void SetParent( GameObject* parent ) { _parent = parent; }
 
-	void Update(float t);
+	void Update( float t );
 	void Draw( ID3D11DeviceContext* pImmediateContext );
 
 private:

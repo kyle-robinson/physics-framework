@@ -50,6 +50,16 @@ bool Application::HandleKeyboard( MSG msg )
 		_cameraOrbitAngleXZ += _cameraSpeed;
 		return true;
 		break;
+
+	case '1': objectToUse = 1; return true; break;
+
+	case '2': objectToUse = 2; return true; break;
+
+	case '3': objectToUse = 3; return true; break;
+
+	case '4': objectToUse = 4; return true; break;
+
+	case '5': objectToUse = 5; return true; break;
 	}
 
 	return false;
@@ -64,7 +74,7 @@ Application::Application()
 	v4df vec3 = vec1 + vec2;
 	for ( int i = 0; i < 4; i++ )
 		wss << vec3[i] << '\t';
-	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
+	MessageBox( nullptr, wss.str().c_str(), L"Vector Addition", MB_OK );
 
 	// Matrix Test Implementation
 	wss.str( std::wstring() );
@@ -77,7 +87,7 @@ Application::Application()
 			wss << mat3( i, j ) << '\t';
 		wss << '\n';
 	}
-	MessageBox( nullptr, wss.str().c_str(), L"Message Box", MB_OK );
+	MessageBox( nullptr, wss.str().c_str(), L"Matrix Addition and Transposition", MB_OK );
 }
 
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
@@ -558,7 +568,6 @@ bool Application::InitDevice()
 		hr = _pd3dDevice->CreateDepthStencilState( &dssDesc, &DSLessEqual );
 		COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil state!" );
 
-		cmdesc = {};
 		cmdesc.FillMode = D3D11_FILL_SOLID;
 		cmdesc.CullMode = D3D11_CULL_BACK;
 		cmdesc.FrontCounterClockwise = true;
@@ -583,38 +592,24 @@ void Application::Update()
     // Update our time
     static float deltaTime = 0.0f;
     static DWORD dwTimeStart = 0;
-
     DWORD dwTimeCur = GetTickCount64();
-
-    if ( dwTimeStart == 0 )
-        dwTimeStart = dwTimeCur;
-
+    if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
 	deltaTime += ( dwTimeCur - dwTimeStart ) / 1000.0f;
-	if ( deltaTime < FPS_60 )
-		return;
+	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobject
-	if ( GetAsyncKeyState( '1' ) )
-		Transform::MoveForward( *_gameObjects[1] );
-
-	if ( GetAsyncKeyState( '2' ) )
-		Transform::MoveForward( *_gameObjects[2] );
-
-	if ( GetAsyncKeyState( '3' ) )
-		Transform::MoveBackward( *_gameObjects[1] );
-
-	if ( GetAsyncKeyState( '4' ) )
-		Transform::MoveBackward( *_gameObjects[2] );
+	if ( GetAsyncKeyState( 'W' ) ) ParticleModel::MoveForward( *_gameObjects[objectToUse] );
+	if ( GetAsyncKeyState( 'A' ) ) ParticleModel::MoveLeft( *_gameObjects[objectToUse] );
+	if ( GetAsyncKeyState( 'S' ) ) ParticleModel::MoveBackward( *_gameObjects[objectToUse] );
+	if ( GetAsyncKeyState( 'D' ) ) ParticleModel::MoveRight( *_gameObjects[objectToUse] );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
-
 	float x = _cameraOrbitRadius * cos( angleAroundZ );
 	float z = _cameraOrbitRadius * sin( angleAroundZ );
 
 	v3df cameraPos = _camera->GetPosition();
 	cameraPos = { x, cameraPos[1], z };
-
 	_camera->SetPosition( cameraPos );
 	_camera->Update();
 

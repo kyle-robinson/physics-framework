@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "DDSTextureLoader.h"
 
-#define NUMBER_OF_CUBES 1
+#define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f
 
 using namespace DirectX;
@@ -44,7 +44,7 @@ struct ConstantBuffer
 
 class Application
 {
-	public:
+public:
 	Application();
 	bool Initialise( HINSTANCE hInstance, int nCmdShow );
 	bool HandleKeyboard( MSG msg );
@@ -101,6 +101,7 @@ private:
 
 	// objects
 	Light basicLight;
+	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;

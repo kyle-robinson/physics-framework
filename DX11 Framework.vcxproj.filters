@@ -80,6 +80,7 @@
     <ClInclude Include="PCH.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -106,12 +107,10 @@
     <ClCompile Include="DDSTextureLoader.cpp">
       <Filter>Source\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
     <ClCompile Include="PCH.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
