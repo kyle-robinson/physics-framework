@@ -1,4 +1,4 @@
-#include "../PCH.h"
+#include "stdafx.h"
 #include <comdef.h>
 
 void ErrorLogger::Log( const std::string& message ) noexcept

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PCH_H
-#define PCH_H
+#ifndef STDAFX_H
+#define STDAFX_H
 
 #include <memory>
 #include <algorithm>
@@ -22,9 +22,9 @@
 #include <directxcolors.h>
 
 // Classes
-#include "Math/Matrix.h"
-#include "Math/Vector.h"
-#include "Utility/Structures.h"
-#include "Utility/ErrorLogger.h"
+#include "Matrix.h"
+#include "Vector.h"
+#include "Structures.h"
+#include "ErrorLogger.h"
 
 #endif

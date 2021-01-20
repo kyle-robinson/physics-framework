@@ -1,4 +1,4 @@
-#include "../PCH.h"
+#include "stdafx.h"
 #include "OBJLoader.h"
 
 bool OBJLoader::FindSimilarVertex(const SimpleVertex& vertex, std::map<SimpleVertex, unsigned short>& vertToIndexMap, unsigned short& index)

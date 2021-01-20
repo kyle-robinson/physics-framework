@@ -2,8 +2,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "../Model/Transform.h"
-#include "../Model/Appearance.h"
+#include "Transform.h"
+#include "Appearance.h"
 
 using namespace DirectX;
 

@@ -2,7 +2,7 @@
 #ifndef PARTICLEMODEL_H
 #define PARTICLEMODEL_H
 
-#include "../Objects/GameObject.h"
+#include "GameObject.h"
 
 class ParticleModel : public GameObject
 {

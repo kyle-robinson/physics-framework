@@ -2,11 +2,11 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "resource.h"
-#include "Objects/Camera.h"
-#include "Model/OBJLoader.h"
-#include "Objects/GameObject.h"
-#include "Model/DDSTextureLoader.h"
+#include "Camera.h"
+#include "OBJLoader.h"
+#include "GameObject.h"
+#include "../resource.h"
+#include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f

@@ -1,4 +1,4 @@
-#include "PCH.h"
+#include "stdafx.h"
 #include "Application.h"
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )

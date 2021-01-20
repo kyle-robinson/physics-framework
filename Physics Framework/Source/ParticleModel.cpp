@@ -1,2 +1,2 @@
-#include "../PCH.h"
+#include "stdafx.h"
 #include "ParticleModel.h"
