@@ -22,9 +22,9 @@
 #include <directxcolors.h>
 
 // Classes
-#include "Matrix.h"
-#include "Vector.h"
-#include "Structures.h"
-#include "ErrorLogger.h"
+#include "Math/Matrix.h"
+#include "Math/Vector.h"
+#include "Utility/Structures.h"
+#include "Utility/ErrorLogger.h"
 
 #endif

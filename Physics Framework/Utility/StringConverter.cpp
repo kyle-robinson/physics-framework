@@ -1,5 +1,4 @@
-#include "PCH.h"
-#include "StringConverter.h"
+#include "../PCH.h"
 
 std::wstring StringConverter::StringToWide( const std::string& narrow ) noexcept
 {

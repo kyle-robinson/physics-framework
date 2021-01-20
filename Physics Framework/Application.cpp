@@ -100,9 +100,9 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	if ( !InitWindow( hInstance, nCmdShow ) ) return false;
 	if ( !InitDevice() ) return false;
 
-	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\stone.dds", nullptr, _pTextureRV.GetAddressOf() );
-	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\floor.dds", nullptr, _pGroundTextureRV.GetAddressOf() );
-	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Hercules_COLOR.dds", nullptr, _pHerculesTextureRV.GetAddressOf() );
+	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\stone.dds", nullptr, _pTextureRV.GetAddressOf() );
+	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\floor.dds", nullptr, _pGroundTextureRV.GetAddressOf() );
+	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\Hercules_COLOR.dds", nullptr, _pHerculesTextureRV.GetAddressOf() );
 	
     // Setup Camera
 	v3df eye( 0.0f, 2.0f, -1.0f );
@@ -119,7 +119,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	basicLight.LightVecW = { 0.0f, 1.0f, -1.0f };
 
 	Geometry herculesGeometry;
-	objMeshData = OBJLoader::Load( "donut.obj", _pd3dDevice.Get() );
+	objMeshData = OBJLoader::Load( "Resources\\Models\\donut.obj", _pd3dDevice.Get() );
 	herculesGeometry.indexBuffer = objMeshData.IndexBuffer;
 	herculesGeometry.numberOfIndices = objMeshData.IndexCount;
 	herculesGeometry.vertexBuffer = objMeshData.VertexBuffer;
@@ -184,7 +184,7 @@ bool Application::InitShadersAndInputLayout()
 	{
 		// Compile the vertex shader
 		ID3DBlob* pVSBlob = nullptr;
-		HRESULT hr = CompileShaderFromFile( L"DX11 Framework.fx", "VS", "vs_4_0", &pVSBlob );
+		HRESULT hr = CompileShaderFromFile( L"Resources\\Shaders\\DX11 Framework.fx", "VS", "vs_4_0", &pVSBlob );
 		COM_ERROR_IF_FAILED( hr, "Failed to compile the vertex shader! Run this executable from the directory that contains the FX file!" );
 
 		// Create the vertex shader
@@ -194,7 +194,7 @@ bool Application::InitShadersAndInputLayout()
 
 		// Compile the pixel shader
 		ID3DBlob* pPSBlob = nullptr;
-		hr = CompileShaderFromFile( L"DX11 Framework.fx", "PS", "ps_4_0", &pPSBlob );
+		hr = CompileShaderFromFile( L"Resources\\Shaders\\DX11 Framework.fx", "PS", "ps_4_0", &pPSBlob );
 		COM_ERROR_IF_FAILED( hr, "Failed to compile the pixel shader! Run this executable from the directory that contains the FX file!" );
 
 		// Create the pixel shader
