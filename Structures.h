@@ -1,4 +1,6 @@
 #pragma once
+#ifndef STRUCTURES_H
+#define STRUCTURES_H
 
 using namespace DirectX;
 
@@ -22,3 +24,5 @@ struct MeshData
 	UINT VBOffset;
 	UINT IndexCount;
 };
+
+#endif

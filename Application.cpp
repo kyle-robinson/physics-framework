@@ -30,34 +30,35 @@ bool Application::HandleKeyboard( MSG msg )
 
 	switch ( msg.wParam )
 	{
+	// window management
+	case VK_ESCAPE:
+		PostQuitMessage( 0 );
+		return true;
+		break;
+
+	// camera movement
 	case VK_UP:
 		_cameraOrbitRadius = max( _cameraOrbitRadiusMin, _cameraOrbitRadius - ( _cameraSpeed * 0.2f ) );
 		return true;
 		break;
-
 	case VK_DOWN:
 		_cameraOrbitRadius = min( _cameraOrbitRadiusMax, _cameraOrbitRadius + ( _cameraSpeed * 0.2f ) );
 		return true;
 		break;
-
 	case VK_RIGHT:
 		_cameraOrbitAngleXZ -= _cameraSpeed;
 		return true;
 		break;
-
 	case VK_LEFT:
 		_cameraOrbitAngleXZ += _cameraSpeed;
 		return true;
 		break;
 
+	// object movement
 	case '1': objectToUse = 1; return true; break;
-
 	case '2': objectToUse = 2; return true; break;
-
 	case '3': objectToUse = 3; return true; break;
-
 	case '4': objectToUse = 4; return true; break;
-
 	case '5': objectToUse = 5; return true; break;
 	}
 

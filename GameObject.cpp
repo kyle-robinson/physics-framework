@@ -1,10 +1,12 @@
 #include "PCH.h"
 #include "GameObject.h"
 
-GameObject::GameObject( std::string type, Geometry geometry, Material material ) : _geometry( geometry ), _type( type ), _material( material )
+GameObject::GameObject( std::string type, Geometry geometry, Material material ) : _type( type )
 {
 	_parent = nullptr;
 	_textureRV = nullptr;
+	_geometry = geometry;
+	_material = material;
 
 	SetPosition( 0.0f, 0.0f, 0.0f );
 	SetRotation( 0.0f, 0.0f, 0.0f );

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include "Camera.h"
 #include "resource.h"
@@ -8,15 +10,6 @@
 
 #define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f
-
-using namespace DirectX;
-
-struct SurfaceInfo
-{
-	v4df AmbientMtrl;
-	v4df DiffuseMtrl;
-	v4df SpecularMtrl;
-};
 
 struct Light
 {
@@ -118,3 +111,4 @@ private:
 	UINT _renderWidth = 1920;
 };
 
+#endif

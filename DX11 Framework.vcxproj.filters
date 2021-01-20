@@ -83,6 +83,9 @@
     <ClInclude Include="ParticleModel.h">
       <Filter>Headers\Model</Filter>
     </ClInclude>
+    <ClInclude Include="Appearance.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
