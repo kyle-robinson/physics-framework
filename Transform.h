@@ -5,17 +5,22 @@
 class Transform
 {
 public:
-	void SetPosition( v3df position ) { _position = position; }
-	void SetPosition( float x, float y, float z ) { _position = { x, y, z }; }
-	v3df GetPosition() const { return _position; }
+	void const SetPosition( v3df position ) { _position = position; }
+	void const SetPosition( float x, float y, float z ) { _position = { x, y, z }; }
+	v3df const GetPosition() const noexcept { return _position; }
 
-	void SetScale( const v3df& scale ) { _scale = scale; }
-	void SetScale( float x, float y, float z ) { _scale = { x, y, z }; }
-	v3df GetScale() const { return _scale; }
+	void const SetScale( const v3df& scale ) { _scale = scale; }
+	void const SetScale( float x, float y, float z ) { _scale = { x, y, z }; }
+	v3df const GetScale() const noexcept { return _scale; }
 
-	void SetRotation( v3df rotation ) { _rotation = rotation; }
-	void SetRotation( float x, float y, float z ) { _rotation = { x, y, z }; }
-	v3df GetRotation() const { return _rotation; }
+	void const SetRotation( v3df rotation ) { _rotation = rotation; }
+	void const SetRotation( float x, float y, float z ) { _rotation = { x, y, z }; }
+	v3df const GetRotation() const noexcept { return _rotation; }
+
+	void const MoveForward() { _position[2] += 0.002f; }
+	void const MoveBackward() { _position[2] -= 0.002f; }
+	void const MoveLeft() { _position[0] -= 0.002f; }
+	void const MoveRight() { _position[0] += 0.002f; }
 
 private:
 	v3df _position;

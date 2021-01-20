@@ -23,12 +23,12 @@ struct Material
 	float specularPower;
 };
 
-class GameObject : public Transform, public ParticleModel
+class GameObject : public Transform
 {
 public:
 	GameObject( std::string type, Geometry geometry, Material material );
-
 	std::string GetType() const { return _type; }
+
 	Geometry GetGeometryData() const { return _geometry; }
 	Material GetMaterial() const { return _material; }
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }

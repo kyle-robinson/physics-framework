@@ -1,6 +1,5 @@
 #include "PCH.h"
 #include "Application.h"
-#include "Transform.h"
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -598,10 +597,10 @@ void Application::Update()
 	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobject
-	if ( GetAsyncKeyState( 'W' ) ) ParticleModel::MoveForward( *_gameObjects[objectToUse] );
-	if ( GetAsyncKeyState( 'A' ) ) ParticleModel::MoveLeft( *_gameObjects[objectToUse] );
-	if ( GetAsyncKeyState( 'S' ) ) ParticleModel::MoveBackward( *_gameObjects[objectToUse] );
-	if ( GetAsyncKeyState( 'D' ) ) ParticleModel::MoveRight( *_gameObjects[objectToUse] );
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->MoveForward();
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->MoveLeft();
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->MoveBackward();
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->MoveRight();
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );

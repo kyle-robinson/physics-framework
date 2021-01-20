@@ -80,7 +80,9 @@
     <ClInclude Include="PCH.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleModel.h" />
+    <ClInclude Include="ParticleModel.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -110,7 +112,9 @@
     <ClCompile Include="PCH.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleModel.cpp" />
+    <ClCompile Include="ParticleModel.cpp">
+      <Filter>Source\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

@@ -4,13 +4,12 @@
 
 class GameObject;
 
-class ParticleModel
+class ParticleModel : public GameObject
 {
 public:
-	static void MoveForward( GameObject& object );
-	static void MoveBackward( GameObject& object );
-	static void MoveLeft( GameObject& object );
-	static void MoveRight( GameObject& object );
+	
+private:
+
 };
 
 #endif
