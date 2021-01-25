@@ -4,20 +4,28 @@
 
 #include "Transform.h"
 #include "Appearance.h"
+#include "ParticleModel.h"
 
 using namespace DirectX;
 
-class GameObject : public Transform, public Appearance
+class GameObject
 {
 public:
-	GameObject( std::string type, Geometry geometry, Material material );
+	GameObject( const std::string& type, Appearance* appearance, Transform* transform, ParticleModel* particleModel );
 	std::string GetType() const { return _type; }
 
-	void Update( float t );
+	Appearance* GetAppearance() const { return _appearance.get(); }
+	Transform* GetTransform() const { return _transform.get(); }
+	ParticleModel* GetParticleModel() const { return _particleModel.get(); }
+
+	void Update( float deltaTime );
 	void Draw( ID3D11DeviceContext* pImmediateContext );
 
-private:
+protected:
 	std::string _type;
+	std::unique_ptr<Transform> _transform;
+	std::unique_ptr<Appearance> _appearance;
+	std::unique_ptr<ParticleModel> _particleModel;
 };
 
 #endif

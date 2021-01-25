@@ -34,32 +34,27 @@ bool Application::HandleKeyboard( MSG msg )
 	case VK_ESCAPE:
 		PostQuitMessage( 0 );
 		return true;
-		break;
 
 	// camera movement
 	case VK_UP:
 		_cameraOrbitRadius = max( _cameraOrbitRadiusMin, _cameraOrbitRadius - ( _cameraSpeed * 0.2f ) );
 		return true;
-		break;
 	case VK_DOWN:
 		_cameraOrbitRadius = min( _cameraOrbitRadiusMax, _cameraOrbitRadius + ( _cameraSpeed * 0.2f ) );
 		return true;
-		break;
 	case VK_RIGHT:
 		_cameraOrbitAngleXZ -= _cameraSpeed;
 		return true;
-		break;
 	case VK_LEFT:
 		_cameraOrbitAngleXZ += _cameraSpeed;
 		return true;
-		break;
 
-	// object movement
-	case '1': objectToUse = 1; return true; break;
-	case '2': objectToUse = 2; return true; break;
-	case '3': objectToUse = 3; return true; break;
-	case '4': objectToUse = 4; return true; break;
-	case '5': objectToUse = 5; return true; break;
+	// set object to use
+	case '1': objectToUse = 1; return true;
+	case '2': objectToUse = 2; return true;
+	case '3': objectToUse = 3; return true;
+	case '4': objectToUse = 4; return true;
+	case '5': objectToUse = 5; return true;
 	}
 
 	return false;
@@ -93,7 +88,7 @@ Application::Application()
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 {
 	RECT rc;
-	GetClientRect(_hWnd, &rc);
+	GetClientRect( _hWnd, &rc );
 	_WindowWidth = rc.right - rc.left;
 	_WindowHeight = rc.bottom - rc.top;
 
@@ -104,20 +99,21 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\floor.dds", nullptr, _pGroundTextureRV.GetAddressOf() );
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\Hercules_COLOR.dds", nullptr, _pHerculesTextureRV.GetAddressOf() );
 	
-    // Setup Camera
+    // setup Camera
 	v3df eye( 0.0f, 2.0f, -1.0f );
 	v3df at( 0.0f, 2.0f, 0.0f );
 	v3df up( 0.0f, 1.0f, 0.0f );
 
 	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
 
-	// Setup the scene's light
+	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
 	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	basicLight.SpecularLight = { 0.8f, 0.8f, 0.8f, 1.0f };
 	basicLight.SpecularPower = 20.0f;
 	basicLight.LightVecW = { 0.0f, 1.0f, -1.0f };
 
+	// create geometry pieces
 	Geometry herculesGeometry;
 	objMeshData = OBJLoader::Load( "Resources\\Models\\donut.obj", _pd3dDevice.Get() );
 	herculesGeometry.indexBuffer = objMeshData.IndexBuffer;
@@ -140,6 +136,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	planeGeometry.vertexBufferOffset = 0;
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
+	// create materials
 	Material shinyMaterial;
 	shinyMaterial.ambient = { 0.3f, 0.3f, 0.3f, 1.0f };
 	shinyMaterial.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -151,28 +148,38 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	noSpecMaterial.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
 	noSpecMaterial.specular = { 0.0f, 0.0f, 0.0f, 0.0f };
 	noSpecMaterial.specularPower = 0.0f;
-	
-	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor", planeGeometry, noSpecMaterial );
-	gameObject->SetPosition( 0.0f, 0.0f, 0.0f );
-	gameObject->SetScale( 15.0f, 15.0f, 15.0f );
-	gameObject->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
-	gameObject->SetTextureRV( _pGroundTextureRV.Get() );
 
+	// create appearances
+	Appearance floorAppearance( planeGeometry, noSpecMaterial );
+	Appearance cubeAppearance( cubeGeometry, shinyMaterial );
+	Appearance donutAppearance( herculesGeometry, shinyMaterial );
+
+	// create particle models
+	//ParticleModel particle(  );
+
+	// initialize floor
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor", floorAppearance,  );
+	gameObject->GetTransform()->SetPosition( 0.0f, 0.0f, 0.0f );
+	gameObject->GetTransform()->SetScale( 15.0f, 15.0f, 15.0f );
+	gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
+	gameObject->GetAppearance()->SetTextureRV( _pGroundTextureRV.Get() );
 	_gameObjects.push_back( gameObject );
 
+	// initialize cubes
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		gameObject = std::make_shared<GameObject>( "Cube " + i, cubeGeometry, shinyMaterial );
-		gameObject->SetScale( 0.5f, 0.5f, 0.5f );
-		gameObject->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-		gameObject->SetTextureRV( _pTextureRV.Get() );
-
+		gameObject = std::make_shared<GameObject>( "Cube " + i,  );
+		gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		gameObject->GetTransform()->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		gameObject->GetAppearance()->SetTextureRV( _pTextureRV.Get() );
 		_gameObjects.push_back( gameObject );
 	}
-	gameObject = std::make_shared<GameObject>( "donut", herculesGeometry, shinyMaterial );
-	gameObject->SetScale( 0.5f, 0.5f, 0.5f );
-	gameObject->SetPosition( -4.0f, 0.5f, 10.0f );
-	gameObject->SetTextureRV( _pHerculesTextureRV.Get() );
+
+	// initialize donut
+	gameObject = std::make_shared<GameObject>( "Donut",  );
+	gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+	gameObject->GetTransform()->SetPosition( -4.0f, 0.5f, 10.0f );
+	gameObject->GetAppearance()->SetTextureRV( _pHerculesTextureRV.Get() );
 	_gameObjects.push_back( gameObject );
 
 	return true;
@@ -598,10 +605,13 @@ void Application::Update()
 	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobject
-	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->MoveForward();
-	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->MoveLeft();
-	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->MoveBackward();
-	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->MoveRight();
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetTransform()->MoveForward();
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetTransform()->MoveLeft();
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetTransform()->MoveBackward();
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetTransform()->MoveRight();
+
+	if ( GetKeyState( VK_MENU ) & 0x8000 )
+		_gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
@@ -649,7 +659,7 @@ void Application::Draw()
 	for ( auto gameObject : _gameObjects )
 	{
 		// Get render material
-		Material material = gameObject->GetMaterial();
+		Material material = gameObject->GetAppearance()->GetMaterial();
 
 		// Copy material to shader
 		cb.surface.AmbientMtrl = material.ambient;
@@ -657,12 +667,12 @@ void Application::Draw()
 		cb.surface.SpecularMtrl = material.specular;
 
 		// Set world matrix
-		cb.World = XMMatrixTranspose( gameObject->GetWorldMatrix() );
+		cb.World = XMMatrixTranspose( gameObject->GetTransform()->GetWorldMatrix() );
 
 		// Set texture
-		if ( gameObject->HasTexture() )
+		if ( gameObject->GetAppearance()->HasTexture() )
 		{
-			ID3D11ShaderResourceView * textureRV = gameObject->GetTextureRV();
+			ID3D11ShaderResourceView * textureRV = gameObject->GetAppearance()->GetTextureRV();
 			_pImmediateContext->PSSetShaderResources( 0, 1, &textureRV );
 			cb.HasTexture = 1.0f;
 		}

@@ -21,6 +21,13 @@ struct Light
 	v3df LightVecW;
 };
 
+struct SurfaceInfo
+{
+	v4df AmbientMtrl;
+	v4df DiffuseMtrl;
+	v4df SpecularMtrl;
+};
+
 struct ConstantBuffer
 {
 	XMMATRIX World;
