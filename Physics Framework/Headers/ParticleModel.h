@@ -2,13 +2,16 @@
 #ifndef PARTICLEMODEL_H
 #define PARTICLEMODEL_H
 
-class Transform;
+#include "GameObject.h"
 
-class ParticleModel
+class ParticleModel : public GameObject
 {
 public:
-	ParticleModel( Transform* transform, bool useConstAccel, v3df initialVelocity, v3df initialAcceleration );
-	void Update( float deltaTime );
+	//ParticleModel() {}
+	ParticleModel( const std::string& name, bool useConstAccel, v3df initialVelocity, v3df initialAcceleration );
+	
+	void Update( float deltaTime ) override;
+	void Draw( ID3D11DeviceContext* pImmediateContext ) override;
 
 	v3df GetVelocity() { return _velocity; }
 	void SetVelocity( v3df velocity ) { _velocity = velocity; };
@@ -18,8 +21,7 @@ public:
 private:
 	v3df _velocity;
 	v3df _acceleration;
-	bool _useConstVelocity;
-	std::unique_ptr<Transform> _transform;
+	bool _useConstAccel;
 };
 
 #endif

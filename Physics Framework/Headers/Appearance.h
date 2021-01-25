@@ -26,16 +26,14 @@ struct Geometry
 class Appearance
 {
 public:
-	Appearance( Geometry geometry, Material material ) : _geometry( geometry ), _material( material ), _textureRV( nullptr ) {}
-	void Draw( ID3D11DeviceContext * pImmediateContext )
-	{
-		pImmediateContext->IASetVertexBuffers( 0, 1, &_geometry.vertexBuffer, &_geometry.vertexBufferStride, &_geometry.vertexBufferOffset );
-		pImmediateContext->IASetIndexBuffer( _geometry.indexBuffer, DXGI_FORMAT_R16_UINT, 0 );
-		pImmediateContext->DrawIndexed( _geometry.numberOfIndices, 0, 0 );
-	}
+	//Appearance() {}
+	//Appearance( Geometry geometry, Material material ) : _geometry( geometry ), _material( material ), _textureRV( nullptr ) {}
 	
 	Material GetMaterial() const { return _material; }
+	void SetMaterial( Material material ) { _material = material; }
+
 	Geometry GetGeometryData() const { return _geometry; }
+	void SetGeometryData( Geometry geometry ) { _geometry = geometry; }
 
 	void SetTextureRV( ID3D11ShaderResourceView* textureRV ) { _textureRV = textureRV; }
 	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }

@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 #include "OBJLoader.h"
-#include "GameObject.h"
+#include "ParticleModel.h"
 #include "../resource.h"
 #include "DDSTextureLoader.h"
 

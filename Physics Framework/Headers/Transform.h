@@ -2,24 +2,13 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "GameObject.h"
+class GameObject;
 
 class Transform
 {
 public:
-	Transform() {}
-	void Update( float t )
-	{
-		// Calculate world matrix
-		XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );
-		XMMATRIX rotation = XMMatrixRotationX( GetRotation()[0] ) * XMMatrixRotationY( GetRotation()[1] ) * XMMatrixRotationZ( GetRotation()[2] );
-		XMMATRIX translation = XMMatrixTranslation( GetPosition()[0], GetPosition()[1], GetPosition()[2] );
-
-		XMStoreFloat4x4( &_world, scale * rotation * translation );
-
-		//if ( _parent != nullptr )
-		//	XMStoreFloat4x4( &_world, this->GetWorldMatrix() * _parent->GetTransform()->GetWorldMatrix() );
-	}
+	//Transform() {}
+	//Transform() : _scale( 1.0f, 1.0f, 1.0f ), _position( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ) {}
 
 	void SetPosition( v3df position ) { _position = position; }
 	void SetPosition( float x, float y, float z ) { _position = { x, y, z }; }
@@ -38,14 +27,14 @@ public:
 	void const MoveLeft() { _position[0] -= 0.002f; }
 	void const MoveRight() { _position[0] += 0.002f; }
 
-	//void SetParent( GameObject* parent ) { _parent = parent; }
+	void SetParent( GameObject* parent ) { _parent = parent; }
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }
-private:
+protected:
 	v3df _scale;
 	v3df _position;
 	v3df _rotation;
 	XMFLOAT4X4 _world;
-	//GameObject* _parent;
+	GameObject* _parent;
 };
 
 #endif
