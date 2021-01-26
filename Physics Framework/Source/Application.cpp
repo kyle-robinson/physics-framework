@@ -608,7 +608,7 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetTransform()->MoveBackward();
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetTransform()->MoveRight();
 
-	if ( GetKeyState( VK_MENU ) & 0x8000 && GetAsyncKeyState( VK_MENU ) )
+	if ( GetKeyState( VK_F1 ) )
 		_gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
 
 	// Update camera
