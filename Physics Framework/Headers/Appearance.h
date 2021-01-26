@@ -18,14 +18,15 @@ struct Geometry
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
 	int numberOfIndices;
-
 	UINT vertexBufferStride;
 	UINT vertexBufferOffset;
 };
 
 class Appearance
 {
-public:	
+public:
+	Appearance() : _geometry( {} ), _material( {} ), _textureRV( nullptr ) {}
+
 	Material GetMaterial() const { return _material; }
 	void SetMaterial( Material material ) { _material = material; }
 
@@ -37,6 +38,7 @@ public:
 	bool HasTexture() const { return _textureRV ? true : false; }
 public:
 	Geometry _geometry;
+private:
 	Material _material;
 	ID3D11ShaderResourceView* _textureRV;
 };

@@ -674,7 +674,7 @@ void Application::Draw()
 		// Set texture
 		if ( gameObject->GetAppearance()->HasTexture() )
 		{
-			ID3D11ShaderResourceView * textureRV = gameObject->GetAppearance()->GetTextureRV();
+			ID3D11ShaderResourceView* textureRV = gameObject->GetAppearance()->GetTextureRV();
 			_pImmediateContext->PSSetShaderResources( 0, 1, &textureRV );
 			cb.HasTexture = 1.0f;
 		}

@@ -7,6 +7,7 @@ class GameObject;
 class Transform
 {
 public:
+	Transform() : _scale( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ), _position( 0.0f, 0.0f, 0.0f ), _parent( nullptr ) {}
 	
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }
 	void SetInitialPosition( float x, float y, float z ) { _initialPosition = { x, y, z }; _position = _initialPosition; }

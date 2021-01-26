@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "ParticleModel.h"
 
-ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transform( transform )
+ParticleModel::ParticleModel( std::shared_ptr<Transform> transform )
+	: _transform( transform ), _useConstAccel( false ), _velocity( 0.0f, 0.001f, 0.0f ), _acceleration( 0.0f, 0.001f, 0.0f ),
+	_mass( 10.0f ), _netForce( 0.0f )
 {}
 
 void ParticleModel::MoveConstVelocity( const float deltaTime )
