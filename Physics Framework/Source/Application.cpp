@@ -150,34 +150,34 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	noSpecMaterial.specularPower = 0.0f;
 
 	// initialize floor
-	std::shared_ptr<ParticleModel> gameObject = std::make_shared<ParticleModel>( "Floor", false, false );
-	gameObject->SetPosition( 0.0f, 0.0f, 0.0f );
-	gameObject->SetScale( 15.0f, 15.0f, 15.0f );
-	gameObject->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
-	gameObject->SetTextureRV( _pGroundTextureRV.Get() );
-	gameObject->SetGeometryData( planeGeometry );
-	gameObject->SetMaterial( noSpecMaterial );
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor" );
+	gameObject->GetTransform()->SetPosition( 0.0f, 0.0f, 0.0f );
+	gameObject->GetTransform()->SetScale( 15.0f, 15.0f, 15.0f );
+	gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
+	gameObject->GetAppearance()->SetTextureRV( _pGroundTextureRV.Get() );
+	gameObject->GetAppearance()->SetGeometryData( planeGeometry );
+	gameObject->GetAppearance()->SetMaterial( noSpecMaterial );
 	_gameObjects.push_back( gameObject );
 
 	// initialize cubes
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		gameObject = std::make_shared<ParticleModel>( "Cube " + i, false, false );
-		gameObject->SetScale( 0.5f, 0.5f, 0.5f );
-		gameObject->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-		gameObject->SetTextureRV( _pTextureRV.Get() );
-		gameObject->SetGeometryData( cubeGeometry );
-		gameObject->SetMaterial( shinyMaterial );
+		gameObject = std::make_shared<GameObject>( "Cube " + i );
+		gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		gameObject->GetTransform()->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		gameObject->GetAppearance()->SetTextureRV( _pTextureRV.Get() );
+		gameObject->GetAppearance()->SetGeometryData( cubeGeometry );
+		gameObject->GetAppearance()->SetMaterial( shinyMaterial );
 		_gameObjects.push_back( gameObject );
 	}
 
 	// initialize donut
-	gameObject = std::make_shared<ParticleModel>( "Donut", false, false );
-	gameObject->SetScale( 0.5f, 0.5f, 0.5f );
-	gameObject->SetPosition( -4.0f, 0.5f, 10.0f );
-	gameObject->SetTextureRV( _pHerculesTextureRV.Get() );
-	gameObject->SetGeometryData( herculesGeometry );
-	gameObject->SetMaterial( shinyMaterial );
+	gameObject = std::make_shared<GameObject>( "Donut" );
+	gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+	gameObject->GetTransform()->SetPosition( -4.0f, 0.5f, 10.0f );
+	gameObject->GetAppearance()->SetTextureRV( _pHerculesTextureRV.Get() );
+	gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
+	gameObject->GetAppearance()->SetMaterial( shinyMaterial );
 	_gameObjects.push_back( gameObject );
 
 	return true;
@@ -603,12 +603,13 @@ void Application::Update()
 	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobjects
-	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->MoveForward();
-	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->MoveLeft();
-	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->MoveBackward();
-	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->MoveRight();
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetTransform()->MoveForward();
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetTransform()->MoveLeft();
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetTransform()->MoveBackward();
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetTransform()->MoveRight();
 
-	if ( GetKeyState( VK_MENU ) & 0x8000 ) _gameObjects[objectToUse]->MoveConstVelocity( deltaTime );
+	if ( GetKeyState( VK_MENU ) & 0x8000 && GetAsyncKeyState( VK_MENU ) )
+		_gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
@@ -656,7 +657,7 @@ void Application::Draw()
 	for ( auto gameObject : _gameObjects )
 	{
 		// Get render material
-		Material material = gameObject->GetMaterial();
+		Material material = gameObject->GetAppearance()->GetMaterial();
 
 		// Copy material to shader
 		cb.surface.AmbientMtrl = material.ambient;
@@ -664,12 +665,12 @@ void Application::Draw()
 		cb.surface.SpecularMtrl = material.specular;
 
 		// Set world matrix
-		cb.World = XMMatrixTranspose( gameObject->GetWorldMatrix() );
+		cb.World = XMMatrixTranspose( gameObject->GetTransform()->GetWorldMatrix() );
 
 		// Set texture
-		if ( gameObject->HasTexture() )
+		if ( gameObject->GetAppearance()->HasTexture() )
 		{
-			ID3D11ShaderResourceView * textureRV = gameObject->GetTextureRV();
+			ID3D11ShaderResourceView * textureRV = gameObject->GetAppearance()->GetTextureRV();
 			_pImmediateContext->PSSetShaderResources( 0, 1, &textureRV );
 			cb.HasTexture = 1.0f;
 		}

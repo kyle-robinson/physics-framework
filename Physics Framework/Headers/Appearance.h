@@ -25,10 +25,7 @@ struct Geometry
 
 class Appearance
 {
-public:
-	//Appearance() {}
-	//Appearance( Geometry geometry, Material material ) : _geometry( geometry ), _material( material ), _textureRV( nullptr ) {}
-	
+public:	
 	Material GetMaterial() const { return _material; }
 	void SetMaterial( Material material ) { _material = material; }
 
@@ -38,7 +35,7 @@ public:
 	void SetTextureRV( ID3D11ShaderResourceView* textureRV ) { _textureRV = textureRV; }
 	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
 	bool HasTexture() const { return _textureRV ? true : false; }
-protected:
+public:
 	Geometry _geometry;
 	Material _material;
 	ID3D11ShaderResourceView* _textureRV;

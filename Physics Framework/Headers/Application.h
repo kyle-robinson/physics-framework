@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 #include "OBJLoader.h"
-#include "ParticleModel.h"
+#include "GameObject.h"
 #include "../resource.h"
 #include "DDSTextureLoader.h"
 
@@ -104,7 +104,7 @@ private:
 	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
-	std::vector<std::shared_ptr<ParticleModel>> _gameObjects;
+	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;
 	float _cameraOrbitRadiusMin = 2.0f;

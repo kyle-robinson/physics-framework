@@ -7,9 +7,6 @@ class GameObject;
 class Transform
 {
 public:
-	//Transform() {}
-	//Transform() : _scale( 1.0f, 1.0f, 1.0f ), _position( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ) {}
-
 	void SetPosition( v3df position ) { _position = position; }
 	void SetPosition( float x, float y, float z ) { _position = { x, y, z }; }
 	v3df GetPosition() const noexcept { return _position; }
@@ -29,7 +26,7 @@ public:
 
 	void SetParent( GameObject* parent ) { _parent = parent; }
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }
-protected:
+public:
 	v3df _scale;
 	v3df _position;
 	v3df _rotation;
