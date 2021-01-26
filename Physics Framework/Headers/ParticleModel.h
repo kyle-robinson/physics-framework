@@ -8,7 +8,8 @@ class ParticleModel : public GameObject
 {
 public:
 	//ParticleModel() {}
-	ParticleModel( const std::string& name, bool useConstAccel, v3df initialVelocity, v3df initialAcceleration );
+	ParticleModel( const std::string& name, bool usePhysics, bool useConstAccel );
+	ParticleModel( const std::string& name, bool usePhysics, bool useConstAccel, v3df initialVelocity, v3df initialAcceleration );
 	
 	void Update( float deltaTime ) override;
 	void Draw( ID3D11DeviceContext* pImmediateContext ) override;
@@ -22,6 +23,7 @@ private:
 	v3df _velocity;
 	v3df _acceleration;
 	bool _useConstAccel;
+	bool _usePhysics;
 };
 
 #endif

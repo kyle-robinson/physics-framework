@@ -150,7 +150,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	noSpecMaterial.specularPower = 0.0f;
 
 	// initialize floor
-	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor" );
+	std::shared_ptr<ParticleModel> gameObject = std::make_shared<ParticleModel>( "Floor", false, false );
 	gameObject->SetPosition( 0.0f, 0.0f, 0.0f );
 	gameObject->SetScale( 15.0f, 15.0f, 15.0f );
 	gameObject->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
@@ -162,7 +162,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	// initialize cubes
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		gameObject = std::make_shared<GameObject>( "Cube " + i );
+		gameObject = std::make_shared<ParticleModel>( "Cube " + i, false, false );
 		gameObject->SetScale( 0.5f, 0.5f, 0.5f );
 		gameObject->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		gameObject->SetTextureRV( _pTextureRV.Get() );
@@ -172,7 +172,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	}
 
 	// initialize donut
-	gameObject = std::make_shared<GameObject>( "Donut" );
+	gameObject = std::make_shared<ParticleModel>( "Donut", false, false );
 	gameObject->SetScale( 0.5f, 0.5f, 0.5f );
 	gameObject->SetPosition( -4.0f, 0.5f, 10.0f );
 	gameObject->SetTextureRV( _pHerculesTextureRV.Get() );
@@ -602,14 +602,13 @@ void Application::Update()
 	deltaTime += ( dwTimeCur - dwTimeStart ) / 1000.0f;
 	if ( deltaTime < FPS_60 ) return;
 
-	// Move gameobject
+	// Move gameobjects
 	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->MoveForward();
 	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->MoveLeft();
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->MoveBackward();
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->MoveRight();
 
-	//if ( GetKeyState( VK_MENU ) & 0x8000 )
-	//	_gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
+	if ( GetKeyState( VK_MENU ) & 0x8000 ) _gameObjects[objectToUse]->MoveConstVelocity( deltaTime );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
