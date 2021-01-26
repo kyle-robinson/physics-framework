@@ -151,7 +151,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 
 	// initialize floor
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor" );
-	gameObject->GetTransform()->SetPosition( 0.0f, 0.0f, 0.0f );
+	gameObject->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
 	gameObject->GetTransform()->SetScale( 15.0f, 15.0f, 15.0f );
 	gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
 	gameObject->GetAppearance()->SetTextureRV( _pGroundTextureRV.Get() );
@@ -164,7 +164,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	{
 		gameObject = std::make_shared<GameObject>( "Cube " + i );
 		gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-		gameObject->GetTransform()->SetPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		gameObject->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		gameObject->GetAppearance()->SetTextureRV( _pTextureRV.Get() );
 		gameObject->GetAppearance()->SetGeometryData( cubeGeometry );
 		gameObject->GetAppearance()->SetMaterial( shinyMaterial );
@@ -174,7 +174,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	// initialize donut
 	gameObject = std::make_shared<GameObject>( "Donut" );
 	gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-	gameObject->GetTransform()->SetPosition( -4.0f, 0.5f, 10.0f );
+	gameObject->GetTransform()->SetInitialPosition( -4.0f, 0.5f, 10.0f );
 	gameObject->GetAppearance()->SetTextureRV( _pHerculesTextureRV.Get() );
 	gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
 	gameObject->GetAppearance()->SetMaterial( shinyMaterial );
@@ -608,8 +608,12 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetTransform()->MoveBackward();
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetTransform()->MoveRight();
 
-	if ( GetKeyState( VK_F1 ) )
-		_gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
+	if ( GetKeyState( VK_F1 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
+	if ( GetKeyState( VK_F2 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstAcceleration( deltaTime );
+
+	if ( GetAsyncKeyState( 'R' ) )
+		for ( std::shared_ptr<GameObject> object : _gameObjects )
+			object->GetTransform()->ResetPosition();
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
