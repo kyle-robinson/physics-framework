@@ -3,31 +3,35 @@
 
 ParticleModel::ParticleModel( std::shared_ptr<Transform> transform )
 	: _transform( transform ), _useConstAccel( false ), _velocity( 0.0f, 0.001f, 0.0f ), _acceleration( 0.0f, 0.001f, 0.0f ),
-	_mass( 10.0f ), _netForce( 0.0f, 0.0f, 0.0f ), _force( 0.0f, 0.0f, 0.0f )
+	_mass( 10.0f ), _netForce( 0.0f, 0.0f, 0.0f ), _force( 0.0f, 0.0f, 0.0f ), _friction( 0.0f, 0.0f, 0.0f )
 {}
 
 void const ParticleModel::MoveForward()
 {
-	_force = { 0.0f, 0.0f, 0.0f };
+	ResetForces();
 	_force[2] = MOVEMENT_SPEED;
+	_friction[2] = -( NORMAL_FORCE * FRICTION_COEF * _mass );
 }
 
 void const ParticleModel::MoveBackward()
 {
-	_force = { 0.0f, 0.0f, 0.0f };
+	ResetForces();
 	_force[2] = -MOVEMENT_SPEED;
+	_friction[2] = std::abs( NORMAL_FORCE * FRICTION_COEF * _mass );
 }
 
 void const ParticleModel::MoveLeft()
 {
-	_force = { 0.0f, 0.0f, 0.0f };
+	ResetForces();
 	_force[0] = -MOVEMENT_SPEED;
+	_friction[0] = std::abs( NORMAL_FORCE * FRICTION_COEF * _mass );
 }
 
 void const ParticleModel::MoveRight()
 {
-	_force = { 0.0f, 0.0f, 0.0f };
+	ResetForces();
 	_force[0] = MOVEMENT_SPEED;
+	_friction[0] = -( NORMAL_FORCE * FRICTION_COEF * _mass );
 }
 
 void ParticleModel::MoveConstVelocity( const float deltaTime )
@@ -54,28 +58,35 @@ void ParticleModel::MoveConstAcceleration( const float deltaTime )
 	_transform->SetPosition( position );
 }
 
+void ParticleModel::ResetForces()
+{
+	_force = { 0.0f, 0.0f, 0.0f };
+	_friction = { 0.0f, 0.0f, 0.0f };
+}
+
 void ParticleModel::UpdateState()
 {
 	UpdateNetForce();
 	UpdateAcceleration();
-	Move();
+	ApplyPhysics();
 }
 
 void ParticleModel::UpdateNetForce()
 {
-	_netForce[0] = _force[0];
-	//_netForce[1] -= GRAVITY;
-	_netForce[2] = _force[2];
+	_netForce[0] = _force[0] + _friction[0];
+	_netForce[2] = _force[2] + _friction[2];
 }
 
 void ParticleModel::UpdateAcceleration()
 {
 	_acceleration[0] = _netForce[0] / _mass;
-	//_acceleration[1] = _netForce[1] / _mass;
 	_acceleration[2] = _netForce[2] / _mass;
+
+	_acceleration[0] = ( _acceleration[0] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[0];
+	_acceleration[2] = ( _acceleration[2] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[2];
 }
 
-void ParticleModel::Move()
+void ParticleModel::ApplyPhysics()
 {
 	_transform->SetPosition(
 		_transform->GetPosition()[0] + _velocity[0] * TIME_STEP + 0.5f * _acceleration[0] * TIME_STEP * TIME_STEP,
@@ -84,8 +95,5 @@ void ParticleModel::Move()
 	);
 
 	_velocity[0] = _velocity[0] + _acceleration[0] * TIME_STEP;
-	//_velocity[1] = _velocity[1] + _acceleration[1] * TIME_STEP;
 	_velocity[2] = _velocity[2] + _acceleration[2] * TIME_STEP;
-
-	//_force = { 0.0f, 0.0f, 0.0f };
 }
