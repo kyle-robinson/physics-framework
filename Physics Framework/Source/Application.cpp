@@ -63,16 +63,16 @@ bool Application::HandleKeyboard( MSG msg )
 Application::Application()
 {
 	// Vector3D Test Implementation
-	std::wstringstream wss;
+	/*std::wstringstream wss;
 	v4df vec1( 1.5f, 2.3f, 3.1f, 4.6f );
 	v4df vec2( 3.8f, 6.4f, 1.7f, 2.5f );
 	v4df vec3 = vec1 + vec2;
 	for ( int i = 0; i < 4; i++ )
 		wss << vec3[i] << '\t';
-	MessageBox( nullptr, wss.str().c_str(), L"Vector Addition", MB_OK );
+	MessageBox( nullptr, wss.str().c_str(), L"Vector Addition", MB_OK );*/
 
 	// Matrix Test Implementation
-	wss.str( std::wstring() );
+	/*wss.str( std::wstring() );
 	matf mat1( 4, 4, 1.0f );
 	matf mat2( 4, 4, 5.0f );
 	matf mat3 = mat1.transpose() + mat2.transpose();
@@ -82,7 +82,7 @@ Application::Application()
 			wss << mat3( i, j ) << '\t';
 		wss << '\n';
 	}
-	MessageBox( nullptr, wss.str().c_str(), L"Matrix Addition and Transposition", MB_OK );
+	MessageBox( nullptr, wss.str().c_str(), L"Matrix Addition and Transposition", MB_OK );*/
 }
 
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
@@ -603,13 +603,14 @@ void Application::Update()
 	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobjects
-	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetTransform()->MoveForward();
-	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetTransform()->MoveLeft();
-	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetTransform()->MoveBackward();
-	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetTransform()->MoveRight();
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveForward();
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveLeft();
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveBackward();
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveRight();
 
 	if ( GetKeyState( VK_F1 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
 	if ( GetKeyState( VK_F2 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstAcceleration( deltaTime );
+	if ( GetKeyState( VK_F3 ) ) _gameObjects[objectToUse]->GetParticleModel()->UpdateState();
 
 	if ( GetAsyncKeyState( 'R' ) )
 		for ( std::shared_ptr<GameObject> object : _gameObjects )

@@ -19,6 +19,14 @@ void GameObject::Update( float deltaTime )
 
 	if ( _transform->_parent != nullptr )
 		XMStoreFloat4x4( &_transform->_world, _transform->GetWorldMatrix() * _transform->_parent->_transform->GetWorldMatrix() );
+
+	if ( _transform->GetPosition()[1] < _transform->GetInitialPosition()[1] )
+	{
+		_transform->SetPosition( _transform->GetPosition()[0], 0.5f, _transform->GetPosition()[2] );
+		_particleModel->SetAcceleration( _particleModel->GetAcceleration()[0], 0.5f, _particleModel->GetAcceleration()[2] );
+		_particleModel->SetNetForce( _particleModel->GetNetForce()[0], 0.5f, _particleModel->GetNetForce()[2] );
+		_particleModel->SetVelocity( _particleModel->GetVelocity()[0], 0.5f, _particleModel->GetVelocity()[2] );
+	}
 }
 
 void GameObject::Draw( ID3D11DeviceContext* pImmediateContext )
