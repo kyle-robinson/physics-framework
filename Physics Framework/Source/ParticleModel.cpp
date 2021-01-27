@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "ParticleModel.h"
 
-ParticleModel::ParticleModel( std::shared_ptr<Transform> transform )
-	: _transform( transform ), _useConstAccel( false ), _velocity( 0.0f, 0.001f, 0.0f ), _acceleration( 0.0f, 0.001f, 0.0f ),
-	_mass( 10.0f ), _netForce( 0.0f, 0.0f, 0.0f ), _force( 0.0f, 0.0f, 0.0f ), _friction( 0.0f, 0.0f, 0.0f )
-{}
+ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transform( transform )
+{
+	_mass = 50.0f;
+	_floorHeight = 0.5f;
+	_velocity = { 0.0f, 0.0f, 0.0f };
+	_netForce = { 0.0f, 0.0f, 0.0f };
+	_acceleration = { 0.0f, 0.0f, 0.0f };
+}
 
-void const ParticleModel::MoveForward()
+/*void const ParticleModel::MoveForward()
 {
 	ResetForces();
 	_force[2] = MOVEMENT_SPEED;
@@ -34,7 +38,15 @@ void const ParticleModel::MoveRight()
 	_friction[0] = -( NORMAL_FORCE * FRICTION_COEF * _mass );
 }
 
-void ParticleModel::MoveConstVelocity( const float deltaTime )
+void const ParticleModel::MoveUp()
+{
+	_enableThrust = true;
+	
+	ResetForces();
+	_force[1] = MOVEMENT_SPEED * _thrust;
+}*/
+
+/*void ParticleModel::MoveConstVelocity( const float deltaTime )
 {
 	_transform->SetPosition(
 		_transform->GetPosition()[0] + _velocity[0] * TIME_STEP,
@@ -56,44 +68,74 @@ void ParticleModel::MoveConstAcceleration( const float deltaTime )
 	_velocity[2] += _acceleration[2] * ( deltaTime * 0.000001f );
 
 	_transform->SetPosition( position );
-}
+}*/
 
-void ParticleModel::ResetForces()
+/*void ParticleModel::ResetForces()
 {
 	_force = { 0.0f, 0.0f, 0.0f };
 	_friction = { 0.0f, 0.0f, 0.0f };
-}
+}*/
 
-void ParticleModel::UpdateState()
+void ParticleModel::Update( float deltaTime )
 {
-	UpdateNetForce();
-	UpdateAcceleration();
-	ApplyPhysics();
+	ApplyGravity( deltaTime );
+	ApplyThrust( deltaTime );
+
+	ComputeAcceleration( deltaTime );
+	ComputeVelocity( deltaTime );
+	ComputePosition( deltaTime );
+
+	CheckFloorCollision();
+
+	_netForce = { 0.0f, 0.0f, 0.0f };
 }
 
-void ParticleModel::UpdateNetForce()
+void ParticleModel::ApplyGravity( float deltaTime )
 {
-	_netForce[0] = _force[0] + _friction[0];
-	_netForce[2] = _force[2] + _friction[2];
+	_netForce[1] -= GRAVITY * _mass;
 }
 
-void ParticleModel::UpdateAcceleration()
+void ParticleModel::ApplyThrust( float deltaTime )
 {
-	_acceleration[0] = _netForce[0] / _mass;
-	_acceleration[2] = _netForce[2] / _mass;
 
-	_acceleration[0] = ( _acceleration[0] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[0];
-	_acceleration[2] = ( _acceleration[2] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[2];
 }
 
-void ParticleModel::ApplyPhysics()
+void ParticleModel::ComputeAcceleration( float deltaTime )
+{
+	_acceleration = _netForce / _mass;
+
+	//_acceleration[0] = ( _acceleration[0] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[0];
+	//_acceleration[1] = ( _acceleration[1] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[1];
+	//_acceleration[2] = ( _acceleration[2] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[2];
+}
+
+void ParticleModel::ComputeVelocity( float deltaTime )
+{
+	_velocity += _acceleration * deltaTime;
+}
+
+void ParticleModel::ComputePosition( float deltaTime )
 {
 	_transform->SetPosition(
-		_transform->GetPosition()[0] + _velocity[0] * TIME_STEP + 0.5f * _acceleration[0] * TIME_STEP * TIME_STEP,
-		0.5f,
-		_transform->GetPosition()[2] + _velocity[2] * TIME_STEP + 0.5f * _acceleration[2] * TIME_STEP * TIME_STEP
+		_transform->GetPosition()[0] + _velocity[0] * deltaTime + 0.5f * _acceleration[0] * deltaTime * deltaTime,
+		_transform->GetPosition()[1] + _velocity[1] * deltaTime + 0.5f * _acceleration[1] * deltaTime * deltaTime,
+		_transform->GetPosition()[2] + _velocity[2] * deltaTime + 0.5f * _acceleration[2] * deltaTime * deltaTime
 	);
+}
 
-	_velocity[0] = _velocity[0] + _acceleration[0] * TIME_STEP;
-	_velocity[2] = _velocity[2] + _acceleration[2] * TIME_STEP;
+void ParticleModel::CheckFloorCollision()
+{
+	v3df position = _transform->GetPosition();
+
+	if ( position[1] < _floorHeight )
+	{
+		_velocity = { _velocity[0], -0.3f * _velocity[1], _velocity[2] };
+		_transform->SetPosition( position[0], _floorHeight, position[2] );
+	}
+
+	if ( position[0] < -10.0f || position[0] > 10.0f )
+		_velocity = { -_velocity[0], _velocity[1], _velocity[2] };
+
+	if ( position[2] < -10.0f || position[2] > 10.0f )
+		_velocity = { _velocity[0], _velocity[1], -_velocity[2] };
 }

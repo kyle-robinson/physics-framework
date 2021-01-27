@@ -603,14 +603,16 @@ void Application::Update()
 	if ( deltaTime < FPS_60 ) return;
 
 	// Move gameobjects
-	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveForward();
-	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveLeft();
-	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveBackward();
-	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveRight();
+	//if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveForward();
+	//if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveLeft();
+	//if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveBackward();
+	//if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveRight();
+	//if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveUp();
 
-	if ( GetKeyState( VK_F1 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
-	if ( GetKeyState( VK_F2 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstAcceleration( deltaTime );
-	if ( GetKeyState( VK_F3 ) ) _gameObjects[objectToUse]->GetParticleModel()->UpdateState();
+	//if ( GetKeyState( VK_F1 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
+	//if ( GetKeyState( VK_F2 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstAcceleration( deltaTime );
+	//if ( GetKeyState( VK_F3 ) ) _gameObjects[objectToUse]->GetParticleModel()->UpdateState();
+	_gameObjects[objectToUse]->GetParticleModel()->Update( deltaTime );
 
 	if ( GetAsyncKeyState( 'R' ) )
 		for ( std::shared_ptr<GameObject> object : _gameObjects )
