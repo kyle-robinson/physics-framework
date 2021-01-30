@@ -13,9 +13,9 @@ public:
 	ParticleModel( std::shared_ptr<Transform> transform, bool useConstAccel, v3df initialVelocity, v3df initialAccel );
 
 	// particle movement
-	void Move( float x, float y, float z );
-	void MoveConstVelocity( float deltaTime );
-	void MoveConstAcceleration( float deltaTime );
+	//void Move( float x, float y, float z );
+	//void MoveConstVelocity( float deltaTime );
+	//void MoveConstAcceleration( float deltaTime );
 
 	// get forces
 	v3df GetVelocity() const { return _velocity; }
@@ -32,8 +32,10 @@ public:
 	// update forces
 	void Update( float deltaTime );
 	void ApplyGravity();
-	void ComputeVelocity( float deltaTime );
-	void CheckFloorCollision();
+	void ComputeAcceleration( float deltaTime );
+	void ComputeVelocity();
+	void ComputePosition();
+	void CheckWorldCollisions();
 	void ResetForces();
 private:
 	float _mass;

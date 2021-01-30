@@ -8,14 +8,14 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useCons
 	_force = { 0.0f, 0.0f, 0.0f };
 }
 
-void ParticleModel::Move( float x, float y, float z )
+/*void ParticleModel::Move( float x, float y, float z )
 {
 	_force[0] = x * LIMITER;
 	_force[1] = y * LIMITER;
 	_force[2] = z * LIMITER;
-}
+}*/
 
-void ParticleModel::MoveConstVelocity( float deltaTime )
+/*void ParticleModel::MoveConstVelocity( float deltaTime )
 {
 	v3df position = _transform->GetPosition();
 	position += _velocity * 0.01f;
@@ -32,20 +32,22 @@ void ParticleModel::MoveConstAcceleration( float deltaTime )
 
 	_velocity += _acceleration * deltaTime * LIMITER;
 	_transform->SetPosition( position );
-}
+}*/
 
 void ParticleModel::Update( float deltaTime )
 {
-	if ( _useConstAccel )
-		MoveConstAcceleration( deltaTime );
-	else
-		MoveConstVelocity( deltaTime );
+	//if ( _useConstAccel )
+	//	MoveConstAcceleration( deltaTime );
+	//else
+	//	MoveConstVelocity( deltaTime );
 
-	//ApplyGravity();
-	//ComputeVelocity( deltaTime );
-	CheckFloorCollision();
+	ApplyGravity();
+	ComputeAcceleration( deltaTime );
+	ComputeVelocity();
+	ComputePosition();
+	CheckWorldCollisions();
 
-	//_force = { 0.0f, 0.0f, 0.0f };
+	_force = { 0.0f, 0.0f, 0.0f };
 }
 
 void ParticleModel::ApplyGravity()
@@ -53,22 +55,48 @@ void ParticleModel::ApplyGravity()
 	_force[1] += _mass * GRAVITY;
 }
 
-void ParticleModel::ComputeVelocity( float deltaTime )
+void ParticleModel::ComputeVelocity()
 {
-	_velocity += _force / _mass * deltaTime;
+	_velocity += _force / _mass * 0.01f;
+}
+
+void ParticleModel::ComputeAcceleration( float deltaTime )
+{
 	v3df position = _transform->GetPosition();
-	position += _velocity * deltaTime;
+
+	position[0] += _velocity[0] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[0] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
+	position[1] += _velocity[1] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[1] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
+	position[2] += _velocity[2] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[2] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
+
+	_velocity += _acceleration * deltaTime * LIMITER;
 	_transform->SetPosition( position );
 }
 
-void ParticleModel::CheckFloorCollision()
+void ParticleModel::ComputePosition()
 {
 	v3df position = _transform->GetPosition();
+	position += _velocity * 0.01f;
+	_transform->SetPosition( position );
+}
+
+void ParticleModel::CheckWorldCollisions()
+{
+	v3df position = _transform->GetPosition();
+	
+	// floor collision
 	if ( position[1] < _transform->GetInitialPosition()[1] )
 	{
 		_velocity = { _velocity[0], 0.0f, _velocity[2] };
 		_transform->SetPosition( { position[0], _transform->GetInitialPosition()[1], position[2] } );
 	}
+
+	// left/right collisions
+	if ( position[0] < -30.0f || position[0] > 30.0f )
+		_velocity[0] = -0.3f * _velocity[0];
+
+	// front/back collisions
+	if ( position[2] < -30.0f || position[2] > 30.0f )
+		_velocity[2] = -0.3f * _velocity[2];
 }
 
 void ParticleModel::ResetForces()
