@@ -41,11 +41,11 @@ void ParticleModel::Update( float deltaTime )
 	else
 		MoveConstVelocity( deltaTime );
 
-	/*ApplyGravity();
-	ComputeVelocity( deltaTime );
+	//ApplyGravity();
+	//ComputeVelocity( deltaTime );
 	CheckFloorCollision();
 
-	_force = { 0.0f, 0.0f, 0.0f };*/
+	//_force = { 0.0f, 0.0f, 0.0f };
 }
 
 void ParticleModel::ApplyGravity()
@@ -66,7 +66,7 @@ void ParticleModel::CheckFloorCollision()
 	v3df position = _transform->GetPosition();
 	if ( position[1] < _transform->GetInitialPosition()[1] )
 	{
-		_velocity = { _velocity[0], -0.3f * _velocity[1], _velocity[2] };
+		_velocity = { _velocity[0], 0.0f, _velocity[2] };
 		_transform->SetPosition( { position[0], _transform->GetInitialPosition()[1], position[2] } );
 	}
 }
