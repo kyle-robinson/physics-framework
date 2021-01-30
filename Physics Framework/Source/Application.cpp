@@ -599,8 +599,13 @@ void Application::Update()
 	}
 
 	if ( GetAsyncKeyState( 'R' ) )
+	{
 		for ( int i = 0; i < _gameObjects.size(); i++ )
+		{
 			_gameObjects[i]->GetTransform()->ResetPosition();
+			_gameObjects[i]->GetParticleModel()->ResetForces();
+		}
+	}
 
 	_gameObjects[objectToUse]->GetParticleModel()->Update( dt );
 

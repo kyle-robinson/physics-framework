@@ -70,3 +70,9 @@ void ParticleModel::CheckFloorCollision()
 		_transform->SetPosition( { position[0], _transform->GetInitialPosition()[1], position[2] } );
 	}
 }
+
+void ParticleModel::ResetForces()
+{
+	_velocity = { 0.0f, 0.0f, 0.0f };
+	_acceleration = { 0.0f, 0.0f, 0.0f };
+}

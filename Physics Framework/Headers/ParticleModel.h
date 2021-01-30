@@ -34,6 +34,7 @@ public:
 	void ApplyGravity();
 	void ComputeVelocity( float deltaTime );
 	void CheckFloorCollision();
+	void ResetForces();
 private:
 	float _mass;
 	v3df _force;
