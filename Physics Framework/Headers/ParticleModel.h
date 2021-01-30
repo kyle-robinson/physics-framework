@@ -5,7 +5,7 @@
 #include "Transform.h"
 
 #define GRAVITY -9.81f
-#define LIMITER 0.00000001f
+#define LIMITER 0.0000001f
 
 class ParticleModel
 {

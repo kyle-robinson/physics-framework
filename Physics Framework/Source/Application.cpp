@@ -579,29 +579,15 @@ void Application::Update()
 	dt += ( dwTimeCur - dwTimeStart ) / 1000.0f;
 	if ( dt < FPS_60 ) return;
 
-	// Move gameobjects
-	if ( GetAsyncKeyState( 'Q' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( true );
-	if ( GetAsyncKeyState( 'E' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( false );
+	// Set Object Velocities
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, 0.1f );
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( -0.1f, 0.0f, 0.0f );
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, -0.1f );
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.1f, 0.0f, 0.0f );
+	if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.1f, 0.0f );
+	if ( GetAsyncKeyState( VK_SHIFT ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, -0.1f, 0.0f );
 
-	if ( _gameObjects[objectToUse]->GetParticleModel()->GetConstAcceleration() )
-	{
-		if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, 0.1f );
-		if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( -0.1f, 0.0f, 0.0f );
-		if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, -0.1f );
-		if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.1f, 0.0f, 0.0f );
-		if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.1f, 0.0f );
-		if ( GetAsyncKeyState( VK_SHIFT ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, -0.1f, 0.0f );
-	}
-	else
-	{
-		if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, 0.1f );
-		if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( -0.1f, 0.0f, 0.0f );
-		if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, -0.1f );
-		if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.1f, 0.0f, 0.0f );
-		if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.1f, 0.0f );
-		if ( GetAsyncKeyState( VK_SHIFT ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, -0.1f, 0.0f );
-	}
-
+	// Reset Object Positions & Forces
 	if ( GetAsyncKeyState( 'R' ) )
 	{
 		for ( int i = 0; i < _gameObjects.size(); i++ )
@@ -611,9 +597,7 @@ void Application::Update()
 		}
 	}
 
-	_gameObjects[objectToUse]->GetParticleModel()->Update( dt );
-
-	// Update camera
+	// Update Camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
 	float x = _cameraOrbitRadius * cos( angleAroundZ );
 	float z = _cameraOrbitRadius * sin( angleAroundZ );
@@ -623,7 +607,7 @@ void Application::Update()
 	_camera->SetPosition( cameraPos );
 	_camera->Update();
 
-	// Update objects
+	// Update Objects
 	for ( int i = 0; i < _gameObjects.size(); i++ )
 		_gameObjects[i]->Update( dt );
 
