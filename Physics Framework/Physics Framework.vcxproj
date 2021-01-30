@@ -428,12 +428,12 @@
     <ClInclude Include="Headers\Matrix.h" />
     <ClInclude Include="Headers\OBJLoader.h" />
     <ClInclude Include="Headers\ParticleModel.h" />
+    <ClInclude Include="Headers\stdafx.h" />
     <ClInclude Include="Headers\StringConverter.h" />
     <ClInclude Include="Headers\Structures.h" />
     <ClInclude Include="Headers\Transform.h" />
     <ClInclude Include="Headers\Vector.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -1,141 +1,72 @@
 #include "stdafx.h"
 #include "ParticleModel.h"
 
-ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transform( transform )
+ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useConstAccel, v3df initialVelocity, v3df initialAccel )
+	: _transform( transform ), _useConstAccel( useConstAccel ), _velocity( initialVelocity ), _acceleration( initialAccel )
 {
 	_mass = 50.0f;
-	_floorHeight = 0.5f;
-	_velocity = { 0.0f, 0.0f, 0.0f };
-	_netForce = { 0.0f, 0.0f, 0.0f };
-	_acceleration = { 0.0f, 0.0f, 0.0f };
+	_force = { 0.0f, 0.0f, 0.0f };
 }
 
-/*void const ParticleModel::MoveForward()
+void ParticleModel::Move( float x, float y, float z )
 {
-	ResetForces();
-	_force[2] = MOVEMENT_SPEED;
-	_friction[2] = -( NORMAL_FORCE * FRICTION_COEF * _mass );
+	_force[0] = x * LIMITER;
+	_force[1] = y * LIMITER;
+	_force[2] = z * LIMITER;
 }
 
-void const ParticleModel::MoveBackward()
+void ParticleModel::MoveConstVelocity( float deltaTime )
 {
-	ResetForces();
-	_force[2] = -MOVEMENT_SPEED;
-	_friction[2] = std::abs( NORMAL_FORCE * FRICTION_COEF * _mass );
+	v3df position = _transform->GetPosition();
+	position += _velocity * 0.01f;
+	_transform->SetPosition( position );
 }
 
-void const ParticleModel::MoveLeft()
-{
-	ResetForces();
-	_force[0] = -MOVEMENT_SPEED;
-	_friction[0] = std::abs( NORMAL_FORCE * FRICTION_COEF * _mass );
-}
-
-void const ParticleModel::MoveRight()
-{
-	ResetForces();
-	_force[0] = MOVEMENT_SPEED;
-	_friction[0] = -( NORMAL_FORCE * FRICTION_COEF * _mass );
-}
-
-void const ParticleModel::MoveUp()
-{
-	_enableThrust = true;
-	
-	ResetForces();
-	_force[1] = MOVEMENT_SPEED * _thrust;
-}*/
-
-/*void ParticleModel::MoveConstVelocity( const float deltaTime )
-{
-	_transform->SetPosition(
-		_transform->GetPosition()[0] + _velocity[0] * TIME_STEP,
-		_transform->GetPosition()[1] + _velocity[1] * TIME_STEP,
-		_transform->GetPosition()[2] + _velocity[2] * TIME_STEP
-	);
-}
-
-void ParticleModel::MoveConstAcceleration( const float deltaTime )
+void ParticleModel::MoveConstAcceleration( float deltaTime )
 {
 	v3df position = _transform->GetPosition();
 
-	position[0] += _velocity[0] * ( deltaTime * 0.000001f ) + 0.5f * _acceleration[0] * ( TIME_STEP * 0.00001f ) * ( TIME_STEP * 0.000001f );
-	position[1] += _velocity[1] * ( deltaTime * 0.000001f ) + 0.5f * _acceleration[1] * ( TIME_STEP * 0.00001f ) * ( TIME_STEP * 0.000001f );
-	position[2] += _velocity[2] * ( deltaTime * 0.000001f ) + 0.5f * _acceleration[2] * ( TIME_STEP * 0.00001f ) * ( TIME_STEP * 0.000001f );
+	position[0] += _velocity[0] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[0] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
+	position[1] += _velocity[1] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[1] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
+	position[2] += _velocity[2] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[2] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
 
-	_velocity[0] += _acceleration[0] * ( deltaTime * 0.000001f );
-	_velocity[1] += _acceleration[1] * ( deltaTime * 0.000001f );
-	_velocity[2] += _acceleration[2] * ( deltaTime * 0.000001f );
-
+	_velocity += _acceleration * deltaTime * LIMITER;
 	_transform->SetPosition( position );
-}*/
-
-/*void ParticleModel::ResetForces()
-{
-	_force = { 0.0f, 0.0f, 0.0f };
-	_friction = { 0.0f, 0.0f, 0.0f };
-}*/
+}
 
 void ParticleModel::Update( float deltaTime )
 {
-	ApplyGravity( deltaTime );
-	ApplyThrust( deltaTime );
+	if ( _useConstAccel )
+		MoveConstAcceleration( deltaTime );
+	else
+		MoveConstVelocity( deltaTime );
 
-	ComputeAcceleration( deltaTime );
+	/*ApplyGravity();
 	ComputeVelocity( deltaTime );
-	ComputePosition( deltaTime );
-
 	CheckFloorCollision();
 
-	_netForce = { 0.0f, 0.0f, 0.0f };
+	_force = { 0.0f, 0.0f, 0.0f };*/
 }
 
-void ParticleModel::ApplyGravity( float deltaTime )
+void ParticleModel::ApplyGravity()
 {
-	_netForce[1] -= GRAVITY * _mass;
-}
-
-void ParticleModel::ApplyThrust( float deltaTime )
-{
-
-}
-
-void ParticleModel::ComputeAcceleration( float deltaTime )
-{
-	_acceleration = _netForce / _mass;
-
-	//_acceleration[0] = ( _acceleration[0] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[0];
-	//_acceleration[1] = ( _acceleration[1] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[1];
-	//_acceleration[2] = ( _acceleration[2] > MAX_ACCELERATION ) ? MAX_ACCELERATION : _acceleration[2];
+	_force[1] += _mass * GRAVITY;
 }
 
 void ParticleModel::ComputeVelocity( float deltaTime )
 {
-	_velocity += _acceleration * deltaTime;
-}
-
-void ParticleModel::ComputePosition( float deltaTime )
-{
-	_transform->SetPosition(
-		_transform->GetPosition()[0] + _velocity[0] * deltaTime + 0.5f * _acceleration[0] * deltaTime * deltaTime,
-		_transform->GetPosition()[1] + _velocity[1] * deltaTime + 0.5f * _acceleration[1] * deltaTime * deltaTime,
-		_transform->GetPosition()[2] + _velocity[2] * deltaTime + 0.5f * _acceleration[2] * deltaTime * deltaTime
-	);
+	_velocity += _force / _mass * deltaTime;
+	v3df position = _transform->GetPosition();
+	position += _velocity * deltaTime;
+	_transform->SetPosition( position );
 }
 
 void ParticleModel::CheckFloorCollision()
 {
 	v3df position = _transform->GetPosition();
-
-	if ( position[1] < _floorHeight )
+	if ( position[1] < _transform->GetInitialPosition()[1] )
 	{
 		_velocity = { _velocity[0], -0.3f * _velocity[1], _velocity[2] };
-		_transform->SetPosition( position[0], _floorHeight, position[2] );
+		_transform->SetPosition( { position[0], _transform->GetInitialPosition()[1], position[2] } );
 	}
-
-	if ( position[0] < -10.0f || position[0] > 10.0f )
-		_velocity = { -_velocity[0], _velocity[1], _velocity[2] };
-
-	if ( position[2] < -10.0f || position[2] > 10.0f )
-		_velocity = { _velocity[0], _velocity[1], -_velocity[2] };
 }

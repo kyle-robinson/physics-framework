@@ -60,30 +60,7 @@ bool Application::HandleKeyboard( MSG msg )
 	return false;
 }
 
-Application::Application()
-{
-	// Vector3D Test Implementation
-	/*std::wstringstream wss;
-	v4df vec1( 1.5f, 2.3f, 3.1f, 4.6f );
-	v4df vec2( 3.8f, 6.4f, 1.7f, 2.5f );
-	v4df vec3 = vec1 + vec2;
-	for ( int i = 0; i < 4; i++ )
-		wss << vec3[i] << '\t';
-	MessageBox( nullptr, wss.str().c_str(), L"Vector Addition", MB_OK );*/
-
-	// Matrix Test Implementation
-	/*wss.str( std::wstring() );
-	matf mat1( 4, 4, 1.0f );
-	matf mat2( 4, 4, 5.0f );
-	matf mat3 = mat1.transpose() + mat2.transpose();
-	for ( int i = 0; i < mat3.get_rows(); i++ )
-	{
-		for ( int j = 0; j < mat3.get_cols(); j++ )
-			wss << mat3( i, j ) << '\t';
-		wss << '\n';
-	}
-	MessageBox( nullptr, wss.str().c_str(), L"Matrix Addition and Transposition", MB_OK );*/
-}
+Application::Application() {}
 
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 {
@@ -150,35 +127,35 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	noSpecMaterial.specularPower = 0.0f;
 
 	// initialize floor
-	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>( "Floor" );
+	std::unique_ptr<GameObject> gameObject = std::make_unique<GameObject>( "Floor" );
 	gameObject->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
 	gameObject->GetTransform()->SetScale( 15.0f, 15.0f, 15.0f );
 	gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
 	gameObject->GetAppearance()->SetTextureRV( _pGroundTextureRV.Get() );
 	gameObject->GetAppearance()->SetGeometryData( planeGeometry );
 	gameObject->GetAppearance()->SetMaterial( noSpecMaterial );
-	_gameObjects.push_back( gameObject );
+	_gameObjects.push_back( std::move( gameObject ) );
 
 	// initialize cubes
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		gameObject = std::make_shared<GameObject>( "Cube " + i );
+		gameObject = std::make_unique<GameObject>( "Cube " + i );
 		gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		gameObject->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		gameObject->GetAppearance()->SetTextureRV( _pTextureRV.Get() );
 		gameObject->GetAppearance()->SetGeometryData( cubeGeometry );
 		gameObject->GetAppearance()->SetMaterial( shinyMaterial );
-		_gameObjects.push_back( gameObject );
+		_gameObjects.push_back( std::move( gameObject ) );
 	}
 
 	// initialize donut
-	gameObject = std::make_shared<GameObject>( "Donut" );
+	gameObject = std::make_unique<GameObject>( "Donut" );
 	gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	gameObject->GetTransform()->SetInitialPosition( -4.0f, 0.5f, 10.0f );
 	gameObject->GetAppearance()->SetTextureRV( _pHerculesTextureRV.Get() );
 	gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
 	gameObject->GetAppearance()->SetMaterial( shinyMaterial );
-	_gameObjects.push_back( gameObject );
+	_gameObjects.push_back( std::move( gameObject ) );
 
 	return true;
 }
@@ -595,28 +572,37 @@ bool Application::InitDevice()
 void Application::Update()
 {
     // Update our time
-    static float deltaTime = 0.0f;
+    static float dt = 0.0f;
     static DWORD dwTimeStart = 0;
     DWORD dwTimeCur = GetTickCount64();
     if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
-	deltaTime += ( dwTimeCur - dwTimeStart ) / 1000.0f;
-	if ( deltaTime < FPS_60 ) return;
+	dt += ( dwTimeCur - dwTimeStart ) / 1000.0f;
+	if ( dt < FPS_60 ) return;
 
 	// Move gameobjects
-	//if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveForward();
-	//if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveLeft();
-	//if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveBackward();
-	//if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveRight();
-	//if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveUp();
+	if ( GetAsyncKeyState( 'Q' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( true );
+	if ( GetAsyncKeyState( 'E' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( false );
 
-	//if ( GetKeyState( VK_F1 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstVelocity( deltaTime );
-	//if ( GetKeyState( VK_F2 ) ) _gameObjects[objectToUse]->GetParticleModel()->MoveConstAcceleration( deltaTime );
-	//if ( GetKeyState( VK_F3 ) ) _gameObjects[objectToUse]->GetParticleModel()->UpdateState();
-	_gameObjects[objectToUse]->GetParticleModel()->Update( deltaTime );
+	if ( _gameObjects[objectToUse]->GetParticleModel()->GetConstAcceleration() )
+	{
+		if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, 0.1f );
+		if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( -0.1f, 0.0f, 0.0f );
+		if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, -0.1f );
+		if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.1f, 0.0f, 0.0f );
+	}
+	else
+	{
+		if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, 0.1f );
+		if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( -0.1f, 0.0f, 0.0f );
+		if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, -0.1f );
+		if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.1f, 0.0f, 0.0f );
+	}
 
 	if ( GetAsyncKeyState( 'R' ) )
-		for ( std::shared_ptr<GameObject> object : _gameObjects )
-			object->GetTransform()->ResetPosition();
+		for ( int i = 0; i < _gameObjects.size(); i++ )
+			_gameObjects[i]->GetTransform()->ResetPosition();
+
+	_gameObjects[objectToUse]->GetParticleModel()->Update( dt );
 
 	// Update camera
 	float angleAroundZ = XMConvertToRadians( _cameraOrbitAngleXZ );
@@ -629,10 +615,10 @@ void Application::Update()
 	_camera->Update();
 
 	// Update objects
-	for ( auto gameObject : _gameObjects )
-		gameObject->Update( deltaTime );
+	for ( int i = 0; i < _gameObjects.size(); i++ )
+		_gameObjects[i]->Update( dt );
 
-	deltaTime -= FPS_60;
+	dt -= FPS_60;
 }
 
 void Application::Draw()
@@ -644,40 +630,32 @@ void Application::Draw()
 
     // Setup buffers and render scene
 	_pImmediateContext->IASetInputLayout( _pVertexLayout.Get() );
-
 	_pImmediateContext->VSSetShader( _pVertexShader.Get(), nullptr, 0 );
 	_pImmediateContext->PSSetShader( _pPixelShader.Get(), nullptr, 0 );
-
 	_pImmediateContext->VSSetConstantBuffers( 0, 1, _pConstantBuffer.GetAddressOf() );
 	_pImmediateContext->PSSetConstantBuffers( 0, 1, _pConstantBuffer.GetAddressOf() );
 	_pImmediateContext->PSSetSamplers( 0, 1, _pSamplerLinear.GetAddressOf() );
 
 	ConstantBuffer cb;
-
 	cb.View = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetView() ) );
 	cb.Projection = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetProjection() ) );
-	
 	cb.light = basicLight;
 	cb.EyePosW = _camera->GetPosition();
 
 	// Render all scene objects
-	for ( auto gameObject : _gameObjects )
+	for ( int i = 0; i < _gameObjects.size(); i++ )
 	{
 		// Get render material
-		Material material = gameObject->GetAppearance()->GetMaterial();
-
-		// Copy material to shader
+		Material material = _gameObjects[i]->GetAppearance()->GetMaterial();
 		cb.surface.AmbientMtrl = material.ambient;
 		cb.surface.DiffuseMtrl = material.diffuse;
 		cb.surface.SpecularMtrl = material.specular;
-
-		// Set world matrix
-		cb.World = XMMatrixTranspose( gameObject->GetTransform()->GetWorldMatrix() );
+		cb.World = XMMatrixTranspose( _gameObjects[i]->GetTransform()->GetWorldMatrix() );
 
 		// Set texture
-		if ( gameObject->GetAppearance()->HasTexture() )
+		if ( _gameObjects[i]->GetAppearance()->HasTexture() )
 		{
-			ID3D11ShaderResourceView* textureRV = gameObject->GetAppearance()->GetTextureRV();
+			ID3D11ShaderResourceView* textureRV = _gameObjects[i]->GetAppearance()->GetTextureRV();
 			_pImmediateContext->PSSetShaderResources( 0, 1, &textureRV );
 			cb.HasTexture = 1.0f;
 		}
@@ -685,14 +663,8 @@ void Application::Draw()
 		{
 			cb.HasTexture = 0.0f;
 		}
-
-		// Update constant buffer
 		_pImmediateContext->UpdateSubresource( _pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0 );
-
-		// Draw object
-		gameObject->Draw( _pImmediateContext.Get() );
+		_gameObjects[i]->Draw( _pImmediateContext.Get() );
 	}
-
-    // Present our back buffer to our front buffer
     _pSwapChain->Present( 0, 0 );
 }

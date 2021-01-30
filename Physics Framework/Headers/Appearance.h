@@ -27,6 +27,14 @@ class Appearance
 public:
 	Appearance() : _geometry( {} ), _material( {} ), _textureRV( nullptr ) {}
 
+	void Update( ID3D11DeviceContext* context )
+	{
+		context->IASetVertexBuffers( 0, 1, &_geometry.vertexBuffer,
+			&_geometry.vertexBufferStride, &_geometry.vertexBufferOffset );
+		context->IASetIndexBuffer( _geometry.indexBuffer, DXGI_FORMAT_R16_UINT, 0 );
+		context->DrawIndexed( _geometry.numberOfIndices, 0, 0 );
+	}
+
 	Material GetMaterial() const { return _material; }
 	void SetMaterial( Material material ) { _material = material; }
 

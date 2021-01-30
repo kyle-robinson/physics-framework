@@ -8,7 +8,16 @@ class Transform
 {
 public:
 	Transform() : _scale( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ), _position( 0.0f, 0.0f, 0.0f ), _parent( nullptr ) {}
-	
+
+	void Update( float deltaTime )
+	{
+		// Calculate world matrix
+		XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );
+		XMMATRIX rotation = XMMatrixRotationX( GetRotation()[0] ) * XMMatrixRotationY( GetRotation()[1] ) * XMMatrixRotationZ( GetRotation()[2] );
+		XMMATRIX translation = XMMatrixTranslation( GetPosition()[0], GetPosition()[1], GetPosition()[2] );
+		XMStoreFloat4x4( &_world, scale * rotation * translation );
+	}
+
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }
 	void SetInitialPosition( float x, float y, float z ) { _initialPosition = { x, y, z }; _position = _initialPosition; }
 	v3df GetInitialPosition() const noexcept { return _initialPosition; }
