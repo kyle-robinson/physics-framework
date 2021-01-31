@@ -98,12 +98,22 @@ void ParticleModel::CheckWorldCollisions()
 	}
 
 	// left/right collisions
-	if ( position[0] < -WORLD_BOUNDARY || position[0] > WORLD_BOUNDARY )
-		_velocity[0] = -0.3f * _velocity[0];
+	//if ( position[0] == -WORLD_BOUNDARY || position[0] == WORLD_BOUNDARY )
+	//	_velocity[0] = 0.3f * -_velocity[0];
+
+	if ( position[0] < -WORLD_BOUNDARY )
+		_velocity[0] = 0.1f;
+	else if ( position[0] > WORLD_BOUNDARY )
+		_velocity[0] = -0.1f;
 
 	// front/back collisions
-	if ( position[2] < -WORLD_BOUNDARY || position[2] > WORLD_BOUNDARY )
-		_velocity[2] = -0.3f * _velocity[2];
+	//if ( position[2] <= -WORLD_BOUNDARY || position[2] >= WORLD_BOUNDARY )
+	//	_velocity[2] = 0.3f * -_velocity[2];
+
+	if ( position[2] < -WORLD_BOUNDARY )
+		_velocity[2] = 0.1f;
+	else if ( position[2] > WORLD_BOUNDARY )
+		_velocity[2] = -0.1f;
 }
 
 void ParticleModel::ResetForces()
