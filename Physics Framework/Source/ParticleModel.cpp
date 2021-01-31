@@ -61,15 +61,22 @@ void ParticleModel::DragLaminar()
 
 void ParticleModel::DragTurbulent()
 {
-	float velMag = _velocity.magnitude();
-	v3df unitVel = _velocity.normalize();
-
 	// magnitude of drag force
-	float dragMag = DRAG_FACTOR * velMag * velMag;
+	v3df dragMag;
+	static float density = 6.25f;
+	dragMag[0] = 0.5f * density * -DRAG_FACTOR * 8.0f * _velocity[0] * _velocity[0];
+	dragMag[1] = 0.5f * density * -DRAG_FACTOR * 8.0f * _velocity[1] * _velocity[1];
+	dragMag[2] = 0.5f * density * -DRAG_FACTOR * 8.0f * _velocity[2] * _velocity[2];
 
-	_drag[0] = -dragMag * unitVel[0];
-	_drag[1] = -dragMag * unitVel[1];
-	_drag[2] = -dragMag * unitVel[2];
+	// adjust for negative movements
+	if ( _velocity[0] < 0.0f )
+		dragMag[0] = -dragMag[0];
+	if ( _velocity[1] < 0.0f )
+		dragMag[1] = -dragMag[1];
+	if ( _velocity[2] < 0.0f )
+		dragMag[2] = -dragMag[2];
+
+	_drag = dragMag;
 }
 
 void ParticleModel::Acceleration()
