@@ -5,7 +5,9 @@
 #include "Transform.h"
 
 #define GRAVITY -9.81f
+#define TIME_STEP 0.01f
 #define LIMITER 0.0000001f
+#define WORLD_BOUNDARY 15.0f
 
 class ParticleModel
 {
@@ -13,7 +15,7 @@ public:
 	ParticleModel( std::shared_ptr<Transform> transform, bool useConstAccel, v3df initialVelocity, v3df initialAccel );
 
 	// particle movement
-	//void Move( float x, float y, float z );
+	void Move( float x, float y, float z );
 	//void MoveConstVelocity( float deltaTime );
 	//void MoveConstAcceleration( float deltaTime );
 
@@ -39,7 +41,8 @@ public:
 	void ResetForces();
 private:
 	float _mass;
-	v3df _force;
+	//v3df _force;
+	v3df _netForce;
 	v3df _velocity;
 	v3df _acceleration;
 	bool _useConstAccel;

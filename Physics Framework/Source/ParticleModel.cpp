@@ -5,15 +5,16 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useCons
 	: _transform( transform ), _useConstAccel( useConstAccel ), _velocity( initialVelocity ), _acceleration( initialAccel )
 {
 	_mass = 50.0f;
-	_force = { 0.0f, 0.0f, 0.0f };
+	//_force = { 0.0f, 0.0f, 0.0f };
+	_netForce = { 0.0f, 0.0f, 0.0f };
 }
 
-/*void ParticleModel::Move( float x, float y, float z )
+void ParticleModel::Move( float x, float y, float z )
 {
-	_force[0] = x * LIMITER;
-	_force[1] = y * LIMITER;
-	_force[2] = z * LIMITER;
-}*/
+	_netForce[0] = x;
+	_netForce[1] = y;
+	_netForce[2] = z;
+}
 
 /*void ParticleModel::MoveConstVelocity( float deltaTime )
 {
@@ -47,35 +48,41 @@ void ParticleModel::Update( float deltaTime )
 	ComputePosition();
 	CheckWorldCollisions();
 
-	_force = { 0.0f, 0.0f, 0.0f };
+	//_force = { 0.0f, 0.0f, 0.0f };
+	_netForce = { 0.0f, 0.0f, 0.0f };
 }
 
 void ParticleModel::ApplyGravity()
 {
-	_force[1] += _mass * GRAVITY;
+	//_force[1] += _mass * GRAVITY;
+	_netForce[1] += _mass * GRAVITY;
 }
 
 void ParticleModel::ComputeVelocity()
 {
-	_velocity += _force / _mass * 0.01f;
+	//_velocity += _force / _mass * 0.01f;
+	_velocity += _netForce / _mass * 0.01f;
 }
 
 void ParticleModel::ComputeAcceleration( float deltaTime )
 {
-	v3df position = _transform->GetPosition();
-
-	position[0] += _velocity[0] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[0] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
-	position[1] += _velocity[1] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[1] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
-	position[2] += _velocity[2] * ( deltaTime * LIMITER ) + 0.5f * _acceleration[2] * ( deltaTime * LIMITER ) * ( deltaTime * LIMITER );
-
-	_velocity += _acceleration * deltaTime * LIMITER;
-	_transform->SetPosition( position );
+	_acceleration = _netForce / _mass;
 }
 
 void ParticleModel::ComputePosition()
 {
+	//v3df position = _transform->GetPosition();
+	//position += _velocity * 0.01f;
+	//_transform->SetPosition( position );
+	
 	v3df position = _transform->GetPosition();
-	position += _velocity * 0.01f;
+
+	position[0] += _velocity[0] * TIME_STEP + 0.5f * _acceleration[0] * TIME_STEP * TIME_STEP;
+	position[1] += _velocity[1] * TIME_STEP + 0.5f * _acceleration[1] * TIME_STEP * TIME_STEP;
+	position[2] += _velocity[2] * TIME_STEP + 0.5f * _acceleration[2] * TIME_STEP * TIME_STEP;
+
+	_velocity += _acceleration * TIME_STEP;
+
 	_transform->SetPosition( position );
 }
 
@@ -91,11 +98,11 @@ void ParticleModel::CheckWorldCollisions()
 	}
 
 	// left/right collisions
-	if ( position[0] < -30.0f || position[0] > 30.0f )
+	if ( position[0] < -WORLD_BOUNDARY || position[0] > WORLD_BOUNDARY )
 		_velocity[0] = -0.3f * _velocity[0];
 
 	// front/back collisions
-	if ( position[2] < -30.0f || position[2] > 30.0f )
+	if ( position[2] < -WORLD_BOUNDARY || position[2] > WORLD_BOUNDARY )
 		_velocity[2] = -0.3f * _velocity[2];
 }
 

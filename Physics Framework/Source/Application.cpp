@@ -582,7 +582,13 @@ void Application::Update()
 	// Set Object Velocities
 	//if ( GetAsyncKeyState( 'Q' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( true );
 	//if ( GetAsyncKeyState( 'E' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetConstAcceleration( false );
-	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, 0.1f );
+
+	if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 0.0f, 0.1f );
+	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f, 0.0f );
+	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 0.0f, -0.1f );
+	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.1f, 0.0f, 0.0f );
+
+	/*if ( GetAsyncKeyState( 'W' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, 0.1f );
 	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( -0.1f, 0.0f, 0.0f );
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.0f, 0.0f, -0.1f );
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetAcceleration( 0.1f, 0.0f, 0.0f );
@@ -594,7 +600,8 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.0f, -0.1f );
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.1f, 0.0f, 0.0f );
 	if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, 0.1f, 0.0f );
-	if ( GetAsyncKeyState( VK_SHIFT ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, -0.1f, 0.0f );
+	if ( GetAsyncKeyState( VK_SHIFT ) ) _gameObjects[objectToUse]->GetParticleModel()->SetVelocity( 0.0f, -0.1f, 0.0f );*/
+
 	//if ( _gameObjects[objectToUse]->GetParticleModel()->GetConstAcceleration() )
 	//{
 	//}
