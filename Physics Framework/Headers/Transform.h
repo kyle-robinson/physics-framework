@@ -9,7 +9,7 @@ class Transform
 public:
 	Transform() : _scale( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ), _position( 0.0f, 0.0f, 0.0f ), _parent( nullptr ) {}
 
-	void Update( float deltaTime )
+	void Update()
 	{
 		// Calculate world matrix
 		XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );

@@ -13,7 +13,7 @@ public:
 	GameObject( const std::string& type );
 
 	std::string GetType() const { return _type; }
-	virtual void Update( float deltaTime );
+	virtual void Update();
 	virtual void Draw( ID3D11DeviceContext* pImmediateContext );
 
 	std::shared_ptr<Transform> GetTransform() const { return _transform; }

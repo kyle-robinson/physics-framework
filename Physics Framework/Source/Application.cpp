@@ -584,7 +584,7 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 7.5f, 0.0f );
+	if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
 	// Reset Object Positions & Forces
 	if ( GetAsyncKeyState( 'R' ) )
@@ -606,7 +606,7 @@ void Application::Update()
 
 	// Update Objects
 	for ( int i = 0; i < _gameObjects.size(); i++ )
-		_gameObjects[i]->Update( dt );
+		_gameObjects[i]->Update();
 
 	dt -= FPS_60;
 }
