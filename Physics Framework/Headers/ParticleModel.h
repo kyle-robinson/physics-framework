@@ -4,7 +4,7 @@
 
 #include "Transform.h"
 
-#define FRICTION 2.5f
+#define FRICTION 0.00002f
 #define GRAVITY -9.81f
 #define TIME_STEP 0.01f
 #define LIMITER 0.0000001f
@@ -17,8 +17,6 @@ public:
 
 	// particle movement
 	void Move( float x, float y, float z );
-	//void MoveConstVelocity( float deltaTime );
-	//void MoveConstAcceleration( float deltaTime );
 
 	// get forces
 	v3df GetVelocity() const { return _velocity; }
@@ -44,7 +42,6 @@ public:
 private:
 	float _mass;
 	v3df _friction;
-	//v3df _force;
 	v3df _netForce;
 	v3df _velocity;
 	v3df _acceleration;
