@@ -584,6 +584,7 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'A' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
 	if ( GetAsyncKeyState( 'S' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
 	if ( GetAsyncKeyState( 'D' ) ) _gameObjects[objectToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
+	if ( GetAsyncKeyState( VK_SPACE ) ) _gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 7.5f, 0.0f );
 
 	// Reset Object Positions & Forces
 	if ( GetAsyncKeyState( 'R' ) )
