@@ -4,6 +4,7 @@
 
 #include "Transform.h"
 
+#define FRICTION 2.5f
 #define GRAVITY -9.81f
 #define TIME_STEP 0.01f
 #define LIMITER 0.0000001f
@@ -34,13 +35,15 @@ public:
 	// update forces
 	void Update( float deltaTime );
 	void ApplyGravity();
-	void ComputeAcceleration( float deltaTime );
+	void ComputeAcceleration();
 	void ComputeVelocity();
+	void ComputeFriction();
 	void ComputePosition();
 	void CheckWorldCollisions();
 	void ResetForces();
 private:
 	float _mass;
+	v3df _friction;
 	//v3df _force;
 	v3df _netForce;
 	v3df _velocity;

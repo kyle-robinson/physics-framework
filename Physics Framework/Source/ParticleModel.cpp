@@ -6,14 +6,16 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useCons
 {
 	_mass = 50.0f;
 	//_force = { 0.0f, 0.0f, 0.0f };
+	//_friction = 0.5f * ( _mass * -GRAVITY );
+	_friction = { 0.0f, 0.0f, 0.0f };
 	_netForce = { 0.0f, 0.0f, 0.0f };
 }
 
 void ParticleModel::Move( float x, float y, float z )
 {
-	_netForce[0] = x;
-	_netForce[1] = y;
-	_netForce[2] = z;
+	_netForce[0] += x;
+	_netForce[1] += y;
+	_netForce[2] += z;
 }
 
 /*void ParticleModel::MoveConstVelocity( float deltaTime )
@@ -43,8 +45,9 @@ void ParticleModel::Update( float deltaTime )
 	//	MoveConstVelocity( deltaTime );
 
 	ApplyGravity();
-	ComputeAcceleration( deltaTime );
+	ComputeAcceleration();
 	ComputeVelocity();
+	ComputeFriction();
 	ComputePosition();
 	CheckWorldCollisions();
 
@@ -58,15 +61,43 @@ void ParticleModel::ApplyGravity()
 	_netForce[1] += _mass * GRAVITY;
 }
 
+void ParticleModel::ComputeAcceleration()
+{
+	_acceleration = _netForce / _mass;
+
+	// x friction
+	if ( _acceleration[0] > 0.0f )
+		_acceleration[0] *= _friction[0];
+	else
+		_acceleration[0] *= -_friction[0];
+
+	// z friction
+	if ( _acceleration[2] > 0.0f )
+		_acceleration[2] *= _friction[2];
+	else
+		_acceleration[2] *= -_friction[2];
+}
+
 void ParticleModel::ComputeVelocity()
 {
 	//_velocity += _force / _mass * 0.01f;
-	_velocity += _netForce / _mass * 0.01f;
+	_velocity += _netForce / _mass * TIME_STEP;
 }
 
-void ParticleModel::ComputeAcceleration( float deltaTime )
+void ParticleModel::ComputeFriction()
 {
-	_acceleration = _netForce / _mass;
+	/*float normalForce = _mass * -GRAVITY;
+	float _friction = 0.5f * normalForce;
+
+	_netForce[0] += _friction;
+	_netForce[1] += _friction;
+	_netForce[2] += _friction;*/
+
+	v3df invVelocity = { -_velocity[0], -_velocity[1], -_velocity[2] };
+	if ( _velocity.magnitude() < FRICTION * TIME_STEP )
+		_friction = ( invVelocity / TIME_STEP );
+	else
+		_friction = invVelocity.normalize() * FRICTION;
 }
 
 void ParticleModel::ComputePosition()
