@@ -2,21 +2,29 @@
 #include "ParticleSystem.h"
 
 /*   PARTICLE SYSTEM   */
-ParticleSystem::ParticleSystem()
+ParticleSystem::ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV,
+	Geometry geometry, Material material )
 {
-	_particles.reserve( MAX_PARTICLE_COUNT );
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
+	{
+		_particles[i].GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		_particles[i].GetTransform()->SetInitialPosition( 0.0f, 0.5f, -2.5f );
+		_particles[i].GetAppearance()->SetTextureRV( _pTextureRV.Get() );
+		_particles[i].GetAppearance()->SetGeometryData( geometry );
+		_particles[i].GetAppearance()->SetMaterial( material );
+	}
 }
 
 void ParticleSystem::Update( float deltaTime )
 {
-	for ( int i = 0; i < MAX_PARTICLE_COUNT; i++ )
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
 		_particles[i].Update( deltaTime );
 }
 
-void ParticleSystem::Draw()
+void ParticleSystem::Draw( ID3D11DeviceContext* pImmediateContext )
 {
 	v3df position;
-	for ( int i = 0; i < MAX_PARTICLE_COUNT; i++ )
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
 	{
 		if ( _particles[i].GetActive() )
 		{
@@ -31,6 +39,7 @@ void ParticleSystem::Draw()
 
 			_particles[i].GetTransform()->SetPosition( position );
 			_particles[i].GetTransform()->SetScale( { particleScale, particleScale, particleScale } );
+			_particles[i].GetAppearance()->Update( pImmediateContext );
 		}
 	}
 }
@@ -44,13 +53,8 @@ void ParticleSystem::AddParticle( v3df position, v3df velocity, float maxAge )
 
 int ParticleSystem::FindNextAvailableParticleIndex()
 {
-	for ( int i = 0; i < MAX_PARTICLE_COUNT; i++ )
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
 		if ( !_particles[i].GetActive() )
 			return i;
 	return -1;
-}
-
-void ParticleSystem::DestroyParticle( int index )
-{
-	_particles.erase( _particles.begin() + index );
 }

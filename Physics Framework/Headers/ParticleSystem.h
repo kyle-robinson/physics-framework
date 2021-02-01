@@ -9,14 +9,15 @@
 class ParticleSystem
 {
 public:
-	ParticleSystem();
+	ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV,
+		Geometry geometry, Material material );
 	void Update( float deltaTime );
-	void Draw();
+	void Draw( ID3D11DeviceContext* pImmediateContext );
 	void AddParticle( v3df position, v3df velocity, float maxAge );
 	int FindNextAvailableParticleIndex();
 private:
-	void DestroyParticle( int index );
-	std::vector<Particle> _particles;
+	Particle _particles[MAX_PARTICLE_COUNT];
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV;
 };
 
 #endif

@@ -7,7 +7,8 @@ class GameObject;
 class Transform
 {
 public:
-	Transform() : _scale( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ), _position( 0.0f, 0.0f, 0.0f ), _parent( nullptr ) {}
+	Transform() : _scale( 0.0f, 0.0f, 0.0f ), _rotation( 0.0f, 0.0f, 0.0f ), _position( 0.0f, 0.0f, 0.0f ),
+		_initialPosition( 0.0f, 0.0f, 0.0f ), _parent( nullptr ) {}
 
 	void Update()
 	{

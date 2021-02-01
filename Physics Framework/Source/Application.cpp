@@ -84,9 +84,6 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 
 	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
 
-	// setup particle system
-	_particleSystem = std::make_shared<ParticleSystem>();
-
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
 	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -140,6 +137,9 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	gameObject->GetAppearance()->SetMaterial( noSpecMaterial );
 	_gameObjects.push_back( std::move( gameObject ) );
 
+	// setup particle system
+	//_particleSystem = std::make_shared<ParticleSystem>( _pTextureRV.Get(), cubeGeometry, shinyMaterial );
+
 	// initialize cubes
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
@@ -160,6 +160,18 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
 	gameObject->GetAppearance()->SetMaterial( shinyMaterial );
 	_gameObjects.push_back( std::move( gameObject ) );
+
+	// initialize particles
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
+	{
+		std::unique_ptr<GameObject> particle = std::make_unique<GameObject>( "Particle " + i );
+		particle->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		particle->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 5.0f );
+		particle->GetAppearance()->SetTextureRV( _pTextureRV.Get() );
+		particle->GetAppearance()->SetGeometryData( cubeGeometry );
+		particle->GetAppearance()->SetMaterial( shinyMaterial );
+		_particles.push_back( std::move( particle ) );
+	}
 
 	return true;
 }
@@ -556,7 +568,25 @@ void Application::Update()
 	for ( int i = 0; i < _gameObjects.size(); i++ )
 		_gameObjects[i]->Update();
 
-	_particleSystem->Update( dt );
+	// move particles
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
+	{
+		_particles[i]->GetParticleModel()->Move( 0.0f, 1.0f + i, 0.0f );
+		_particles[i]->Update();
+		if ( _particles[i]->GetTransform()->GetPosition()[1] > 5.0f )
+			_particles[i]->GetTransform()->SetPosition( 0.0f, 0.5f, 2.5f );
+		_particles[i]->GetTransform()->SetScale(
+			0.5f - ( _particles[i]->GetTransform()->GetPosition()[1] * 0.5f ),
+			0.5f - ( _particles[i]->GetTransform()->GetPosition()[1] * 0.5f ),
+			0.5f - ( _particles[i]->GetTransform()->GetPosition()[1] * 0.5f )
+		);
+		if ( _particles[i]->GetTransform()->GetScale()[1] <= 0.0f )
+		{
+			_particles[i]->GetTransform()->SetScale( 0.1f, 0.1f, 0.1f );
+		}
+	}
+
+	//_particleSystem->Update( dt );
 
 	dt -= FPS_60;
 }
@@ -605,7 +635,32 @@ void Application::Draw()
 		_gameObjects[i]->Draw( _pImmediateContext.Get() );
 	}
 
-	_particleSystem->Draw();
+	// Render all particles
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
+	{
+		// Get render material
+		Material material = _particles[i]->GetAppearance()->GetMaterial();
+		cb.surface.AmbientMtrl = material.ambient;
+		cb.surface.DiffuseMtrl = material.diffuse;
+		cb.surface.SpecularMtrl = material.specular;
+		cb.World = XMMatrixTranspose( _particles[i]->GetTransform()->GetWorldMatrix() );
+
+		// Set texture
+		if ( _particles[i]->GetAppearance()->HasTexture() )
+		{
+			ID3D11ShaderResourceView* textureRV = _particles[i]->GetAppearance()->GetTextureRV();
+			_pImmediateContext->PSSetShaderResources( 0, 1, &textureRV );
+			cb.HasTexture = 1.0f;
+		}
+		else
+		{
+			cb.HasTexture = 0.0f;
+		}
+		_pImmediateContext->UpdateSubresource( _pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0 );
+		_particles[i]->Draw( _pImmediateContext.Get() );
+	}
+
+	//_particleSystem->Draw( _pImmediateContext.Get() );
 
     _pSwapChain->Present( 0, 0 );
 }

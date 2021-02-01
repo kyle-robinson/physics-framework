@@ -7,11 +7,12 @@
 #include "OBJLoader.h"
 #include "GameObject.h"
 #include "../resource.h"
-#include "ParticleSystem.h"
+//#include "ParticleSystem.h"
 #include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f
+#define MAX_PARTICLE_COUNT 10
 
 struct Light
 {
@@ -103,7 +104,8 @@ private:
 	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
-	std::shared_ptr<ParticleSystem> _particleSystem;
+	std::vector<std::unique_ptr<GameObject>> _particles;
+	//std::shared_ptr<ParticleSystem> _particleSystem;
 	std::vector<std::unique_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;
