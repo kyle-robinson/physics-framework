@@ -92,7 +92,7 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <SourcePath>$(ProjectDir)DirectXTK\Src;$(SourcePath)</SourcePath>
-    <IncludePath>$(ProjectDir)Headers;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -387,28 +387,24 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Graphics\Shaders.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Source\Application.cpp" />
-    <ClCompile Include="Source\Camera.cpp" />
-    <ClCompile Include="Source\DDSTextureLoader.cpp" />
-    <ClCompile Include="Source\ErrorLogger.cpp">
+    <ClCompile Include="Model\DDSTextureLoader.cpp" />
+    <ClCompile Include="Model\OBJLoader.cpp" />
+    <ClCompile Include="Objects\Camera.cpp" />
+    <ClCompile Include="Objects\GameObject.cpp" />
+    <ClCompile Include="Physics\Particle.cpp" />
+    <ClCompile Include="Physics\ParticleModel.cpp" />
+    <ClCompile Include="Physics\ParticleSystem.cpp" />
+    <ClCompile Include="Utility\ErrorLogger.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\GameObject.cpp" />
-    <ClCompile Include="Source\OBJLoader.cpp" />
-    <ClCompile Include="Source\Particle.cpp" />
-    <ClCompile Include="Source\ParticleModel.cpp" />
-    <ClCompile Include="Source\ParticleSystem.cpp" />
-    <ClCompile Include="Source\Shaders.cpp" />
-    <ClCompile Include="Source\stdafx.cpp">
+    <ClCompile Include="Utility\stdafx.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\StringConverter.cpp">
+    <ClCompile Include="Utility\StringConverter.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
@@ -429,39 +425,39 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\Appearance.h" />
-    <ClInclude Include="Headers\Application.h" />
-    <ClInclude Include="Headers\Camera.h" />
-    <ClInclude Include="Headers\COMException.h" />
-    <ClInclude Include="Headers\DDSTextureLoader.h" />
-    <ClInclude Include="Headers\ErrorLogger.h" />
-    <ClInclude Include="Headers\GameObject.h" />
-    <ClInclude Include="Headers\IndexBuffer.h" />
-    <ClInclude Include="Headers\Indices.h" />
-    <ClInclude Include="Headers\Light.h" />
-    <ClInclude Include="Headers\Matrix.h" />
-    <ClInclude Include="Headers\OBJLoader.h" />
-    <ClInclude Include="Headers\Particle.h" />
-    <ClInclude Include="Headers\ParticleModel.h" />
-    <ClInclude Include="Headers\ParticleSystem.h" />
-    <ClInclude Include="Headers\Quaternion.h" />
-    <ClInclude Include="Headers\Shaders.h" />
-    <ClInclude Include="Headers\stdafx.h" />
-    <ClInclude Include="Headers\StringConverter.h" />
-    <ClInclude Include="Headers\Transform.h" />
-    <ClInclude Include="Headers\Vector.h" />
-    <ClInclude Include="Headers\Vertex.h" />
-    <ClInclude Include="Headers\VertexBuffer.h" />
-    <ClInclude Include="Headers\Vertices.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\Shaders.h" />
+    <ClInclude Include="Graphics\VertexBuffer.h" />
+    <ClInclude Include="Math\Matrix.h" />
+    <ClInclude Include="Math\Quaternion.h" />
+    <ClInclude Include="Math\Vector.h" />
+    <ClInclude Include="Model\Appearance.h" />
+    <ClInclude Include="Model\DDSTextureLoader.h" />
+    <ClInclude Include="Model\OBJLoader.h" />
+    <ClInclude Include="Model\Transform.h" />
+    <ClInclude Include="Objects\Camera.h" />
+    <ClInclude Include="Objects\GameObject.h" />
+    <ClInclude Include="Objects\Indices.h" />
+    <ClInclude Include="Objects\Light.h" />
+    <ClInclude Include="Objects\Vertex.h" />
+    <ClInclude Include="Objects\Vertices.h" />
+    <ClInclude Include="Physics\Particle.h" />
+    <ClInclude Include="Physics\ParticleModel.h" />
+    <ClInclude Include="Physics\ParticleSystem.h" />
+    <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="Utility\COMException.h" />
+    <ClInclude Include="Utility\ErrorLogger.h" />
+    <ClInclude Include="Utility\stdafx.h" />
+    <ClInclude Include="Utility\StringConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds" />
     <Image Include="Resources\Textures\Hercules_COLOR.dds" />
     <Image Include="Resources\Textures\stone.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

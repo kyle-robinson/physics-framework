@@ -2,14 +2,13 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-
 #include "Camera.h"
 #include "Shaders.h"
+#include "resource.h"
 #include "OBJLoader.h"
 #include "GameObject.h"
-#include "../resource.h"
+#include "IndexBuffer.h"
+#include "VertexBuffer.h"
 #include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5

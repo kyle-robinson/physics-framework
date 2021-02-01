@@ -39,144 +39,139 @@
       <UniqueIdentifier>{2c3d4c8c-5d1a-459a-a05a-a4e4b608a44e}</UniqueIdentifier>
       <Extensions>fx;fxh;hlsl</Extensions>
     </Filter>
-    <Filter Include="Source\Particle">
-      <UniqueIdentifier>{705de03d-c607-4815-bac8-fee92aac3a42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Particle">
-      <UniqueIdentifier>{42729b02-3d59-4035-a031-9fb03d1f4037}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\DirectX">
-      <UniqueIdentifier>{08a56681-9b42-4f3c-adb1-015dde3fb4bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\DirectX">
-      <UniqueIdentifier>{cf7b8434-2771-4bcd-a2dd-b3959eae8af4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\Objects\Data">
       <UniqueIdentifier>{7bdfa029-d215-413b-9f3b-e9e5c32f2566}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Graphics">
+      <UniqueIdentifier>{08a56681-9b42-4f3c-adb1-015dde3fb4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics">
+      <UniqueIdentifier>{cf7b8434-2771-4bcd-a2dd-b3959eae8af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Physics">
+      <UniqueIdentifier>{42729b02-3d59-4035-a031-9fb03d1f4037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics">
+      <UniqueIdentifier>{705de03d-c607-4815-bac8-fee92aac3a42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="Graphics\VertexBuffer.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IndexBuffer.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shaders.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix.h">
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector.h">
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Transform.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Appearance.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\DDSTextureLoader.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\OBJLoader.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Matrix.h">
-      <Filter>Headers\Math</Filter>
+    <ClInclude Include="Objects\Vertices.h">
+      <Filter>Headers\Objects\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Vector.h">
-      <Filter>Headers\Math</Filter>
+    <ClInclude Include="Objects\Indices.h">
+      <Filter>Headers\Objects\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Appearance.h">
-      <Filter>Headers\Model</Filter>
+    <ClInclude Include="Objects\Vertex.h">
+      <Filter>Headers\Objects\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\DDSTextureLoader.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\OBJLoader.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Transform.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Camera.h">
+    <ClInclude Include="Objects\GameObject.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\GameObject.h">
+    <ClInclude Include="Objects\Light.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\COMException.h">
+    <ClInclude Include="Objects\Camera.h">
+      <Filter>Headers\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\ParticleSystem.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\ParticleModel.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Particle.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\stdafx.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\ErrorLogger.h">
+    <ClInclude Include="Utility\StringConverter.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\StringConverter.h">
+    <ClInclude Include="Utility\COMException.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Application.h">
+    <ClInclude Include="Utility\ErrorLogger.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\stdafx.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\ParticleSystem.h">
-      <Filter>Headers\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\ParticleModel.h">
-      <Filter>Headers\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Particle.h">
-      <Filter>Headers\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Shaders.h">
-      <Filter>Headers\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Quaternion.h">
-      <Filter>Headers\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Light.h">
-      <Filter>Headers\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\VertexBuffer.h">
-      <Filter>Headers\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\IndexBuffer.h">
-      <Filter>Headers\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Indices.h">
-      <Filter>Headers\Objects\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Vertices.h">
-      <Filter>Headers\Objects\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Vertex.h">
-      <Filter>Headers\Objects\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\DDSTextureLoader.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\OBJLoader.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Camera.cpp">
-      <Filter>Source\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameObject.cpp">
-      <Filter>Source\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ErrorLogger.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StringConverter.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\stdafx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ParticleSystem.cpp">
-      <Filter>Source\Particle</Filter>
+    <ClCompile Include="Graphics\Shaders.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ParticleModel.cpp">
-      <Filter>Source\Particle</Filter>
+    <ClCompile Include="Model\OBJLoader.cpp">
+      <Filter>Source\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Particle.cpp">
-      <Filter>Source\Particle</Filter>
+    <ClCompile Include="Model\DDSTextureLoader.cpp">
+      <Filter>Source\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shaders.cpp">
-      <Filter>Source\DirectX</Filter>
+    <ClCompile Include="Objects\Camera.cpp">
+      <Filter>Source\Objects</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClCompile Include="Objects\GameObject.cpp">
+      <Filter>Source\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Particle.cpp">
+      <Filter>Source\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\ParticleModel.cpp">
+      <Filter>Source\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\ParticleSystem.cpp">
+      <Filter>Source\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\StringConverter.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\ErrorLogger.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\stdafx.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds">
@@ -193,5 +188,10 @@
     <FxCompile Include="Resources\Shaders\DX11 Framework.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClassDiagram.cd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
