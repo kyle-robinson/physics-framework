@@ -441,6 +441,7 @@
     <ClInclude Include="Headers\Particle.h" />
     <ClInclude Include="Headers\ParticleModel.h" />
     <ClInclude Include="Headers\ParticleSystem.h" />
+    <ClInclude Include="Headers\Quaternion.h" />
     <ClInclude Include="Headers\Shaders.h" />
     <ClInclude Include="Headers\stdafx.h" />
     <ClInclude Include="Headers\StringConverter.h" />
