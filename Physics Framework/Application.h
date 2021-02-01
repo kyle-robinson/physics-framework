@@ -46,14 +46,23 @@ struct ConstantBuffer
 	float HasTexture;
 };
 
+namespace Bind
+{
+	class DepthStencil;
+	class RenderTarget;
+	class SwapChain;
+}
+
 class Application
 {
+	friend class GraphicsResource;
 public:
+	UINT GetWidth() const noexcept { return _renderWidth; };
+	UINT GetHeight() const noexcept { return _renderHeight; };
 	bool Initialise( HINSTANCE hInstance, int nCmdShow );
 	bool HandleKeyboard( MSG msg );
 	void Update();
 	void Draw();
-
 private:
 	bool InitializeDirectX();
 	bool InitializeWindow( HINSTANCE hInstance, int nCmdShow );
@@ -66,9 +75,11 @@ private:
 
 	// pipeline
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
+	
+	std::shared_ptr<Bind::SwapChain> swapChain;
+	std::shared_ptr<Bind::DepthStencil> depthStencil;
+	std::shared_ptr<Bind::RenderTarget> renderTarget;
 
 	// buffers
 	VertexBuffer<SimpleVertex> vb_cube;
@@ -78,10 +89,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 
 	// depth stencil
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerAnisotropic;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 
 	// textures
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;

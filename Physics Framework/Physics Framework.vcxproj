@@ -149,7 +149,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;d3d11.lib;D3DCompiler.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <LargeAddressAware>true</LargeAddressAware>
@@ -426,8 +426,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Graphics\DepthStencil.h" />
+    <ClInclude Include="Graphics\GraphicsResource.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\RenderTarget.h" />
     <ClInclude Include="Graphics\Shaders.h" />
+    <ClInclude Include="Graphics\SwapChain.h" />
     <ClInclude Include="Graphics\VertexBuffer.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />

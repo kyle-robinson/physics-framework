@@ -6,7 +6,7 @@
 
 const float GRAVITY = 9.81f;
 const float LIMITER = 0.001f;
-const float TIME_STEP = 0.01f;
+const float TIME_STEP = 0.5f;
 const float DRAG_FACTOR = 5.0f;
 const float FRICTION = 0.00002f;
 

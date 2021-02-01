@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Application.h"
+#include "SwapChain.h"
+#include "DepthStencil.h"
+#include "RenderTarget.h"
 #include "Vertices.h"
 #include "Indices.h"
 
@@ -244,50 +247,9 @@ bool Application::InitializeDirectX()
 {
 	try
 	{
-		UINT createDeviceFlags = 0;
-	#ifdef _DEBUG
-		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-	#endif
-
-		DXGI_SWAP_CHAIN_DESC sd = { 0 };
-		sd.BufferCount = 1;
-		sd.BufferDesc.Width = _renderWidth;
-		sd.BufferDesc.Height = _renderHeight;
-		sd.BufferDesc.RefreshRate.Numerator = 60;
-		sd.BufferDesc.RefreshRate.Denominator = 1;
-		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		sd.SampleDesc.Count = 4;
-		sd.SampleDesc.Quality = 0;
-		sd.OutputWindow = hWnd;
-		sd.Windowed = TRUE;
-		sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-		sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		
-		HRESULT hr = D3D11CreateDeviceAndSwapChain(
-            nullptr,                    // IDXGI Adapter
-            D3D_DRIVER_TYPE_HARDWARE,   // Driver Type
-            nullptr,                    // Software Module
-            createDeviceFlags,          // Flags for Runtime Layers
-            nullptr,                    // Feature Levels Array
-            0,                          // No. of Feature Levels
-            D3D11_SDK_VERSION,          // SDK Version
-            &sd,                        // Swap Chain Description
-            swapChain.GetAddressOf(),   // Swap Chain Address
-            device.GetAddressOf(),      // Device Address
-            nullptr,                    // Ptr to Feature Level
-            context.GetAddressOf()      // Context Address
-        );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
-
-		// Create a render target view
-		ID3D11Texture2D* pBackBuffer = nullptr;
-		hr = swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)&pBackBuffer );
-		COM_ERROR_IF_FAILED( hr, "Failed to create swap chain!" );
-
-		hr = device->CreateRenderTargetView( pBackBuffer, nullptr, &renderTargetView );
-		COM_ERROR_IF_FAILED( hr, "Failed to create render target view!" );
-		pBackBuffer->Release();
+		swapChain = std::make_shared<Bind::SwapChain>( *this, context.GetAddressOf(), device.GetAddressOf(), hWnd );
+		renderTarget = std::make_shared<Bind::RenderTarget>( *this, swapChain->GetSwapChain() );
+        depthStencil = std::make_shared<Bind::DepthStencil>( *this );
 
 		// Setup the viewport
 		D3D11_VIEWPORT vp = { 0 };
@@ -308,30 +270,8 @@ bool Application::InitializeDirectX()
 		bd.Usage = D3D11_USAGE_DEFAULT;
 		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		bd.ByteWidth = static_cast<UINT>( sizeof( ConstantBuffer ) + ( 16 - ( sizeof( ConstantBuffer ) % 16 ) ) );
-		hr = device->CreateBuffer( &bd, nullptr, constantBuffer.GetAddressOf() );
+		HRESULT hr = device->CreateBuffer( &bd, nullptr, constantBuffer.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create constant buffer!" );
-
-		// Depth Stencil
-		D3D11_TEXTURE2D_DESC depthStencilDesc = { 0 };
-		depthStencilDesc.Width = _renderWidth;
-		depthStencilDesc.Height = _renderHeight;
-		depthStencilDesc.MipLevels = 1;
-		depthStencilDesc.ArraySize = 1;
-		depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		depthStencilDesc.SampleDesc.Count = 4;
-		depthStencilDesc.SampleDesc.Quality = 0;
-		depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-		depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		depthStencilDesc.CPUAccessFlags = 0;
-		depthStencilDesc.MiscFlags = 0;
-
-		device->CreateTexture2D( &depthStencilDesc, nullptr, &depthStencilBuffer );
-		COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil texture!" );
-
-		device->CreateDepthStencilView( depthStencilBuffer.Get(), nullptr, &depthStencilView );
-		COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil view!" );
-
-		context->OMSetRenderTargets( 1, renderTargetView.GetAddressOf(), depthStencilView.Get() );
 
 		// Rasterizer
 		CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
@@ -350,15 +290,6 @@ bool Application::InitializeDirectX()
 		hr = device->CreateRasterizerState( &rasterizerDesc, &rasterizerCW );
 		COM_ERROR_IF_FAILED( hr, "Failed to create clockwise rasterizer state!" );
 		context->RSSetState( rasterizerCW.Get() );
-
-		// Depth Stencil State
-		D3D11_DEPTH_STENCIL_DESC dssDesc = { 0 };
-		dssDesc.DepthEnable = true;
-		dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		dssDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-
-		hr = device->CreateDepthStencilState( &dssDesc, &depthStencilState );
-		COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil state!" );
 
 		// Sampler
 		CD3D11_SAMPLER_DESC sampDesc( CD3D11_DEFAULT{} );
@@ -423,10 +354,9 @@ void Application::Update()
 
 void Application::Draw()
 {
-    // Clear buffers
-	float ClearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f }; // red,green,blue,alpha
-    context->ClearRenderTargetView( renderTargetView.Get(), ClearColor );
-	context->ClearDepthStencilView( depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	renderTarget->BindAsBuffer( *this, depthStencil.get(), clearColor );
+    depthStencil->ClearDepthStencil( *this );
 
     // Setup buffers and render scene
 	Shaders::BindShaders( context.Get(), vertexShader, pixelShader );
@@ -465,5 +395,13 @@ void Application::Draw()
 		_gameObjects[i]->Draw( context.Get() );
 	}
 
-    swapChain->Present( 0, 0 );
+    // display frame
+	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );
+	if ( FAILED( hr ) )
+	{
+		hr == DXGI_ERROR_DEVICE_REMOVED ?
+            ErrorLogger::Log( device->GetDeviceRemovedReason(), "Swap Chain. Graphics device removed!" ) :
+            ErrorLogger::Log( hr, "Swap Chain failed to render frame!" );
+		exit( -1 );
+	}
 }
