@@ -84,6 +84,11 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 
 	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
 
+	// setup particle system
+	_particleSystem = std::make_shared<ParticleSystem>();
+	_particleSystem->AddEmitter( { 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f },
+		0.35f, 5.0f, 0.25f, 1.5f, 0.25f, 0.005f, 0.25f );
+
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
 	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -553,6 +558,8 @@ void Application::Update()
 	for ( int i = 0; i < _gameObjects.size(); i++ )
 		_gameObjects[i]->Update();
 
+	_particleSystem->Update( dt );
+
 	dt -= FPS_60;
 }
 
@@ -599,5 +606,8 @@ void Application::Draw()
 		_pImmediateContext->UpdateSubresource( _pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0 );
 		_gameObjects[i]->Draw( _pImmediateContext.Get() );
 	}
+
+	_particleSystem->Draw();
+
     _pSwapChain->Present( 0, 0 );
 }

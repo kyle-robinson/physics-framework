@@ -7,6 +7,7 @@
 #include "OBJLoader.h"
 #include "GameObject.h"
 #include "../resource.h"
+#include "ParticleSystem.h"
 #include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5
@@ -102,6 +103,7 @@ private:
 	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
+	std::shared_ptr<ParticleSystem> _particleSystem;
 	std::vector<std::unique_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;

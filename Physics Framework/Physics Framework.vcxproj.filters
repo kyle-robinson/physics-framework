@@ -110,9 +110,6 @@
     <ClInclude Include="Headers\Shaders.h">
       <Filter>Headers\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\ParticleEmitter.h">
-      <Filter>Headers\Particle</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DDSTextureLoader.cpp">
@@ -153,9 +150,6 @@
     </ClCompile>
     <ClCompile Include="Source\Shaders.cpp">
       <Filter>Source\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ParticleEmitter.cpp">
-      <Filter>Source\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
