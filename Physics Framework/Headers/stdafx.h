@@ -21,10 +21,12 @@
 #include <directxmath.h>
 #include <directxcolors.h>
 
+using namespace DirectX;
+
 // Classes
 #include "Matrix.h"
 #include "Vector.h"
-#include "Structures.h"
+#include "Vertex.h"
 #include "ErrorLogger.h"
 
 #endif

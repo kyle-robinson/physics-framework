@@ -51,6 +51,9 @@
     <Filter Include="Source\DirectX">
       <UniqueIdentifier>{cf7b8434-2771-4bcd-a2dd-b3959eae8af4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Objects\Data">
+      <UniqueIdentifier>{7bdfa029-d215-413b-9f3b-e9e5c32f2566}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -89,9 +92,6 @@
     <ClInclude Include="Headers\StringConverter.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Structures.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\Application.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -112,6 +112,24 @@
     </ClInclude>
     <ClInclude Include="Headers\Quaternion.h">
       <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Light.h">
+      <Filter>Headers\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\VertexBuffer.h">
+      <Filter>Headers\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\IndexBuffer.h">
+      <Filter>Headers\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Indices.h">
+      <Filter>Headers\Objects\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Vertices.h">
+      <Filter>Headers\Objects\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Vertex.h">
+      <Filter>Headers\Objects\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

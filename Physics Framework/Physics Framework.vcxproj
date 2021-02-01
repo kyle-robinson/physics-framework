@@ -436,6 +436,9 @@
     <ClInclude Include="Headers\DDSTextureLoader.h" />
     <ClInclude Include="Headers\ErrorLogger.h" />
     <ClInclude Include="Headers\GameObject.h" />
+    <ClInclude Include="Headers\IndexBuffer.h" />
+    <ClInclude Include="Headers\Indices.h" />
+    <ClInclude Include="Headers\Light.h" />
     <ClInclude Include="Headers\Matrix.h" />
     <ClInclude Include="Headers\OBJLoader.h" />
     <ClInclude Include="Headers\Particle.h" />
@@ -445,9 +448,11 @@
     <ClInclude Include="Headers\Shaders.h" />
     <ClInclude Include="Headers\stdafx.h" />
     <ClInclude Include="Headers\StringConverter.h" />
-    <ClInclude Include="Headers\Structures.h" />
     <ClInclude Include="Headers\Transform.h" />
     <ClInclude Include="Headers\Vector.h" />
+    <ClInclude Include="Headers\Vertex.h" />
+    <ClInclude Include="Headers\VertexBuffer.h" />
+    <ClInclude Include="Headers\Vertices.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

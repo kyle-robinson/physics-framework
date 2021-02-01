@@ -45,8 +45,8 @@ void OBJLoader::CreateIndices(const std::vector<XMFLOAT3>& inVertices,
 		}
 		else //if not found, add it to the buffer
 		{
-			outVertices.push_back(vertex.Pos);
-			outTexCoords.push_back(vertex.TexC);
+			outVertices.push_back(vertex.Position);
+			outTexCoords.push_back(vertex.TexCoord);
 			outNormals.push_back(vertex.Normal);
 			
 			unsigned short newIndex = (unsigned short)outVertices.size() - 1;
@@ -65,7 +65,7 @@ void OBJLoader::CreateIndices(const std::vector<XMFLOAT3>& inVertices,
 //WARNING: This code makes a big assumption -- that your models have texture coordinates AND normals which they should have anyway (else you can't do texturing and lighting!)
 //If your .obj file has no lines beginning with "vt" or "vn", then you'll need to change the Export settings in your modelling software so that it exports the texture coordinates 
 //and normals. If you still have no "vt" lines, you'll need to do some texture unwrapping, also known as UV unwrapping.
-MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertTexCoords)
+MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoords)
 {
 	std::string binaryFilename = filename;
 	binaryFilename.append("Binary");
@@ -198,9 +198,9 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertT
 			unsigned int numMeshVertices = meshVertices.size();
 			for(unsigned int i = 0; i < numMeshVertices; ++i)
 			{
-				finalVerts[i].Pos = meshVertices[i];
+				finalVerts[i].Position = meshVertices[i];
 				finalVerts[i].Normal = meshNormals[i];
-				finalVerts[i].TexC = meshTexCoords[i];
+				finalVerts[i].TexCoord = meshTexCoords[i];
 			}
 
 			//Put data into vertex and index buffers, then pass the relevant data to the MeshData object.
@@ -218,7 +218,7 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertT
 			ZeroMemory(&InitData, sizeof(InitData));
 			InitData.pSysMem = finalVerts;
 
-			_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexBuffer);
+			device->CreateBuffer(&bd, &InitData, &vertexBuffer);
 
 			meshData.VertexBuffer = vertexBuffer;
 			meshData.VBOffset = 0;
@@ -249,7 +249,7 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertT
 
 			ZeroMemory(&InitData, sizeof(InitData));
 			InitData.pSysMem = indicesArray;
-			_pd3dDevice->CreateBuffer(&bd, &InitData, &indexBuffer);
+			device->CreateBuffer(&bd, &InitData, &indexBuffer);
 
 			meshData.IndexCount = meshIndices.size();
 			meshData.IndexBuffer = indexBuffer;
@@ -292,7 +292,7 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertT
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = finalVerts;
 
-		_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexBuffer);
+		device->CreateBuffer(&bd, &InitData, &vertexBuffer);
 
 		meshData.VertexBuffer = vertexBuffer;
 		meshData.VBOffset = 0;
@@ -308,7 +308,7 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* _pd3dDevice, bool invertT
 
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = indices;
-		_pd3dDevice->CreateBuffer(&bd, &InitData, &indexBuffer);
+		device->CreateBuffer(&bd, &InitData, &indexBuffer);
 
 		meshData.IndexCount = numIndices;
 		meshData.IndexBuffer = indexBuffer;

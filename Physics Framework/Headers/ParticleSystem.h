@@ -9,7 +9,7 @@
 class ParticleSystem
 {
 public:
-	ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV,
+	ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone,
 		Geometry geometry, Material material );
 	void Update( float deltaTime );
 	void Draw( ID3D11DeviceContext* pImmediateContext );
@@ -17,7 +17,7 @@ public:
 	int FindNextAvailableParticleIndex();
 private:
 	Particle _particles[MAX_PARTICLE_COUNT];
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
 };
 
 #endif

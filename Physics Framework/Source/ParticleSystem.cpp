@@ -2,14 +2,14 @@
 #include "ParticleSystem.h"
 
 /*   PARTICLE SYSTEM   */
-ParticleSystem::ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV,
+ParticleSystem::ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone,
 	Geometry geometry, Material material )
 {
 	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
 	{
 		_particles[i].GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		_particles[i].GetTransform()->SetInitialPosition( 0.0f, 0.5f, -2.5f );
-		_particles[i].GetAppearance()->SetTextureRV( _pTextureRV.Get() );
+		_particles[i].GetAppearance()->SetTextureRV( textureStone.Get() );
 		_particles[i].GetAppearance()->SetGeometryData( geometry );
 		_particles[i].GetAppearance()->SetMaterial( material );
 	}

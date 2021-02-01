@@ -2,12 +2,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+
 #include "Camera.h"
 #include "Shaders.h"
 #include "OBJLoader.h"
 #include "GameObject.h"
 #include "../resource.h"
-//#include "ParticleSystem.h"
 #include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5
@@ -54,46 +56,43 @@ public:
 	void Draw();
 
 private:
-	bool InitDevice();
-	bool InitWindow( HINSTANCE hInstance, int nCmdShow );
-	bool InitShadersAndInputLayout();
-	bool InitVertexBuffer();
-	bool InitIndexBuffer();
+	bool InitializeDirectX();
+	bool InitializeWindow( HINSTANCE hInstance, int nCmdShow );
+	bool InitializeShaders();
+	bool InitializeObjects();
 
 	// setup
-	HWND _hWnd = nullptr;
-	HINSTANCE _hInst = nullptr;
-	D3D_DRIVER_TYPE _driverType = D3D_DRIVER_TYPE_NULL;
-	D3D_FEATURE_LEVEL _featureLevel = D3D_FEATURE_LEVEL_11_0;
+	HWND hWnd = nullptr;
+	HINSTANCE hInstance = nullptr;
 
 	// pipeline
-	Microsoft::WRL::ComPtr<ID3D11Device> _pd3dDevice;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _pImmediateContext;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> _pSwapChain;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _pRenderTargetView;
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
 
 	// buffers
-	Microsoft::WRL::ComPtr<ID3D11Buffer> _pVertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> _pIndexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> _pPlaneVertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> _pPlaneIndexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> _pConstantBuffer;
+	VertexBuffer<SimpleVertex> vb_cube;
+	IndexBuffer ib_cube;
+	VertexBuffer<SimpleVertex> vb_plane;
+	IndexBuffer ib_plane;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 
 	// depth stencil
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> _depthStencilView;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> DSLessEqual;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> _depthStencilBuffer;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> _pSamplerLinear;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerAnisotropic;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 
 	// textures
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pTextureRV;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pGroundTextureRV;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _pHerculesTextureRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
 
 	// rasterizers
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> RSCullNone;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> CWcullMode;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> CCWcullMode;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerCW;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerCCW;
 
 	// shaders
 	VertexShader vertexShader;
@@ -104,8 +103,6 @@ private:
 	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
-	std::vector<std::unique_ptr<GameObject>> _particles;
-	//std::shared_ptr<ParticleSystem> _particleSystem;
 	std::vector<std::unique_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;
