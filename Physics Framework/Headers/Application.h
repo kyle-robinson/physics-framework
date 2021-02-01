@@ -45,7 +45,6 @@ struct ConstantBuffer
 class Application
 {
 public:
-	Application();
 	bool Initialise( HINSTANCE hInstance, int nCmdShow );
 	bool HandleKeyboard( MSG msg );
 	void Update();

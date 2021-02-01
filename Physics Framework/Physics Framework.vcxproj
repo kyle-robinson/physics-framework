@@ -170,6 +170,10 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <ClCompile>
@@ -387,10 +391,14 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\DDSTextureLoader.cpp" />
-    <ClCompile Include="Source\ErrorLogger.cpp" />
+    <ClCompile Include="Source\ErrorLogger.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\OBJLoader.cpp" />
+    <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticleModel.cpp" />
+    <ClCompile Include="Source\ParticleSystem.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -399,12 +407,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\StringConverter.cpp" />
+    <ClCompile Include="Source\StringConverter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\DX11 Framework.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">Effect</ShaderType>
@@ -427,7 +437,9 @@
     <ClInclude Include="Headers\GameObject.h" />
     <ClInclude Include="Headers\Matrix.h" />
     <ClInclude Include="Headers\OBJLoader.h" />
+    <ClInclude Include="Headers\Particle.h" />
     <ClInclude Include="Headers\ParticleModel.h" />
+    <ClInclude Include="Headers\ParticleSystem.h" />
     <ClInclude Include="Headers\stdafx.h" />
     <ClInclude Include="Headers\StringConverter.h" />
     <ClInclude Include="Headers\Structures.h" />

@@ -2,6 +2,8 @@
 #ifndef STRINGCONVERTER_H
 #define STRINGCONVERTER_H
 
+#include <string>
+
 class StringConverter
 {
 public:

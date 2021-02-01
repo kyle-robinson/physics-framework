@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "ErrorLogger.h"
 #include <comdef.h>
 
 void ErrorLogger::Log( const std::string& message ) noexcept

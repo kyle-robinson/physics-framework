@@ -60,8 +60,6 @@ bool Application::HandleKeyboard( MSG msg )
 	return false;
 }
 
-Application::Application() {}
-
 bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 {
 	RECT rc;
@@ -71,6 +69,9 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 
 	if ( !InitWindow( hInstance, nCmdShow ) ) return false;
 	if ( !InitDevice() ) return false;
+	if ( !InitShadersAndInputLayout() ) return false;
+	if ( !InitVertexBuffer() ) return false;
+	if ( !InitIndexBuffer() ) return false;
 
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\stone.dds", nullptr, _pTextureRV.GetAddressOf() );
 	CreateDDSTextureFromFile( _pd3dDevice.Get(), L"Resources\\Textures\\floor.dds", nullptr, _pGroundTextureRV.GetAddressOf() );
@@ -163,7 +164,7 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 bool Application::InitShadersAndInputLayout()
 {
 	try
-	{
+	{	
 		// Compile the vertex shader
 		ID3DBlob* pVSBlob = nullptr;
 		HRESULT hr = CompileShaderFromFile( L"Resources\\Shaders\\DX11 Framework.fx", "VS", "vs_4_0", &pVSBlob );
@@ -201,16 +202,6 @@ bool Application::InitShadersAndInputLayout()
 
 		// Set the input layout
 		_pImmediateContext->IASetInputLayout( _pVertexLayout.Get() );
-
-		D3D11_SAMPLER_DESC sampDesc = { };
-		sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-		sampDesc.MinLOD = 0;
-		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		hr = _pd3dDevice->CreateSamplerState( &sampDesc, &_pSamplerLinear );
 	}
 	catch ( COMException& exception )
 	{
@@ -497,10 +488,6 @@ bool Application::InitDevice()
 		vp.TopLeftY = 0;
 		_pImmediateContext->RSSetViewports( 1, &vp );
 
-		if ( !InitShadersAndInputLayout() ) return false;
-		if ( !InitVertexBuffer() ) return false;
-		if ( !InitIndexBuffer() ) return false;
-
 		// Set primitive topology
 		_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
@@ -513,6 +500,7 @@ bool Application::InitDevice()
 		hr = _pd3dDevice->CreateBuffer( &bd, nullptr, _pConstantBuffer.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create constant buffer!" );
 
+		// Depth Stencil
 		D3D11_TEXTURE2D_DESC depthStencilDesc = { 0 };
 		depthStencilDesc.Width = _renderWidth;
 		depthStencilDesc.Height = _renderHeight;
@@ -535,13 +523,24 @@ bool Application::InitDevice()
 		_pImmediateContext->OMSetRenderTargets( 1, _pRenderTargetView.GetAddressOf(), _depthStencilView.Get() );
 
 		// Rasterizer
-		D3D11_RASTERIZER_DESC cmdesc = { };
-		cmdesc.FillMode = D3D11_FILL_SOLID;
-		cmdesc.CullMode = D3D11_CULL_NONE;
-		
-		hr = _pd3dDevice->CreateRasterizerState( &cmdesc, &RSCullNone );
+		CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+		rasterizerDesc.CullMode = D3D11_CULL_NONE;
+		hr = _pd3dDevice->CreateRasterizerState( &rasterizerDesc, &RSCullNone );
 		COM_ERROR_IF_FAILED( hr, "Failed to create default rasterizer state!" );
 
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+		rasterizerDesc.CullMode = D3D11_CULL_BACK;
+		rasterizerDesc.FrontCounterClockwise = true;
+		hr = _pd3dDevice->CreateRasterizerState( &rasterizerDesc, &CCWcullMode );
+		COM_ERROR_IF_FAILED( hr, "Failed to create counter-clockwise rasterizer state!" );
+
+		rasterizerDesc.FrontCounterClockwise = false;
+		hr = _pd3dDevice->CreateRasterizerState( &rasterizerDesc, &CWcullMode );
+		COM_ERROR_IF_FAILED( hr, "Failed to create clockwise rasterizer state!" );
+		_pImmediateContext->RSSetState( CWcullMode.Get() );
+
+		// Depth Stencil State
 		D3D11_DEPTH_STENCIL_DESC dssDesc = { 0 };
 		dssDesc.DepthEnable = true;
 		dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -550,15 +549,15 @@ bool Application::InitDevice()
 		hr = _pd3dDevice->CreateDepthStencilState( &dssDesc, &DSLessEqual );
 		COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil state!" );
 
-		cmdesc.FillMode = D3D11_FILL_SOLID;
-		cmdesc.CullMode = D3D11_CULL_BACK;
-		cmdesc.FrontCounterClockwise = true;
-		hr = _pd3dDevice->CreateRasterizerState( &cmdesc, &CCWcullMode );
-		COM_ERROR_IF_FAILED( hr, "Failed to create counter-clockwise rasterizer state!" );
-
-		cmdesc.FrontCounterClockwise = false;
-		hr = _pd3dDevice->CreateRasterizerState( &cmdesc, &CWcullMode );
-		COM_ERROR_IF_FAILED( hr, "Failed to create clockwise rasterizer state!" );
+		// Sampler
+		CD3D11_SAMPLER_DESC sampDesc( CD3D11_DEFAULT{} );
+		sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+		hr = _pd3dDevice->CreateSamplerState( &sampDesc, &_pSamplerLinear );
+		COM_ERROR_IF_FAILED( hr, "Failed to create sampler state!" );
 	}
 	catch ( COMException& exception )
 	{

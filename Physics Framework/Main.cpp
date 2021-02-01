@@ -6,8 +6,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
 
-	Application * theApp = new Application();
-	if ( !( theApp->Initialise( hInstance, nCmdShow ) ) )
+	Application theApp;
+	if ( !( theApp.Initialise( hInstance, nCmdShow ) ) )
 		return -1;
 
     // Main message loop
@@ -19,7 +19,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 			bool handled = false;
 
 			if ( msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST )
-				handled = theApp->HandleKeyboard( msg );
+				handled = theApp.HandleKeyboard( msg );
 			else if ( WM_QUIT == msg.message )
 				break;
 
@@ -31,13 +31,10 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
-			theApp->Update();
-            theApp->Draw();
+			theApp.Update();
+            theApp.Draw();
         }
     }
 
-	delete theApp;
-	theApp = nullptr;
-
-    return (int) msg.wParam;
+    return 0;
 }

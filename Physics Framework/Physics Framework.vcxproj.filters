@@ -39,6 +39,12 @@
       <UniqueIdentifier>{2c3d4c8c-5d1a-459a-a05a-a4e4b608a44e}</UniqueIdentifier>
       <Extensions>fx;fxh;hlsl</Extensions>
     </Filter>
+    <Filter Include="Source\Particle">
+      <UniqueIdentifier>{705de03d-c607-4815-bac8-fee92aac3a42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Particle">
+      <UniqueIdentifier>{42729b02-3d59-4035-a031-9fb03d1f4037}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -57,9 +63,6 @@
       <Filter>Headers\Model</Filter>
     </ClInclude>
     <ClInclude Include="Headers\OBJLoader.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\ParticleModel.h">
       <Filter>Headers\Model</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Transform.h">
@@ -89,15 +92,21 @@
     <ClInclude Include="Headers\stdafx.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\ParticleSystem.h">
+      <Filter>Headers\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\ParticleModel.h">
+      <Filter>Headers\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Particle.h">
+      <Filter>Headers\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DDSTextureLoader.cpp">
       <Filter>Source\Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\OBJLoader.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ParticleModel.cpp">
       <Filter>Source\Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
@@ -120,6 +129,15 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParticleSystem.cpp">
+      <Filter>Source\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParticleModel.cpp">
+      <Filter>Source\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Particle.cpp">
+      <Filter>Source\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
