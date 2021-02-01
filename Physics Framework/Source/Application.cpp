@@ -86,8 +86,6 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 
 	// setup particle system
 	_particleSystem = std::make_shared<ParticleSystem>();
-	_particleSystem->AddEmitter( { 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f },
-		0.35f, 5.0f, 0.25f, 1.5f, 0.25f, 0.005f, 0.25f );
 
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
