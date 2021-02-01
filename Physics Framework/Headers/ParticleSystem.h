@@ -2,16 +2,22 @@
 #ifndef PARTICLESYSTEM_H
 #define PARTICLESYSTEM_H
 
+#define MAX_PARTICLE_COUNT 300
+
 #include "Particle.h"
 
 class ParticleSystem
 {
 public:
+	ParticleSystem();
 	void Update( float deltaTime );
 	void Draw();
+	void AddParticle( v3df position, v3df velocity, float maxAge );
 private:
-	Particle* p;
-	int numParticles;
+	int FindNextAvailableParticleIndex();
+	void DestroyParticle( int index );
+private:
+	std::vector<Particle> _particles;
 };
 
 #endif

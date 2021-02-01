@@ -397,6 +397,7 @@
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\OBJLoader.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
+    <ClCompile Include="Source\ParticleEmitter.cpp" />
     <ClCompile Include="Source\ParticleModel.cpp" />
     <ClCompile Include="Source\ParticleSystem.cpp" />
     <ClCompile Include="Source\Shaders.cpp" />
@@ -439,6 +440,7 @@
     <ClInclude Include="Headers\Matrix.h" />
     <ClInclude Include="Headers\OBJLoader.h" />
     <ClInclude Include="Headers\Particle.h" />
+    <ClInclude Include="Headers\ParticleEmitter.h" />
     <ClInclude Include="Headers\ParticleModel.h" />
     <ClInclude Include="Headers\ParticleSystem.h" />
     <ClInclude Include="Headers\Shaders.h" />

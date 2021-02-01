@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "ParticleModel.h"
 
-ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useLaminar, v3df initialVelocity, v3df initialAccel )
-	: _transform( transform ), _useLaminar( useLaminar ), _velocity( initialVelocity ), _acceleration( initialAccel )
+ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transform( transform )
 {
 	_mass = 50.0f;
+	_useLaminar = false;
 	
 	// f = m * g
 	_weight = _mass * GRAVITY;
@@ -12,6 +12,8 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform, bool useLami
 	_drag = { 0.0f, 0.0f, 0.0f };
 	_friction = { 0.0f, 0.0f, 0.0f };
 	_netForce = { 0.0f, 0.0f, 0.0f };
+	_velocity = { 0.0f, 0.0f, 0.0f };
+	_acceleration = { 0.0f, 0.0f, 0.0f };
 	_emitterPosition = { 0.0f, 0.0f, 0.0f };
 }
 

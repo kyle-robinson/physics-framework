@@ -5,7 +5,7 @@ GameObject::GameObject( const std::string& type ) : _type( type )
 {
 	_transform = std::make_shared<Transform>();
 	_appearance = std::make_shared<Appearance>();
-	_particleModel = std::make_shared<ParticleModel>( _transform, false, v3df( 0.0f, 0.0f, 0.0f ), v3df( 0.0f, 0.0f, 0.0f ) );
+	_particleModel = std::make_shared<ParticleModel>( _transform );
 }
 
 void GameObject::Update()

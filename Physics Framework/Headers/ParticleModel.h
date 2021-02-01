@@ -13,7 +13,7 @@ const float FRICTION = 0.00002f;
 class ParticleModel
 {
 public:
-	ParticleModel( std::shared_ptr<Transform> transform, bool useLaminar, v3df initialVelocity, v3df initialAccel );
+	ParticleModel( std::shared_ptr<Transform> transform );
 
 	// particle movement/positioning
 	void Move( float x, float y, float z );
