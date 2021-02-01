@@ -3,6 +3,7 @@
 #define APPLICATION_H
 
 #include "Camera.h"
+#include "Shaders.h"
 #include "OBJLoader.h"
 #include "GameObject.h"
 #include "../resource.h"
@@ -53,7 +54,6 @@ public:
 private:
 	bool InitDevice();
 	bool InitWindow( HINSTANCE hInstance, int nCmdShow );
-	bool CompileShaderFromFile( WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut );
 	bool InitShadersAndInputLayout();
 	bool InitVertexBuffer();
 	bool InitIndexBuffer();
@@ -69,11 +69,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _pImmediateContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> _pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _pRenderTargetView;
-	
-	// shaders
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> _pVertexShader;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> _pPixelShader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> _pVertexLayout;
 
 	// buffers
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _pVertexBuffer;
@@ -97,6 +92,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> RSCullNone;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> CWcullMode;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> CCWcullMode;
+
+	// shaders
+	VertexShader vertexShader;
+	PixelShader pixelShader;
 
 	// objects
 	Light basicLight;

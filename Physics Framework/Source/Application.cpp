@@ -165,43 +165,15 @@ bool Application::InitShadersAndInputLayout()
 {
 	try
 	{	
-		// Compile the vertex shader
-		ID3DBlob* pVSBlob = nullptr;
-		HRESULT hr = CompileShaderFromFile( L"Resources\\Shaders\\DX11 Framework.fx", "VS", "vs_4_0", &pVSBlob );
-		COM_ERROR_IF_FAILED( hr, "Failed to compile the vertex shader! Run this executable from the directory that contains the FX file!" );
-
-		// Create the vertex shader
-		hr = _pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &_pVertexShader );
-		COM_ERROR_IF_FAILED( hr, "Failed to create the vertex shader!" );
-		if ( FAILED( hr ) ) pVSBlob->Release();
-
-		// Compile the pixel shader
-		ID3DBlob* pPSBlob = nullptr;
-		hr = CompileShaderFromFile( L"Resources\\Shaders\\DX11 Framework.fx", "PS", "ps_4_0", &pPSBlob );
-		COM_ERROR_IF_FAILED( hr, "Failed to compile the pixel shader! Run this executable from the directory that contains the FX file!" );
-
-		// Create the pixel shader
-		hr = _pd3dDevice->CreatePixelShader( pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &_pPixelShader );
-		COM_ERROR_IF_FAILED( hr, "Failed to create the pixel shader!" );
-		pPSBlob->Release();
-	
-		// Define the input layout
-		D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
+		D3D11_INPUT_ELEMENT_DESC layout[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-
-		UINT numElements = ARRAYSIZE( layout );
-
-		// Create the input layout
-		hr = _pd3dDevice->CreateInputLayout( layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &_pVertexLayout );
-		COM_ERROR_IF_FAILED( hr, "Failed to create the input layout!" );
-		pVSBlob->Release();
-
-		// Set the input layout
-		_pImmediateContext->IASetInputLayout( _pVertexLayout.Get() );
+		HRESULT hr = vertexShader.Initialize( _pd3dDevice, L"Resources\\Shaders\\DX11 Framework.fx", layout, ARRAYSIZE( layout ) );
+		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
+	    hr = pixelShader.Initialize( _pd3dDevice, L"Resources\\Shaders\\DX11 Framework.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
 	}
 	catch ( COMException& exception )
 	{
@@ -385,32 +357,6 @@ bool Application::InitWindow( HINSTANCE hInstance, int nCmdShow )
 		
 	if ( !_hWnd ) return false;
 	ShowWindow( _hWnd, nCmdShow );
-
-    return true;
-}
-
-bool Application::CompileShaderFromFile( WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut )
-{
-    DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined(DEBUG) || defined(_DEBUG)
-    // Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-    // Setting this flag improves the shader debugging experience, but still allows 
-    // the shaders to be optimized and to run exactly the way they will run in 
-    // the release configuration of this program.
-    dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-    ID3DBlob* pErrorBlob;
-    HRESULT hr = D3DCompileFromFile( szFileName, nullptr, nullptr, szEntryPoint, szShaderModel, dwShaderFlags, 0, ppBlobOut, &pErrorBlob );
-
-    if ( FAILED( hr ) )
-    {
-        if ( pErrorBlob != nullptr ) OutputDebugStringA( (char*)pErrorBlob->GetBufferPointer() );
-        if ( pErrorBlob ) pErrorBlob->Release();
-		ErrorLogger::Log( hr, "Failed to compile shader from file!" );
-        return false;
-    }
-    if ( pErrorBlob ) pErrorBlob->Release();
 
     return true;
 }
@@ -618,9 +564,7 @@ void Application::Draw()
 	_pImmediateContext->ClearDepthStencilView( _depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
     // Setup buffers and render scene
-	_pImmediateContext->IASetInputLayout( _pVertexLayout.Get() );
-	_pImmediateContext->VSSetShader( _pVertexShader.Get(), nullptr, 0 );
-	_pImmediateContext->PSSetShader( _pPixelShader.Get(), nullptr, 0 );
+	Shaders::BindShaders( _pImmediateContext.Get(), vertexShader, pixelShader );
 	_pImmediateContext->VSSetConstantBuffers( 0, 1, _pConstantBuffer.GetAddressOf() );
 	_pImmediateContext->PSSetConstantBuffers( 0, 1, _pConstantBuffer.GetAddressOf() );
 	_pImmediateContext->PSSetSamplers( 0, 1, _pSamplerLinear.GetAddressOf() );

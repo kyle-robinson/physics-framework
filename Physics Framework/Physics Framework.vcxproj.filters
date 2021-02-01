@@ -45,6 +45,12 @@
     <Filter Include="Headers\Particle">
       <UniqueIdentifier>{42729b02-3d59-4035-a031-9fb03d1f4037}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\DirectX">
+      <UniqueIdentifier>{08a56681-9b42-4f3c-adb1-015dde3fb4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\DirectX">
+      <UniqueIdentifier>{cf7b8434-2771-4bcd-a2dd-b3959eae8af4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -101,6 +107,9 @@
     <ClInclude Include="Headers\Particle.h">
       <Filter>Headers\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Shaders.h">
+      <Filter>Headers\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DDSTextureLoader.cpp">
@@ -138,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="Source\Particle.cpp">
       <Filter>Source\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shaders.cpp">
+      <Filter>Source\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
