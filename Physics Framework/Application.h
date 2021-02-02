@@ -9,49 +9,20 @@
 #include "GameObject.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
+#include "ConstantBuffer.h"
 #include "DDSTextureLoader.h"
 
 #define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f
-#define MAX_PARTICLE_COUNT 10
-
-struct Light
-{
-	v4df AmbientLight;
-	v4df DiffuseLight;
-	v4df SpecularLight;
-
-	float SpecularPower;
-	v3df LightVecW;
-};
-
-struct SurfaceInfo
-{
-	v4df AmbientMtrl;
-	v4df DiffuseMtrl;
-	v4df SpecularMtrl;
-};
-
-struct ConstantBuffer
-{
-	XMMATRIX World;
-	XMMATRIX View;
-	XMMATRIX Projection;
-	
-	SurfaceInfo surface;
-
-	Light light;
-
-	v3df EyePosW;
-	float HasTexture;
-};
 
 namespace Bind
 {
 	class DepthStencil;
 	class RenderTarget;
+	class Rasterizer;
 	class SwapChain;
 	class Viewport;
+	class Sampler;
 }
 
 class Application
@@ -82,26 +53,21 @@ private:
 	std::shared_ptr<Bind::SwapChain> swapChain;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;
+	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
+	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 
 	// buffers
 	VertexBuffer<SimpleVertex> vb_cube;
 	IndexBuffer ib_cube;
 	VertexBuffer<SimpleVertex> vb_plane;
 	IndexBuffer ib_plane;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
-
-	// depth stencil
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerAnisotropic;
+	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 
 	// textures
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
-
-	// rasterizers
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerCW;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerCCW;
 
 	// shaders
 	VertexShader vertexShader;

@@ -3,7 +3,9 @@
 #include "SwapChain.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
+#include "Rasterizer.h"
 #include "Viewport.h"
+#include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
 
@@ -252,44 +254,21 @@ bool Application::InitializeDirectX()
 		renderTarget = std::make_shared<Bind::RenderTarget>( *this, swapChain->GetSwapChain() );
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );
 		viewport = std::make_shared<Bind::Viewport>( *this );
+
+		rasterizerStates.emplace( "Solid", std::make_shared<Bind::Rasterizer>( *this, true, false ) );
+        rasterizerStates.emplace( "Cubemap", std::make_shared<Bind::Rasterizer>( *this, true, true ) );
+        rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
+		rasterizerStates["Solid"]->Bind( *this );
+
+		samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
+		samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
+		samplerStates.emplace( "Point", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
+		samplerStates["Anisotropic"]->Bind( *this );
+
 		context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-		// Create the constant buffer
-		D3D11_BUFFER_DESC bd = { 0 };
-		bd.CPUAccessFlags = 0;
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bd.ByteWidth = static_cast<UINT>( sizeof( ConstantBuffer ) + ( 16 - ( sizeof( ConstantBuffer ) % 16 ) ) );
-		HRESULT hr = device->CreateBuffer( &bd, nullptr, constantBuffer.GetAddressOf() );
+		HRESULT hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create constant buffer!" );
-
-		// Rasterizer
-		CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
-		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-		rasterizerDesc.CullMode = D3D11_CULL_NONE;
-		hr = device->CreateRasterizerState( &rasterizerDesc, &rasterizer );
-		COM_ERROR_IF_FAILED( hr, "Failed to create default rasterizer state!" );
-
-		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-		rasterizerDesc.CullMode = D3D11_CULL_BACK;
-		rasterizerDesc.FrontCounterClockwise = true;
-		hr = device->CreateRasterizerState( &rasterizerDesc, &rasterizerCCW );
-		COM_ERROR_IF_FAILED( hr, "Failed to create counter-clockwise rasterizer state!" );
-
-		rasterizerDesc.FrontCounterClockwise = false;
-		hr = device->CreateRasterizerState( &rasterizerDesc, &rasterizerCW );
-		COM_ERROR_IF_FAILED( hr, "Failed to create clockwise rasterizer state!" );
-		context->RSSetState( rasterizerCW.Get() );
-
-		// Sampler
-		CD3D11_SAMPLER_DESC sampDesc( CD3D11_DEFAULT{} );
-		sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-		hr = device->CreateSamplerState( &sampDesc, &samplerAnisotropic );
-		COM_ERROR_IF_FAILED( hr, "Failed to create sampler state!" );
 	}
 	catch ( COMException& exception )
 	{
@@ -348,40 +327,40 @@ void Application::Draw()
 	renderTarget->BindAsBuffer( *this, depthStencil.get(), clearColor );
     depthStencil->ClearDepthStencil( *this );
 
-    // Setup buffers and render scene
+    // Setup Buffers
 	Shaders::BindShaders( context.Get(), vertexShader, pixelShader );
-	context->VSSetConstantBuffers( 0, 1, constantBuffer.GetAddressOf() );
-	context->PSSetConstantBuffers( 0, 1, constantBuffer.GetAddressOf() );
-	context->PSSetSamplers( 0, 1, samplerAnisotropic.GetAddressOf() );
+	context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+	context->PSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
 
-	ConstantBuffer cb;
-	cb.View = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetView() ) );
-	cb.Projection = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetProjection() ) );
-	cb.light = basicLight;
-	cb.EyePosW = _camera->GetPosition();
+	// Setup Constant Buffer
+	cb_vs_matrix.data.View = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetView() ) );
+	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetProjection() ) );
+	cb_vs_matrix.data.light = basicLight;
+	cb_vs_matrix.data.EyePosW = _camera->GetPosition();
 
-	// Render all scene objects
+	// Render Scene Objects
 	for ( int i = 0; i < _gameObjects.size(); i++ )
 	{
-		// Get render material
+		// Get Materials
 		Material material = _gameObjects[i]->GetAppearance()->GetMaterial();
-		cb.surface.AmbientMtrl = material.ambient;
-		cb.surface.DiffuseMtrl = material.diffuse;
-		cb.surface.SpecularMtrl = material.specular;
-		cb.World = XMMatrixTranspose( _gameObjects[i]->GetTransform()->GetWorldMatrix() );
+		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
+		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
+		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
+		cb_vs_matrix.data.World = XMMatrixTranspose( _gameObjects[i]->GetTransform()->GetWorldMatrix() );
 
-		// Set texture
+		// Set Textures
 		if ( _gameObjects[i]->GetAppearance()->HasTexture() )
 		{
 			ID3D11ShaderResourceView* textureRV = _gameObjects[i]->GetAppearance()->GetTextureRV();
 			context->PSSetShaderResources( 0, 1, &textureRV );
-			cb.HasTexture = 1.0f;
+			cb_vs_matrix.data.HasTexture = 1.0f;
 		}
 		else
 		{
-			cb.HasTexture = 0.0f;
+			cb_vs_matrix.data.HasTexture = 0.0f;
 		}
-		context->UpdateSubresource( constantBuffer.Get(), 0, nullptr, &cb, 0, 0 );
+
+		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		_gameObjects[i]->Draw( context.Get() );
 	}
 
