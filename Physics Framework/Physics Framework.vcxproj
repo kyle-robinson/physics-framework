@@ -433,6 +433,7 @@
     <ClInclude Include="Graphics\Shaders.h" />
     <ClInclude Include="Graphics\SwapChain.h" />
     <ClInclude Include="Graphics\VertexBuffer.h" />
+    <ClInclude Include="Graphics\Viewport.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector.h" />

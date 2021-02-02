@@ -143,6 +143,9 @@
     <ClInclude Include="Graphics\DepthStencil.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Viewport.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

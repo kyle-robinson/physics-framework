@@ -3,6 +3,7 @@
 #include "SwapChain.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
+#include "Viewport.h"
 #include "Vertices.h"
 #include "Indices.h"
 
@@ -250,18 +251,7 @@ bool Application::InitializeDirectX()
 		swapChain = std::make_shared<Bind::SwapChain>( *this, context.GetAddressOf(), device.GetAddressOf(), hWnd );
 		renderTarget = std::make_shared<Bind::RenderTarget>( *this, swapChain->GetSwapChain() );
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );
-
-		// Setup the viewport
-		D3D11_VIEWPORT vp = { 0 };
-		vp.Width = static_cast<FLOAT>( _renderWidth );
-		vp.Height = static_cast<FLOAT>( _renderHeight );
-		vp.MinDepth = 0.0f;
-		vp.MaxDepth = 1.0f;
-		vp.TopLeftX = 0;
-		vp.TopLeftY = 0;
-		context->RSSetViewports( 1, &vp );
-
-		// Set primitive topology
+		viewport = std::make_shared<Bind::Viewport>( *this );
 		context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 		// Create the constant buffer

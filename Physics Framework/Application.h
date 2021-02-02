@@ -51,6 +51,7 @@ namespace Bind
 	class DepthStencil;
 	class RenderTarget;
 	class SwapChain;
+	class Viewport;
 }
 
 class Application
@@ -77,6 +78,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	
+	std::shared_ptr<Bind::Viewport> viewport;
 	std::shared_ptr<Bind::SwapChain> swapChain;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;
