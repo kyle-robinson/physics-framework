@@ -30,6 +30,7 @@ cbuffer ConstantBuffer : register( b0 )
 
 	float3 EyePosW;
 	float HasTexture;
+    float IsSkybox;
 }
 
 struct VS_INPUT
@@ -115,15 +116,20 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	// Sum all the terms together and copy over the diffuse alpha.
 	float4 finalColour;
 
-	if (HasTexture == 1.0f)
+	if (HasTexture == 1.0f && !IsSkybox)
 	{
 		finalColour.rgb = (textureColour.rgb * (ambient + diffuse)) + specular;
         //finalColour.rgb = specular;
     }
-	else
-	{
-		finalColour.rgb = ambient + diffuse + specular;
-	}
+    else if ( IsSkybox )
+    {
+        ambient = float3( 1.0f, 1.0f, 1.0f );
+        finalColour.rgb = textureColour.rgb * ambient;
+    }
+    else
+    {
+        finalColour.rgb = ambient + diffuse + specular;
+    }
 
 	finalColour.a = surface.DiffuseMtrl.a;
 

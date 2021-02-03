@@ -83,13 +83,15 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\stone.dds", nullptr, textureStone.GetAddressOf() );
 	CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\floor.dds", nullptr, textureGround.GetAddressOf() );
 	CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\Hercules_COLOR.dds", nullptr, textureHercules.GetAddressOf() );
+	CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sand.dds", nullptr, textureSand.GetAddressOf() );
+	CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sky.dds", nullptr, textureSky.GetAddressOf() );
 	
     // setup Camera
 	v3df eye( 0.0f, 2.0f, -1.0f );
 	v3df at( 0.0f, 2.0f, 0.0f );
 	v3df up( 0.0f, 1.0f, 0.0f );
 
-	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 200.0f );
+	_camera = std::make_shared<Camera>( eye, at, up, static_cast<float>( _renderWidth ), static_cast<float>( _renderHeight ), 0.01f, 300.0f );
 
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -137,9 +139,9 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	// initialize floor
 	std::unique_ptr<GameObject> gameObject = std::make_unique<GameObject>( "Floor" );
 	gameObject->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
-	gameObject->GetTransform()->SetScale( 15.0f, 15.0f, 15.0f );
+	gameObject->GetTransform()->SetScale( 50.0f, 50.0f, 50.0f );
 	gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
-	gameObject->GetAppearance()->SetTextureRV( textureGround.Get() );
+	gameObject->GetAppearance()->SetTextureRV( textureSand.Get() );
 	gameObject->GetAppearance()->SetGeometryData( planeGeometry );
 	gameObject->GetAppearance()->SetMaterial( noSpecMaterial );
 	_gameObjects.push_back( std::move( gameObject ) );
@@ -164,6 +166,14 @@ bool Application::Initialise( HINSTANCE hInstance, int nCmdShow )
 	gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
 	gameObject->GetAppearance()->SetMaterial( shinyMaterial );
 	_gameObjects.push_back( std::move( gameObject ) );
+
+	// initialize skybox
+	_skybox = std::make_unique<GameObject>( "Skybox" );
+	_skybox->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
+	_skybox->GetTransform()->SetInitialPosition( _camera->GetPosition() );
+	_skybox->GetAppearance()->SetTextureRV( textureSky.Get() );
+	_skybox->GetAppearance()->SetGeometryData( cubeGeometry );
+	_skybox->GetAppearance()->SetMaterial( noSpecMaterial );
 
 	return true;
 }
@@ -258,7 +268,6 @@ bool Application::InitializeDirectX()
 		rasterizerStates.emplace( "Solid", std::make_shared<Bind::Rasterizer>( *this, true, false ) );
         rasterizerStates.emplace( "Cubemap", std::make_shared<Bind::Rasterizer>( *this, true, true ) );
         rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
-		rasterizerStates["Solid"]->Bind( *this );
 
 		samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
 		samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
@@ -318,6 +327,8 @@ void Application::Update()
 	for ( int i = 0; i < _gameObjects.size(); i++ )
 		_gameObjects[i]->Update();
 
+	_skybox->Update();
+
 	dt -= FPS_60;
 }
 
@@ -326,6 +337,7 @@ void Application::Draw()
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	renderTarget->BindAsBuffer( *this, depthStencil.get(), clearColor );
     depthStencil->ClearDepthStencil( *this );
+	rasterizerStates["Solid"]->Bind( *this );
 
     // Setup Buffers
 	Shaders::BindShaders( context.Get(), vertexShader, pixelShader );
@@ -337,6 +349,7 @@ void Application::Draw()
 	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &_camera->GetProjection() ) );
 	cb_vs_matrix.data.light = basicLight;
 	cb_vs_matrix.data.EyePosW = _camera->GetPosition();
+	cb_vs_matrix.data.IsSkybox = 0.0f;
 
 	// Render Scene Objects
 	for ( int i = 0; i < _gameObjects.size(); i++ )
@@ -363,6 +376,16 @@ void Application::Draw()
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		_gameObjects[i]->Draw( context.Get() );
 	}
+
+	// Render Cubemap
+	rasterizerStates["Cubemap"]->Bind( *this );
+	_skybox->GetTransform()->SetPosition( _camera->GetPosition() );
+	cb_vs_matrix.data.World = XMMatrixTranspose( _skybox->GetTransform()->GetWorldMatrix() );
+	cb_vs_matrix.data.IsSkybox = 1.0f;
+	ID3D11ShaderResourceView* skyboxTexture = _skybox->GetAppearance()->GetTextureRV();
+	context->PSSetShaderResources( 0, 1, &skyboxTexture );
+	if ( !cb_vs_matrix.ApplyChanges() ) return;
+	_skybox->Draw( context.Get() );
 
     // display frame
 	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );

@@ -14,6 +14,7 @@ struct CB_VS_matrix
 	Light light;
 	v3df EyePosW;
 	float HasTexture;
+	float IsSkybox;
 };
 
 #endif

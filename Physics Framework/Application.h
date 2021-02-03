@@ -62,9 +62,10 @@ private:
 	VertexBuffer<SimpleVertex> vb_plane;
 	IndexBuffer ib_plane;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
-	//Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 
 	// textures
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
@@ -78,6 +79,7 @@ private:
 	int objectToUse = 1;
 	MeshData objMeshData;
 	std::shared_ptr<Camera> _camera;
+	std::unique_ptr<GameObject> _skybox;
 	std::vector<std::unique_ptr<GameObject>> _gameObjects;
 
 	float _cameraOrbitRadius = 7.0f;
