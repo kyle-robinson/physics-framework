@@ -135,7 +135,7 @@ void RenderWindow::RegisterWindowClass() noexcept
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
 	wc.hIcon = LoadIcon( hInstance, (LPCTSTR)IDI_TUTORIAL1 );
-    wc.hCursor = hHandNormal;
+    wc.hCursor = LoadCursor( hInstance, IDC_ARROW );
     wc.hbrBackground = (HBRUSH)( COLOR_WINDOW + 1 );
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = windowClass_Wide.c_str();

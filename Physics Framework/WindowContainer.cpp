@@ -22,11 +22,11 @@ WindowContainer::WindowContainer()
 	}
 }
 
-//extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK WindowContainer::WindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	//if ( ImGui_ImplWin32_WndProcHandler( hWnd, uMsg, wParam, lParam ) )
-	//	return true;
+	if ( ImGui_ImplWin32_WndProcHandler( hWnd, uMsg, wParam, lParam ) )
+		return true;
 
 	switch ( uMsg )
 	{
@@ -94,7 +94,6 @@ LRESULT CALLBACK WindowContainer::WindowProc( HWND hWnd, UINT uMsg, WPARAM wPara
 		int x = LOWORD( lParam );
 		int y = HIWORD( lParam );
 		mouse.OnLeftPressed( x, y );
-		SetCursor( renderWindow.hHandSelect );
 		return 0;
 	}
 	case WM_LBUTTONUP:
@@ -102,7 +101,6 @@ LRESULT CALLBACK WindowContainer::WindowProc( HWND hWnd, UINT uMsg, WPARAM wPara
 		int x = LOWORD( lParam );
 		int y = HIWORD( lParam );
 		mouse.OnLeftReleased( x, y );
-		SetCursor( renderWindow.hHandNormal );
 		return 0;
 	}
 	case WM_RBUTTONDOWN:

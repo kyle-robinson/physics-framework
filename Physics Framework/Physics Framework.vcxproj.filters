@@ -60,6 +60,12 @@
     <Filter Include="Headers\Input">
       <UniqueIdentifier>{f60faba5-5bda-40d5-869e-22e5fc4c6424}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Miscellaneous">
+      <UniqueIdentifier>{2f2b713e-c4ca-4ad3-ae76-7d380af809df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ImGui">
+      <UniqueIdentifier>{c5141d88-08d5-4fca-baa4-35b3f151b87b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\VertexBuffer.h">
@@ -91,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="Model\OBJLoader.h">
       <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources\resource.h">
-      <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Vertices.h">
       <Filter>Headers\Objects\Data</Filter>
@@ -182,6 +185,36 @@
     <ClInclude Include="Input\Mouse.h">
       <Filter>Headers\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\resource.h">
+      <Filter>Resource Files\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imgui.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imgui_impl_dx11.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imgui_impl_win32.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imgui_internal.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imstb_rectpack.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imstb_textedit.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imstb_truetype.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\imgui\imconfig.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ImGuiManager.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -238,6 +271,24 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_impl_dx11.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_impl_win32.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ImGuiManager.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds">
@@ -257,7 +308,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClassDiagram.cd">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Miscellaneous</Filter>
     </None>
   </ItemGroup>
 </Project>

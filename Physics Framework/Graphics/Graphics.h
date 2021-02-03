@@ -2,9 +2,6 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Mouse.h"
-#include "Keyboard.h"
-
 #include "Camera.h"
 #include "Shaders.h"
 #include "resource.h"
@@ -12,6 +9,7 @@
 #include "GameObject.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
+#include "ImGuiManager.h"
 #include "ConstantBuffer.h"
 #include "DDSTextureLoader.h"
 
@@ -71,6 +69,8 @@ private:
 
 	UINT windowWidth;
 	UINT windowHeight;
+	ImGuiManager imgui;
+
 	Light basicLight;
 	MeshData objMeshData;
 	std::unique_ptr<GameObject> torus;

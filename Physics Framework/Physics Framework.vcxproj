@@ -92,7 +92,7 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <SourcePath>$(ProjectDir)DirectXTK\Src;$(SourcePath)</SourcePath>
-    <IncludePath>$(ProjectDir)Input;$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)External;$(ProjectDir)Input;$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -387,8 +387,24 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\External\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
+    <ClCompile Include="Graphics\ImGuiManager.cpp" />
     <ClCompile Include="Graphics\Shaders.cpp" />
     <ClCompile Include="Input\Keyboard.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -436,12 +452,21 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\External\imgui\imconfig.h" />
+    <ClInclude Include="..\External\imgui\imgui.h" />
+    <ClInclude Include="..\External\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\External\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\External\imgui\imgui_internal.h" />
+    <ClInclude Include="..\External\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\External\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\External\imgui\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Graphics\ConstantBuffer.h" />
     <ClInclude Include="Graphics\ConstantBufferTypes.h" />
     <ClInclude Include="Graphics\DepthStencil.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\GraphicsResource.h" />
+    <ClInclude Include="Graphics\ImGuiManager.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
     <ClInclude Include="Graphics\Rasterizer.h" />
     <ClInclude Include="Graphics\RenderTarget.h" />

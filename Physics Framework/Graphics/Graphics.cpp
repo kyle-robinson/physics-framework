@@ -17,6 +17,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeDirectX( hWnd ) ) return false;
 	if ( !InitializeShaders() ) return false;
 	if ( !InitializeScene() ) return false;
+	imgui.Initialize( hWnd, device.Get(), context.Get() );
 
 	return true;
 }
@@ -157,7 +158,6 @@ bool Graphics::InitializeScene()
 		ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 		ground->GetAppearance()->SetGeometryData( planeGeometry );
 		ground->GetAppearance()->SetMaterial( noSpecMaterial );
-		//cubes.push_back( std::move( gameObject ) );
 
 		// initialize cubes
 		for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
@@ -178,7 +178,6 @@ bool Graphics::InitializeScene()
 		torus->GetAppearance()->SetTextureRV( textureHercules.Get() );
 		torus->GetAppearance()->SetGeometryData( herculesGeometry );
 		torus->GetAppearance()->SetMaterial( shinyMaterial );
-		//cubes.push_back( std::move( gameObject ) );
 
 		// initialize skybox
 		skybox = std::make_unique<GameObject>( "Skybox" );
@@ -274,6 +273,10 @@ void Graphics::Draw()
 	context->PSSetShaderResources( 0, 1, &skyboxTexture );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	skybox->Draw( context.Get() );
+
+	imgui.BeginRender();
+	imgui.SpawnDemoWindow();
+	imgui.EndRender();
 
     // display frame
 	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );
