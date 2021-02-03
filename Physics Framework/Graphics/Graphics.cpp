@@ -234,29 +234,10 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
-	// Set Object Velocities
-	if ( GetAsyncKeyState( 'W' ) ) gameObjects[objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
-	if ( GetAsyncKeyState( 'A' ) ) gameObjects[objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( 'S' ) ) gameObjects[objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
-	if ( GetAsyncKeyState( 'D' ) ) gameObjects[objectToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( VK_SPACE ) ) gameObjects[objectToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
-
-	// Reset Object Positions & Forces
-	if ( GetAsyncKeyState( 'R' ) )
-		for ( int i = 0; i < gameObjects.size(); i++ )
-			gameObjects[i]->GetTransform()->ResetPosition();
-	if ( GetAsyncKeyState( 'F' ) )
-		for ( int i = 0; i < gameObjects.size(); i++ )
-			gameObjects[i]->GetParticleModel()->ResetForces();
-
-	// Update Camera
+	skybox->Update();
 	camera->Update();
-
-	// Update Objects
 	for ( int i = 0; i < gameObjects.size(); i++ )
 		gameObjects[i]->Update();
-	
-	skybox->Update();
 }
 
 void Graphics::Draw()

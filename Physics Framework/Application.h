@@ -3,8 +3,6 @@
 #define APPLICATION_H
 
 #include "WindowContainer.h"
-//#include "MousePicking.h"
-//#include "Timer.h"
 
 class Application : public WindowContainer
 {

@@ -25,7 +25,7 @@ bool Application::ProcessMessages() noexcept
 
 void Application::Update()
 {
-	// Update our time
+	// update delta time
     static float dt = 0.0f;
     static DWORD dwTimeStart = 0;
     DWORD dwTimeCur = GetTickCount64();
@@ -52,83 +52,32 @@ void Application::Update()
 		outMsg += std::to_string( me.GetPosY() );
 		outMsg += "\n";
 		OutputDebugStringA( outMsg.c_str() );
-        if ( mouse.IsRightDown() )
-		{
-			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
-			{
-				
-			}
-		}
-		if( me.GetType() == Mouse::MouseEvent::EventType::LPress )
-		{
-			
-		}
-		if( me.GetType() == Mouse::MouseEvent::EventType::Move )
-		{
-			
-		}
 	}
 
-	if ( keyboard.KeyIsPressed( VK_UP ) )
-		Camera::MoveFoward( gfx.camera );
-
-	if ( keyboard.KeyIsPressed( VK_DOWN ) )
-		Camera::MoveBackward( gfx.camera );
-
-	if ( keyboard.KeyIsPressed( VK_RIGHT ) )
-		Camera::MoveRight( gfx.camera );
-
-	if ( keyboard.KeyIsPressed( VK_LEFT ) )
-		Camera::MoveLeft( gfx.camera );
-
 	// camera movement
-	/*if ( keyboard.KeyIsPressed( 'W' ) )
-		CameraMove::MoveForward( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( VK_UP ) ) Camera::MoveFoward( gfx.camera );
+	if ( keyboard.KeyIsPressed( VK_DOWN ) ) Camera::MoveBackward( gfx.camera );
+	if ( keyboard.KeyIsPressed( VK_RIGHT ) ) Camera::MoveRight( gfx.camera );
+	if ( keyboard.KeyIsPressed( VK_LEFT ) ) Camera::MoveLeft( gfx.camera );
 
-	if ( keyboard.KeyIsPressed( 'A' ) )
-		CameraMove::MoveLeft( gfx.cameras[gfx.cameraToUse], dt );
+	// object movement
+	if ( GetAsyncKeyState( 'W' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
+	if ( GetAsyncKeyState( 'A' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
+	if ( GetAsyncKeyState( 'S' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
+	if ( GetAsyncKeyState( 'D' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
+	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
-	if ( keyboard.KeyIsPressed( 'S' ) )
-		CameraMove::MoveBackward( gfx.cameras[gfx.cameraToUse], dt );
+	// reset object position
+	if ( GetAsyncKeyState( 'R' ) )
+		for ( int i = 0; i < gfx.gameObjects.size(); i++ )
+			gfx.gameObjects[i]->GetTransform()->ResetPosition();
 
-	if ( keyboard.KeyIsPressed( 'D' ) )
-		CameraMove::MoveRight( gfx.cameras[gfx.cameraToUse], dt );
-
-	if ( keyboard.KeyIsPressed( VK_SPACE ) )
-		CameraMove::MoveUp( gfx.cameras[gfx.cameraToUse], dt );
-
-	if ( keyboard.KeyIsPressed( 'E' ) )
-		CameraMove::MoveDown( gfx.cameras[gfx.cameraToUse], dt );
-
-	// static camera
-	if ( !gfx.flyCamera && gfx.cameraToUse == "Main" )
-		gfx.cameras[gfx.cameraToUse]->SetPosition( gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().x,
-			9.0f, gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().z );
-
-	// camera world collisions
-	for ( auto const& cam : gfx.cameras )
-	{
-		// y world collisions
-		if ( cam.second->GetPositionFloat3().y <= 6.0f )
-			cam.second->SetPosition( cam.second->GetPositionFloat3().x, 6.0f, cam.second->GetPositionFloat3().z );
-		if ( cam.second->GetPositionFloat3().y >= 30.0f )
-			cam.second->SetPosition( cam.second->GetPositionFloat3().x, 30.0f, cam.second->GetPositionFloat3().z );
-
-		// x world colliisons
-		if ( cam.second->GetPositionFloat3().x <= -125.0f )
-			cam.second->SetPosition( -125.0f, cam.second->GetPositionFloat3().y, cam.second->GetPositionFloat3().z );
-		if ( cam.second->GetPositionFloat3().x >= 50.0f )
-			cam.second->SetPosition( 50.0f, cam.second->GetPositionFloat3().y, cam.second->GetPositionFloat3().z );
-
-		// z world collisions
-		if ( cam.second->GetPositionFloat3().z <= -100.0f )
-			cam.second->SetPosition( cam.second->GetPositionFloat3().x, cam.second->GetPositionFloat3().y, -100.0f );
-		if ( cam.second->GetPositionFloat3().z >= 50.0f )
-			cam.second->SetPosition( cam.second->GetPositionFloat3().x, cam.second->GetPositionFloat3().y, 50.0f );
-	}*/
+	// reset object forces
+	if ( GetAsyncKeyState( 'F' ) )
+		for ( int i = 0; i < gfx.gameObjects.size(); i++ )
+			gfx.gameObjects[i]->GetParticleModel()->ResetForces();
 
 	gfx.Update( dt );
-
 	dt -= FPS_60;
 }
 

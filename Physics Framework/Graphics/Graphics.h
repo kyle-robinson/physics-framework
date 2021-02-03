@@ -34,24 +34,18 @@ class Graphics
 public:
 	UINT GetWidth() const noexcept { return windowWidth; };
 	UINT GetHeight() const noexcept { return windowHeight; };
-	//bool Initialise( HINSTANCE hInstance, int nCmdShow );
 	bool Initialize( HWND hWnd, int width, int height );
-	//bool HandleKeyboard( MSG msg );
 	void Update( float dt );
 	void Draw();
-public:
+
+	int objectToUse = 1;
 	std::shared_ptr<Camera> camera;
+	std::vector<std::unique_ptr<GameObject>> gameObjects;
 private:
 	bool InitializeDirectX( HWND hWnd );
-	//bool InitializeWindow( HINSTANCE hInstance, int nCmdShow );
 	bool InitializeShaders();
 	bool InitializeScene();
 
-	// setup
-	//HWND hWnd = nullptr;
-	//HINSTANCE hInstance = nullptr;
-
-	// pipeline
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	
@@ -62,34 +56,24 @@ private:
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 
-	// buffers
 	VertexBuffer<SimpleVertex> vb_cube;
 	IndexBuffer ib_cube;
 	VertexBuffer<SimpleVertex> vb_plane;
 	IndexBuffer ib_plane;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 
-	// textures
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
 
-	// shaders
 	VertexShader vertexShader;
 	PixelShader pixelShader;
 
-	// input
-	Mouse mouse;
-	Keyboard keyboard;
-
-	// objects
 	Light basicLight;
-	int objectToUse = 1;
 	MeshData objMeshData;
 	std::unique_ptr<GameObject> skybox;
-	std::vector<std::unique_ptr<GameObject>> gameObjects;
 
 	UINT windowWidth = 1280;
 	UINT windowHeight = 720;
