@@ -10,7 +10,7 @@ namespace Bind
 	class SwapChain : public GraphicsResource
 	{
 	public:
-        SwapChain( Application& gfx, ID3D11DeviceContext** context, ID3D11Device** device, HWND hWnd )
+        SwapChain( Graphics& gfx, ID3D11DeviceContext** context, ID3D11Device** device, HWND hWnd )
 		{
 			try
 			{
@@ -58,7 +58,6 @@ namespace Bind
 				return;
 			}
         }
-        void Bind( Application& gfx ) noexcept override {}
         IDXGISwapChain* GetSwapChain() noexcept
         {
             return swapChain.Get();

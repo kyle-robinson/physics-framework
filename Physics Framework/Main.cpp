@@ -5,13 +5,22 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 {
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
+    UNREFERENCED_PARAMETER( nCmdShow );
 
 	Application theApp;
-	if ( !( theApp.Initialise( hInstance, nCmdShow ) ) )
-		return -1;
+    if ( theApp.Initialize( hInstance, "DirectX 11 Physics Framwork", "TutorialWindowClass", 1280, 720 ) )
+    {
+        while ( theApp.ProcessMessages() == true )
+        {
+            theApp.Update();
+            theApp.Render();
+        }
+    }
+	//if ( !( theApp.Initialise( hInstance, nCmdShow ) ) )
+	//	return -1;
 
     // Main message loop
-    MSG msg = { 0 };
+    /*MSG msg = { 0 };
     while ( WM_QUIT != msg.message )
     {
         if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
@@ -34,7 +43,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 			theApp.Update();
             theApp.Draw();
         }
-    }
+    }*/
 
     return 0;
 }

@@ -11,7 +11,7 @@ namespace Bind
 	class RenderTarget : public GraphicsResource
 	{
 	public:
-		RenderTarget( Application& gfx, IDXGISwapChain* swapChain )
+		RenderTarget( Graphics& gfx, IDXGISwapChain* swapChain )
 		{
 			try
 			{
@@ -27,7 +27,7 @@ namespace Bind
 				return;
 			}
 		}
-		void BindAsBuffer( Application& gfx, DepthStencil* depthStencil, float clearColor[4] ) noexcept
+		void BindAsBuffer( Graphics& gfx, DepthStencil* depthStencil, float clearColor[4] ) noexcept
 		{
 			GetContext( gfx )->OMSetRenderTargets( 1, backBuffer.GetAddressOf(), depthStencil->GetDepthStencilView() );
 			GetContext( gfx )->ClearRenderTargetView( backBuffer.Get(), clearColor );

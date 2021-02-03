@@ -10,8 +10,8 @@ namespace Bind
 	class DepthStencil : public GraphicsResource
 	{
 	public:
-		DepthStencil( Application& gfx ) : DepthStencil( gfx, static_cast<FLOAT>( gfx.GetWidth() ), static_cast<FLOAT>( gfx.GetHeight() ) ) {}
-		DepthStencil( Application& gfx, float width, float height )
+		DepthStencil( Graphics& gfx ) : DepthStencil( gfx, static_cast<FLOAT>( gfx.GetWidth() ), static_cast<FLOAT>( gfx.GetHeight() ) ) {}
+		DepthStencil( Graphics& gfx, float width, float height )
 		{
 			try
 			{
@@ -33,7 +33,7 @@ namespace Bind
 				return;
 			}
 		}
-		void ClearDepthStencil( Application& gfx ) noexcept
+		void ClearDepthStencil(Graphics& gfx ) noexcept
 		{
 			GetContext( gfx )->ClearDepthStencilView( depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 		}

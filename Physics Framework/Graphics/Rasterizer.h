@@ -10,7 +10,7 @@ namespace Bind
 	class Rasterizer : public GraphicsResource
 	{
 	public:
-		Rasterizer( Application& gfx, bool isSolid, bool isTwoSided ) : isSolid( isSolid ), isTwoSided( isTwoSided )
+		Rasterizer( Graphics& gfx, bool isSolid, bool isTwoSided ) : isSolid( isSolid ), isTwoSided( isTwoSided )
 		{
 			try
 			{
@@ -27,7 +27,7 @@ namespace Bind
 				return;
 			}
 		}
-		Rasterizer( Application& gfx, ID3D11RasterizerState* pRasterizer, bool isSolid, bool isTwoSided )
+		Rasterizer( Graphics& gfx, ID3D11RasterizerState* pRasterizer, bool isSolid, bool isTwoSided )
 			: isSolid( isSolid ), isTwoSided( isTwoSided )
 		{
 			try
@@ -45,17 +45,17 @@ namespace Bind
 				return;
 			}
 		}
-		void Bind( Application& gfx ) noexcept override
+		void Bind( Graphics& gfx ) noexcept override
 		{
 			GetContext( gfx )->RSSetState( pRasterizer.Get() );
 		}
-		static void DrawSolid( Application& gfx, UINT indexCount ) noexcept
+		static void DrawSolid( Graphics& gfx, UINT indexCount ) noexcept
 		{
 			Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizer_Solid;
 			GetContext( gfx )->RSSetState( pRasterizer_Solid.Get() );
 			GetContext( gfx )->DrawIndexed( indexCount, 0, 0 );
 		}
-		static void DrawWireframe( Application& gfx, UINT indexCount ) noexcept
+		static void DrawWireframe( Graphics& gfx, UINT indexCount ) noexcept
 		{
 			Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizer_Wireframe;
 			GetContext( gfx )->RSSetState( pRasterizer_Wireframe.Get() );

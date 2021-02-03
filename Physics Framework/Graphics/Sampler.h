@@ -16,7 +16,7 @@ namespace Bind
 			Bilinear,
 			Point
 		};
-		Sampler( Application& gfx, Type type, bool reflect = false, UINT slot = 0u )
+		Sampler( Graphics& gfx, Type type, bool reflect = false, UINT slot = 0u )
 			: type( type ), reflect( reflect ), slot( slot )
 		{
 			try
@@ -52,7 +52,7 @@ namespace Bind
 				return;
 			}
 		}
-		void Bind( Application& gfx ) noexcept override
+		void Bind( Graphics& gfx ) noexcept override
 		{
 			GetContext( gfx )->PSSetSamplers( slot, 1u, pSampler.GetAddressOf() );
 		}
