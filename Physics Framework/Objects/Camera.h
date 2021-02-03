@@ -35,10 +35,10 @@ public:
 	void SetLookAt( v3df lookAt ) { _at = lookAt; }
 	void SetPosition( v3df position ) { _eye = position; }
 
-	static void MoveFoward( std::shared_ptr<Camera>& camera );
-	static void MoveBackward( std::shared_ptr<Camera>& camera );
-	static void MoveRight( std::shared_ptr<Camera>& camera );
-	static void MoveLeft( std::shared_ptr<Camera>& camera );
+	static void MoveFoward( std::unique_ptr<Camera>& camera );
+	static void MoveBackward( std::unique_ptr<Camera>& camera );
+	static void MoveRight( std::unique_ptr<Camera>& camera );
+	static void MoveLeft( std::unique_ptr<Camera>& camera );
 private:
 	float cameraOrbitRadius = 7.0f;
 	float cameraOrbitRadiusMin = 2.0f;

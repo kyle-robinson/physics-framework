@@ -9,46 +9,11 @@
 #include "Vertices.h"
 #include "Indices.h"
 
-/*bool Graphics::HandleKeyboard( MSG msg )
-{
-	switch ( msg.wParam )
-	{
-	// window management
-	case VK_ESCAPE:
-		PostQuitMessage( 0 );
-		return true;
-
-	// camera movement
-	case VK_UP:
-		cameraOrbitRadius = max( cameraOrbitRadiusMin, cameraOrbitRadius - ( cameraSpeed * 0.2f ) );
-		return true;
-	case VK_DOWN:
-		cameraOrbitRadius = min( cameraOrbitRadiusMax, cameraOrbitRadius + ( cameraSpeed * 0.2f ) );
-		return true;
-	case VK_RIGHT:
-		cameraOrbitAngleXZ -= cameraSpeed;
-		return true;
-	case VK_LEFT:
-		cameraOrbitAngleXZ += cameraSpeed;
-		return true;
-
-	// set object to use
-	case '1': objectToUse = 1; return true;
-	case '2': objectToUse = 2; return true;
-	case '3': objectToUse = 3; return true;
-	case '4': objectToUse = 4; return true;
-	case '5': objectToUse = 5; return true;
-	}
-
-	return false;
-}*/
-
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
 	windowWidth = width;
 	windowHeight = height;
-	
-	//if ( !InitializeWindow( hInstance, nCmdShow ) ) return false;
+
 	if ( !InitializeDirectX( hWnd ) ) return false;
 	if ( !InitializeShaders() ) return false;
 	if ( !InitializeScene() ) return false;
@@ -132,7 +97,7 @@ bool Graphics::InitializeScene()
 		CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sky.dds", nullptr, textureSky.GetAddressOf() );
 	
 		// setup camera
-		camera = std::make_shared<Camera>(
+		camera = std::make_unique<Camera>(
 			v3df( 0.0f, 2.0f, -1.0f ), // eye
 			v3df( 0.0f, 2.0f,  0.0f ), // at
 			v3df( 0.0f, 1.0f,  0.0f ), // up
@@ -184,36 +149,36 @@ bool Graphics::InitializeScene()
 		planeGeometry.vertexBufferOffset = 0;
 		planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
-		// initialize floor
-		std::unique_ptr<GameObject> gameObject = std::make_unique<GameObject>( "Floor" );
-		gameObject->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
-		gameObject->GetTransform()->SetScale( 50.0f, 50.0f, 50.0f );
-		gameObject->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
-		gameObject->GetAppearance()->SetTextureRV( textureSand.Get() );
-		gameObject->GetAppearance()->SetGeometryData( planeGeometry );
-		gameObject->GetAppearance()->SetMaterial( noSpecMaterial );
-		gameObjects.push_back( std::move( gameObject ) );
+		// initialize ground
+		ground = std::make_unique<GameObject>( "Ground" );
+		ground->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
+		ground->GetTransform()->SetScale( 50.0f, 50.0f, 50.0f );
+		ground->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
+		ground->GetAppearance()->SetTextureRV( textureSand.Get() );
+		ground->GetAppearance()->SetGeometryData( planeGeometry );
+		ground->GetAppearance()->SetMaterial( noSpecMaterial );
+		//cubes.push_back( std::move( gameObject ) );
 
 		// initialize cubes
 		for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 		{
-			gameObject = std::make_unique<GameObject>( "Cube " + i );
-			gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-			gameObject->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-			gameObject->GetAppearance()->SetTextureRV( textureStone.Get() );
-			gameObject->GetAppearance()->SetGeometryData( cubeGeometry );
-			gameObject->GetAppearance()->SetMaterial( shinyMaterial );
-			gameObjects.push_back( std::move( gameObject ) );
+			std::unique_ptr<GameObject> cube = std::make_unique<GameObject>( "Cube " + i );
+			cube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+			cube->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+			cube->GetAppearance()->SetTextureRV( textureStone.Get() );
+			cube->GetAppearance()->SetGeometryData( cubeGeometry );
+			cube->GetAppearance()->SetMaterial( shinyMaterial );
+			cubes.push_back( std::move( cube ) );
 		}
 
-		// initialize donut
-		gameObject = std::make_unique<GameObject>( "Donut" );
-		gameObject->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-		gameObject->GetTransform()->SetInitialPosition( -4.0f, 0.5f, 10.0f );
-		gameObject->GetAppearance()->SetTextureRV( textureHercules.Get() );
-		gameObject->GetAppearance()->SetGeometryData( herculesGeometry );
-		gameObject->GetAppearance()->SetMaterial( shinyMaterial );
-		gameObjects.push_back( std::move( gameObject ) );
+		// initialize torus
+		torus = std::make_unique<GameObject>( "Torus" );
+		torus->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		torus->GetTransform()->SetInitialPosition( -4.0f, 0.5f, 10.0f );
+		torus->GetAppearance()->SetTextureRV( textureHercules.Get() );
+		torus->GetAppearance()->SetGeometryData( herculesGeometry );
+		torus->GetAppearance()->SetMaterial( shinyMaterial );
+		//cubes.push_back( std::move( gameObject ) );
 
 		// initialize skybox
 		skybox = std::make_unique<GameObject>( "Skybox" );
@@ -234,10 +199,12 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
-	skybox->Update();
 	camera->Update();
-	for ( int i = 0; i < gameObjects.size(); i++ )
-		gameObjects[i]->Update();
+	ground->Update();
+	for ( int i = 0; i < cubes.size(); i++ )
+		cubes[i]->Update();
+	torus->Update();
+	skybox->Update();
 }
 
 void Graphics::Draw()
@@ -260,20 +227,21 @@ void Graphics::Draw()
 	cb_vs_matrix.data.IsSkybox = 0.0f;
 
 	// Render Scene Objects
-	for ( int i = 0; i < gameObjects.size(); i++ )
+	ID3D11ShaderResourceView* textureToUse;
+	for ( int i = 0; i < cubes.size(); i++ )
 	{
 		// Get Materials
-		Material material = gameObjects[i]->GetAppearance()->GetMaterial();
+		Material material = cubes[i]->GetAppearance()->GetMaterial();
 		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
 		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
-		cb_vs_matrix.data.World = XMMatrixTranspose( gameObjects[i]->GetTransform()->GetWorldMatrix() );
+		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetTransform()->GetWorldMatrix() );
 
 		// Set Textures
-		if ( gameObjects[i]->GetAppearance()->HasTexture() )
+		if ( cubes[i]->GetAppearance()->HasTexture() )
 		{
-			ID3D11ShaderResourceView* textureRV = gameObjects[i]->GetAppearance()->GetTextureRV();
-			context->PSSetShaderResources( 0, 1, &textureRV );
+			textureToUse = cubes[i]->GetAppearance()->GetTextureRV();
+			context->PSSetShaderResources( 0, 1, &textureToUse );
 			cb_vs_matrix.data.HasTexture = 1.0f;
 		}
 		else
@@ -282,8 +250,20 @@ void Graphics::Draw()
 		}
 
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
-		gameObjects[i]->Draw( context.Get() );
+		cubes[i]->Draw( context.Get() );
 	}
+
+	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
+	textureToUse = torus->GetAppearance()->GetTextureRV();
+	context->PSSetShaderResources( 0, 1, &textureToUse );
+	if ( !cb_vs_matrix.ApplyChanges() ) return;
+	torus->Draw( context.Get() );
+
+	cb_vs_matrix.data.World = XMMatrixTranspose( ground->GetTransform()->GetWorldMatrix() );
+	textureToUse = ground->GetAppearance()->GetTextureRV();
+	context->PSSetShaderResources( 0, 1, &textureToUse );
+	if ( !cb_vs_matrix.ApplyChanges() ) return;
+	ground->Draw( context.Get() );
 
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );

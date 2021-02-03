@@ -50,22 +50,22 @@ XMFLOAT4X4 Camera::GetViewProjection() const
 	return viewProj;
 }
 
-void Camera::MoveFoward( std::shared_ptr<Camera>& cam )
+void Camera::MoveFoward( std::unique_ptr<Camera>& cam )
 {
 	cam->cameraOrbitRadius = max( cam->cameraOrbitRadiusMin, cam->cameraOrbitRadius - ( cam->cameraSpeed * 0.2f ) );
 }
 
-void Camera::MoveBackward( std::shared_ptr<Camera>& cam )
+void Camera::MoveBackward( std::unique_ptr<Camera>& cam )
 {
 	cam->cameraOrbitRadius = min( cam->cameraOrbitRadiusMax, cam->cameraOrbitRadius + ( cam->cameraSpeed * 0.2f ) );
 }
 
-void Camera::MoveRight( std::shared_ptr<Camera>& cam )
+void Camera::MoveRight( std::unique_ptr<Camera>& cam )
 {
 	cam->cameraOrbitAngleXZ -= cam->cameraSpeed;
 }
 
-void Camera::MoveLeft( std::shared_ptr<Camera>& cam )
+void Camera::MoveLeft( std::unique_ptr<Camera>& cam )
 {
 	cam->cameraOrbitAngleXZ += cam->cameraSpeed;
 }

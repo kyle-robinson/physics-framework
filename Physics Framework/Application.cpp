@@ -60,22 +60,30 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( VK_RIGHT ) ) Camera::MoveRight( gfx.camera );
 	if ( keyboard.KeyIsPressed( VK_LEFT ) ) Camera::MoveLeft( gfx.camera );
 
+	// select cube to move
+	static int cubeToUse = 0;
+	if ( keyboard.KeyIsPressed( '1' ) ) cubeToUse = 0;
+	if ( keyboard.KeyIsPressed( '2' ) ) cubeToUse = 1;
+	if ( keyboard.KeyIsPressed( '3' ) ) cubeToUse = 2;
+	if ( keyboard.KeyIsPressed( '4' ) ) cubeToUse = 3;
+	if ( keyboard.KeyIsPressed( '5' ) ) cubeToUse = 4;
+
 	// object movement
-	if ( GetAsyncKeyState( 'W' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
-	if ( GetAsyncKeyState( 'A' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( 'S' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
-	if ( GetAsyncKeyState( 'D' ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.gameObjects[gfx.objectToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
+	if ( GetAsyncKeyState( 'W' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
+	if ( GetAsyncKeyState( 'A' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
+	if ( GetAsyncKeyState( 'S' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
+	if ( GetAsyncKeyState( 'D' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
+	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
 	// reset object position
 	if ( GetAsyncKeyState( 'R' ) )
-		for ( int i = 0; i < gfx.gameObjects.size(); i++ )
-			gfx.gameObjects[i]->GetTransform()->ResetPosition();
+		for ( int i = 0; i < gfx.cubes.size(); i++ )
+			gfx.cubes[i]->GetTransform()->ResetPosition();
 
 	// reset object forces
 	if ( GetAsyncKeyState( 'F' ) )
-		for ( int i = 0; i < gfx.gameObjects.size(); i++ )
-			gfx.gameObjects[i]->GetParticleModel()->ResetForces();
+		for ( int i = 0; i < gfx.cubes.size(); i++ )
+			gfx.cubes[i]->GetParticleModel()->ResetForces();
 
 	gfx.Update( dt );
 	dt -= FPS_60;

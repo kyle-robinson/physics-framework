@@ -38,9 +38,8 @@ public:
 	void Update( float dt );
 	void Draw();
 
-	int objectToUse = 1;
-	std::shared_ptr<Camera> camera;
-	std::vector<std::unique_ptr<GameObject>> gameObjects;
+	std::unique_ptr<Camera> camera;
+	std::vector<std::unique_ptr<GameObject>> cubes;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
@@ -48,6 +47,11 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
 	
 	std::shared_ptr<Bind::Viewport> viewport;
 	std::shared_ptr<Bind::SwapChain> swapChain;
@@ -56,27 +60,23 @@ private:
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 
-	VertexBuffer<SimpleVertex> vb_cube;
-	IndexBuffer ib_cube;
-	VertexBuffer<SimpleVertex> vb_plane;
-	IndexBuffer ib_plane;
-	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
-
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
-
 	VertexShader vertexShader;
 	PixelShader pixelShader;
 
+	VertexBuffer<SimpleVertex> vb_cube;
+	VertexBuffer<SimpleVertex> vb_plane;
+	IndexBuffer ib_cube;
+	IndexBuffer ib_plane;
+	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+
+	UINT windowWidth;
+	UINT windowHeight;
 	Light basicLight;
 	MeshData objMeshData;
+	std::unique_ptr<GameObject> torus;
+	std::unique_ptr<GameObject> ground;
 	std::unique_ptr<GameObject> skybox;
 
-	UINT windowWidth = 1280;
-	UINT windowHeight = 720;
 };
 
 #endif
