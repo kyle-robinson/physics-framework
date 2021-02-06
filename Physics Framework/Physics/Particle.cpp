@@ -4,8 +4,8 @@
 
 Particle::Particle( const std::string& id ) : id( id )
 {
-	energy = 100.0f;
-	respawnTimer = rand() % 1000;
+	energy = MAX_ENERGY;
+	startTimer = rand() % 1000;
 	
 	_transform = std::make_shared<Transform>();
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
@@ -16,16 +16,17 @@ Particle::Particle( const std::string& id ) : id( id )
 
 void Particle::Update()
 {
-	_particleModel->Update();
-	_transform->Update();
+	if ( startTimer < 0 )
+	{
+		_particleModel->Update();
+		_transform->Update();
+		_transform->SetScale( v3df( energy * SIZE, energy * SIZE, energy * SIZE ) );
+	}
 
-	_transform->SetScale( v3df( energy * 0.01f, energy * 0.01f, energy * 0.01f ) );
-
-	if ( energy <= 0.0f && respawnTimer <= 0 )
+	if ( energy <= 0 && startTimer < 0 )
 		Respawn();
-
 	energy -= 0.1f;
-	respawnTimer -= 1;
+	startTimer -= 1;
 
 	/*if ( _active )
 	{
@@ -46,7 +47,7 @@ void Particle::Draw( ID3D11DeviceContext* pImmediateContext, ConstantBuffer<CB_V
 
 void Particle::Respawn()
 {
-	energy = 100.0f;
+	energy = MAX_ENERGY;
 	_transform->SetPosition( _transform->GetInitialPosition() );
 }
 

@@ -84,17 +84,18 @@ void Application::Update()
 	{
 		//srand( static_cast<unsigned>( time( 0 ) ) );
 		float randomNum = fmod( static_cast<float>( rand() ), 21.0f ) - 10.0f;
-		gfx.particles[i]->GetParticleModel()->Move( fmod( randomNum, i ), 1.5f, 0.0f );
+		if ( gfx.particles[i]->GetStartTimer() < 0 )
+			gfx.particles[i]->GetParticleModel()->Move( fmod( randomNum, i ), 1.5f, 0.0f );
 	}
 
 	// reset object position
 	if ( GetAsyncKeyState( 'R' ) )
-		for ( int i = 0; i < gfx.cubes.size(); i++ )
+		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetTransform()->ResetPosition();
 
 	// reset object forces
 	if ( GetAsyncKeyState( 'F' ) )
-		for ( int i = 0; i < gfx.cubes.size(); i++ )
+		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetParticleModel()->ResetForces();
 
 	gfx.Update( dt );

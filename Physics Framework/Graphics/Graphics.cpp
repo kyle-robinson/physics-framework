@@ -210,9 +210,11 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
+	UNREFERENCED_PARAMETER( dt );
+
 	camera->Update();
 	ground->Update();
-	for ( int i = 0; i < cubes.size(); i++ )
+	for ( unsigned int i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update();
 	torus->Update();
 	skybox->Update();
@@ -242,7 +244,7 @@ void Graphics::Draw()
 
 	// Render Scene Objects
 	ID3D11ShaderResourceView* textureToUse;
-	for ( int i = 0; i < cubes.size(); i++ )
+	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
 		// Get Materials
 		Material material = cubes[i]->GetAppearance()->GetMaterial();
@@ -295,8 +297,8 @@ void Graphics::Draw()
 	skybox->Draw( context.Get() );
 
 	imgui.BeginRender();
-	SpawnControlWindow( cubes, "Cube Controls" );
-	SpawnControlWindow( particles, "Particle Controls" );
+	SpawnControlWindow( cubes );
+	SpawnControlWindow( particles );
 	imgui.EndRender();
 
     // display frame
@@ -310,38 +312,60 @@ void Graphics::Draw()
 	}
 }
 
-template<typename T>
-void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<T>>& vec, const std::string& windowName )
+void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
-	if ( ImGui::Begin( windowName.c_str(), FALSE ) )
+	if ( ImGui::Begin( "Cube Controls", FALSE ) )
 	{
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 		{
 			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
 			{
-				if ( std::is_same<T, GameObject>::value )
-				{
-					float timeStep = vec[i]->GetParticleModel()->GetTimeStep();
-					ImGui::SliderFloat( "Time Step", &timeStep, 0.1f, 1.0f, "%.1f" );
-					vec[i]->GetParticleModel()->SetTimeStep( timeStep );
+				float timeStep = vec[i]->GetParticleModel()->GetTimeStep();
+				ImGui::SliderFloat( "Time Step", &timeStep, 0.1f, 1.0f, "%.1f" );
+				vec[i]->GetParticleModel()->SetTimeStep( timeStep );
 
-					float gravity = vec[i]->GetParticleModel()->GetGravity();
-					ImGui::SliderFloat( "Gravity", &gravity, 4.905f, 19.62f, "%.7f" );
-					vec[i]->GetParticleModel()->SetGravity( gravity );
+				float gravity = vec[i]->GetParticleModel()->GetGravity();
+				ImGui::SliderFloat( "Gravity", &gravity, 4.905f, 19.62f, "%.7f" );
+				vec[i]->GetParticleModel()->SetGravity( gravity );
 
-					float dragFactor = vec[i]->GetParticleModel()->GetDragFactor();
-					ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
-					vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
+				float friction = vec[i]->GetParticleModel()->GetFriction();
+				ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0008f, "%.7f", 10 );
+				vec[i]->GetParticleModel()->SetFriction( friction );
 
-					float friction = vec[i]->GetParticleModel()->GetFriction();
-					ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0008f, "%.7f", 10 );
-					vec[i]->GetParticleModel()->SetFriction( friction );
-				}
-				else
-				{
-					
-				}
+				float dragFactor = vec[i]->GetParticleModel()->GetDragFactor();
+				ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
+				vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
+
+				ImGui::Text( "Drag Type: " );
+				ImGui::SameLine();
+				static int dragFactorGroup = 0;
+				if ( ImGui::RadioButton( "Laminar", &dragFactorGroup, 0 ) )
+					vec[i]->GetParticleModel()->SetLaminar( true );
+				ImGui::SameLine();
+				if ( ImGui::RadioButton( "Turbulent", &dragFactorGroup, 1 ) )
+					vec[i]->GetParticleModel()->SetLaminar( false );
 			}
+		}
+	} ImGui::End();
+}
+
+void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
+{
+	if ( ImGui::Begin( "Particle Controls", FALSE ) )
+	{
+		float energy = vec[0]->GetMaxEnergy();
+		ImGui::SliderFloat( "Energy", &energy, 10, 200, "%.1f" );
+
+		//float life = vec[0]->GetMaxLife();
+		//ImGui::SliderFloat( "Life", &life, 0.001f, 0.1f, "%.000001f", 10 );
+
+		float size = vec[0]->GetSize();
+		ImGui::SliderFloat( "Size", &size, 0.001f, 0.01f );
+		for ( unsigned int i = 0; i < vec.size(); i++ )
+		{
+			vec[i]->SetMaxEnergy( energy );
+			vec[i]->SetSize( size );
+			//vec[i]->SetMaxLife( life );
 		}
 	} ImGui::End();
 }

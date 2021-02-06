@@ -47,8 +47,8 @@ private:
 	bool InitializeShaders();
 	bool InitializeScene();
 
-	template<typename T>
-	void SpawnControlWindow( std::vector<std::unique_ptr<T>>& vec, const std::string& name );
+	void SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec );
+	void SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec );
 
 	// Device/Context
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
