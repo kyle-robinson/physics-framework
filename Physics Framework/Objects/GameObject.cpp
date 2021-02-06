@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameObject.h"
 
-GameObject::GameObject( const std::string& type ) : _type( type )
+GameObject::GameObject( const std::string& id ) : _id( id )
 {
 	_transform = std::make_shared<Transform>();
 	_appearance = std::make_shared<Appearance>();

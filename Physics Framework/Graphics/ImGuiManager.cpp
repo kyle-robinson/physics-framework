@@ -35,16 +35,8 @@ void ImGuiManager::EndRender() const noexcept
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
-void ImGuiManager::SpawnDemoWindow()
+void ImGuiManager::SetCherryTheme() const noexcept
 {
-    if ( ImGui::Begin( "Test Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
-    {
-        static float demo = 1.0f;
-        ImGui::SliderFloat( "Test Slider", &demo, 0.0f, 1.0f );
-    } ImGui::End();
-}
-
-void ImGuiManager::SetCherryTheme() {
     // cherry colors, 3 intensities
     #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
     #define MED(v)  ImVec4(0.455f, 0.198f, 0.301f, v)
@@ -58,7 +50,7 @@ void ImGuiManager::SetCherryTheme() {
     style.Colors[ImGuiCol_Text]                  = TEXT(0.78f);
     style.Colors[ImGuiCol_TextDisabled]          = TEXT(0.28f);
     style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
-    style.Colors[ImGuiCol_ChildBg]         = BG( 0.58f);
+    style.Colors[ImGuiCol_ChildBg]               = BG( 0.58f);
     style.Colors[ImGuiCol_PopupBg]               = BG( 0.9f);
     style.Colors[ImGuiCol_Border]                = ImVec4(0.31f, 0.31f, 1.00f, 0.00f);
     style.Colors[ImGuiCol_BorderShadow]          = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);

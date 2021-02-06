@@ -4,12 +4,6 @@
 
 #include "Transform.h"
 
-const float GRAVITY = 9.81f;
-const float LIMITER = 0.001f;
-const float TIME_STEP = 0.5f;
-const float DRAG_FACTOR = 5.0f;
-const float FRICTION = 0.0002f;
-
 class ParticleModel
 {
 public:
@@ -33,6 +27,16 @@ public:
 	void SetAcceleration( v3df acceleration ) { _acceleration = acceleration; }
 	void SetAcceleration( float x, float y, float z ) { _acceleration = { x, y, z }; }
 
+	// update constants
+	float GetTimeStep() const { return TIME_STEP; };
+	void SetTimeStep( float timeStep ) { TIME_STEP = timeStep; };
+	float GetGravity() const noexcept { return GRAVITY; };
+	void SetGravity( float gravity ) { GRAVITY = gravity; };
+	float GetDragFactor() const noexcept { return DRAG_FACTOR; };
+	void SetDragFactor( float dragFactor ) { DRAG_FACTOR = dragFactor; };
+	float GetFriction() const noexcept { return FRICTION; };
+	void SetFriction( float friction ) { FRICTION = friction; };
+
 	// update forces
 	void Update();
 	void Weight();
@@ -46,17 +50,23 @@ public:
 	void CheckWorldCollisions();
 	void ResetForces();
 private:
+	// Constants
+	float GRAVITY = 9.81f;
+	float TIME_STEP = 0.5f;
+	float LIMITER = 0.001f;
+	float DRAG_FACTOR = 5.0f;
+	float FRICTION = 0.0002f;
+
+	// Local Variables
 	float _mass;
 	float _weight;
 	bool _useLaminar;
-
 	v3df _drag;
 	v3df _friction;
 	v3df _netForce;
 	v3df _velocity;
 	v3df _acceleration;
 	v3df _emitterPosition;
-
 	std::shared_ptr<Transform> _transform;
 };
 

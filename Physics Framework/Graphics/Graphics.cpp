@@ -8,6 +8,7 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
+#include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -167,15 +168,15 @@ bool Graphics::InitializeScene()
 	ground->GetAppearance()->SetMaterial( noSpecMaterial );
 
 	// initialize cubes
+	cubes.resize( NUMBER_OF_CUBES );
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		std::unique_ptr<GameObject> cube = std::make_unique<GameObject>( "Cube " + i );
-		cube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-		cube->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-		cube->GetAppearance()->SetTextureRV( textureStone.Get() );
-		cube->GetAppearance()->SetGeometryData( cubeGeometry );
-		cube->GetAppearance()->SetMaterial( shinyMaterial );
-		cubes.push_back( std::move( cube ) );
+		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
+		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		cubes[i]->GetAppearance()->SetTextureRV( textureStone.Get() );
+		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
+		cubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
 
 	// initialize torus
@@ -197,7 +198,12 @@ bool Graphics::InitializeScene()
 	// setup particle system
 	particles.resize( PARTICLE_COUNT );
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
-		particles[i] = std::make_unique<Particle>( textureStone.Get(), cubeGeometry, noSpecMaterial );
+	{
+		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
+		particles[i]->GetAppearance()->SetTextureRV( textureStone.Get() );
+		particles[i]->GetAppearance()->SetGeometryData( cubeGeometry );
+		particles[i]->GetAppearance()->SetMaterial( noSpecMaterial );
+	}
 
 	return true;
 }
@@ -289,7 +295,8 @@ void Graphics::Draw()
 	skybox->Draw( context.Get() );
 
 	imgui.BeginRender();
-	imgui.SpawnDemoWindow();
+	SpawnControlWindow( cubes, "Cube Controls" );
+	SpawnControlWindow( particles, "Particle Controls" );
 	imgui.EndRender();
 
     // display frame
@@ -301,4 +308,40 @@ void Graphics::Draw()
             ErrorLogger::Log( hr, "Swap Chain failed to render frame!" );
 		exit( -1 );
 	}
+}
+
+template<typename T>
+void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<T>>& vec, const std::string& windowName )
+{
+	if ( ImGui::Begin( windowName.c_str(), FALSE ) )
+	{
+		for ( unsigned int i = 0; i < vec.size(); i++ )
+		{
+			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
+			{
+				if ( std::is_same<T, GameObject>::value )
+				{
+					float timeStep = vec[i]->GetParticleModel()->GetTimeStep();
+					ImGui::SliderFloat( "Time Step", &timeStep, 0.1f, 1.0f, "%.1f" );
+					vec[i]->GetParticleModel()->SetTimeStep( timeStep );
+
+					float gravity = vec[i]->GetParticleModel()->GetGravity();
+					ImGui::SliderFloat( "Gravity", &gravity, 4.905f, 19.62f, "%.7f" );
+					vec[i]->GetParticleModel()->SetGravity( gravity );
+
+					float dragFactor = vec[i]->GetParticleModel()->GetDragFactor();
+					ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
+					vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
+
+					float friction = vec[i]->GetParticleModel()->GetFriction();
+					ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0008f, "%.7f", 10 );
+					vec[i]->GetParticleModel()->SetFriction( friction );
+				}
+				else
+				{
+					
+				}
+			}
+		}
+	} ImGui::End();
 }

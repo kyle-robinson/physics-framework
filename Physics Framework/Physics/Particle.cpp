@@ -2,7 +2,7 @@
 #include "Particle.h"
 //#include "ParticleSystem.h"
 
-Particle::Particle( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture, Geometry geometry, Material material )
+Particle::Particle( const std::string& id ) : id( id )
 {
 	energy = 100.0f;
 	respawnTimer = rand() % 1000;
@@ -11,16 +11,11 @@ Particle::Particle( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture, Ge
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
 	_transform->SetInitialPosition( 0.0f, 0.5f, 0.5f );
 	_particleModel = std::make_shared<ParticleModel>( _transform );
-
 	_appearance = std::make_shared<Appearance>();
-	_appearance->SetTextureRV( texture.Get() );
-	_appearance->SetGeometryData( geometry );
-	_appearance->SetMaterial( material );
 }
 
 void Particle::Update()
 {
-	//_transform->SetPosition( position += velocity );
 	_particleModel->Update();
 	_transform->Update();
 
