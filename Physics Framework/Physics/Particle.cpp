@@ -8,7 +8,7 @@ Particle::Particle( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture, Ge
 	
 	_transform = std::make_shared<Transform>();
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
-	_transform->SetInitialPosition( 0.0f, 0.5f, -2.5f );
+	_transform->SetInitialPosition( 0.0f, 0.5f, 0.5f );
 	_particleModel = std::make_shared<ParticleModel>( _transform );
 
 	_appearance = std::make_shared<Appearance>();

@@ -14,7 +14,7 @@
 #include "ConstantBuffer.h"
 #include "DDSTextureLoader.h"
 
-#define PARTICLE_COUNT 1
+#define PARTICLE_COUNT 2
 #define NUMBER_OF_CUBES 5
 #define FPS_60 1.0f/60.0f
 
