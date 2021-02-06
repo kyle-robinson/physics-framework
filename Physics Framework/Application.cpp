@@ -78,12 +78,14 @@ void Application::Update()
 	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
 	// particle movement
-	//srand( static_cast<unsigned>( time( 0 ) ) );
 	//float randomNum = rand() % 3 + ( -1 );
 	//float randomNum = static_cast<float>( rand() ) / static_cast<float>( RAND_MAX );
-	float randomNum = fmod( static_cast<float>( rand() ), 11.0f ) + ( -5.0f );
 	for ( unsigned int i = 0; i < gfx.particles.size(); i++ )
-		gfx.particles[i]->GetParticleModel()->Move( randomNum, 2.0f, 10.0f );
+	{
+		//srand( static_cast<unsigned>( time( 0 ) ) );
+		float randomNum = fmod( static_cast<float>( rand() ), 21.0f ) - 10.0f;
+		gfx.particles[i]->GetParticleModel()->Move( fmod( randomNum, i ), 1.5f, 0.0f );
+	}
 
 	// reset object position
 	if ( GetAsyncKeyState( 'R' ) )

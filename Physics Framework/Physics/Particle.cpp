@@ -5,6 +5,7 @@
 Particle::Particle( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture, Geometry geometry, Material material )
 {
 	energy = 100.0f;
+	respawnTimer = rand() % 1000;
 	
 	_transform = std::make_shared<Transform>();
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
@@ -25,10 +26,11 @@ void Particle::Update()
 
 	_transform->SetScale( v3df( energy * 0.01f, energy * 0.01f, energy * 0.01f ) );
 
-	if ( energy <= 0.0f )
+	if ( energy <= 0.0f && respawnTimer <= 0 )
 		Respawn();
 
 	energy -= 0.1f;
+	respawnTimer -= 1;
 
 	/*if ( _active )
 	{

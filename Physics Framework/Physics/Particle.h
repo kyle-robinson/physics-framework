@@ -31,6 +31,7 @@ private:
 	DWORD color;
 	int energy;
 	float size;
+	int respawnTimer;
 
 	//int _curAge;
 	//int _maxAge;
