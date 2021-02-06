@@ -8,7 +8,6 @@ ImGuiManager::ImGuiManager()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	//ImGui::StyleColorsDark();
     SetCherryTheme();
 }
 

@@ -3,8 +3,8 @@
 #define VIEWPORT_H
 
 #include "GraphicsResource.h"
-class Application;
 
+class Graphics;
 namespace Bind
 {
 	class Viewport : public GraphicsResource

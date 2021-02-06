@@ -142,7 +142,7 @@ void ParticleModel::CheckWorldCollisions()
 		_transform->SetPosition( { position[0], _transform->GetInitialPosition()[1], position[2] } );
 	}
 	else if ( position[1] > 5.0f )
-		_velocity[1] = -0.01f;
+		_velocity[1] = -0.05f;
 
 	// left/right collisions
 	if ( position[0] < -6.5f )
