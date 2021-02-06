@@ -1,27 +1,40 @@
 #include "stdafx.h"
-#include "ParticleSystem.h"
+/*#include "ParticleSystem.h"
+#include "Particle.h"
 
-/*   PARTICLE SYSTEM   */
-ParticleSystem::ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone,
-	Geometry geometry, Material material )
+ParticleSystem::ParticleSystem( Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture, Geometry geometry, Material material )
+	: texture( texture )
 {
+	//_particles.resize( MAX_PARTICLE_COUNT );
 	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
 	{
+		//_particles[i] = std::make_unique<Particle>();
 		_particles[i].GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		_particles[i].GetTransform()->SetInitialPosition( 0.0f, 0.5f, -2.5f );
-		_particles[i].GetAppearance()->SetTextureRV( textureStone.Get() );
+		_particles[i].GetAppearance()->SetTextureRV( texture.Get() );
 		_particles[i].GetAppearance()->SetGeometryData( geometry );
 		_particles[i].GetAppearance()->SetMaterial( material );
 	}
 }
 
-void ParticleSystem::Update( float deltaTime )
+void ParticleSystem::Update()
 {
 	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
-		_particles[i].Update( deltaTime );
+	{
+		//_particles[i].SetVelocity( 0.1f, 0.1f, 0.1f );
+		_particles[i].Update();
+	}
 }
 
-void ParticleSystem::Draw( ID3D11DeviceContext* pImmediateContext )
+void ParticleSystem::Draw( ID3D11DeviceContext* pImmediateContext, ConstantBuffer<CB_VS_matrix>& cb_vs_matrix )
+{
+	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
+	{
+		_particles[i].Draw( pImmediateContext, cb_vs_matrix );
+	}
+}*/
+
+/*void ParticleSystem::Draw( ID3D11DeviceContext* pImmediateContext )
 {
 	v3df position;
 	for ( int i = 0; i < MAX_PARTICLE_COUNT; ++i )
@@ -57,4 +70,4 @@ int ParticleSystem::FindNextAvailableParticleIndex()
 		if ( !_particles[i].GetActive() )
 			return i;
 	return -1;
-}
+}*/

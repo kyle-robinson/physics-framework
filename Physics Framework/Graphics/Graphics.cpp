@@ -194,6 +194,11 @@ bool Graphics::InitializeScene()
 	skybox->GetAppearance()->SetGeometryData( cubeGeometry );
 	skybox->GetAppearance()->SetMaterial( noSpecMaterial );
 
+	// setup particle system
+	particles.resize( PARTICLE_COUNT );
+	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
+		particles[i] = std::make_unique<Particle>( textureStone.Get(), cubeGeometry, noSpecMaterial );
+
 	return true;
 }
 
@@ -205,6 +210,9 @@ void Graphics::Update( float dt )
 		cubes[i]->Update();
 	torus->Update();
 	skybox->Update();
+
+	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
+		particles[i]->Update();
 }
 
 void Graphics::Draw()
@@ -253,6 +261,11 @@ void Graphics::Draw()
 		cubes[i]->Draw( context.Get() );
 	}
 
+	// Render Particles
+	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
+		particles[i]->Draw( context.Get(), cb_vs_matrix );
+
+	// Render Other Objects
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	textureToUse = torus->GetAppearance()->GetTextureRV();
 	context->PSSetShaderResources( 0, 1, &textureToUse );

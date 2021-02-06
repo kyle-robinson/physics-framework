@@ -75,6 +75,10 @@ void Application::Update()
 	if ( GetAsyncKeyState( 'D' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
 	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
+	// particle movement
+	for ( unsigned int i = 0; i < gfx.particles.size(); i++ )
+		gfx.particles[i]->GetParticleModel()->Move( 0.0f, 2.0f, 10.0f );
+
 	// reset object position
 	if ( GetAsyncKeyState( 'R' ) )
 		for ( int i = 0; i < gfx.cubes.size(); i++ )
