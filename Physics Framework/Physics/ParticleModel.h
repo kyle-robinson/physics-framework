@@ -7,6 +7,7 @@
 class ParticleModel
 {
 public:
+	ParticleModel() {};
 	ParticleModel( std::shared_ptr<Transform> transform );
 
 	// particle movement/positioning
@@ -38,7 +39,7 @@ public:
 	void SetFriction( float friction ) { FRICTION = friction; };
 
 	// update forces
-	void Update();
+	virtual void Update( const float dt );
 	void Weight();
 	void DragForce();
 	void DragLaminar();

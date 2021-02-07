@@ -412,6 +412,7 @@
     <ClCompile Include="Input\Mouse.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Physics\RigidBody.cpp" />
     <ClCompile Include="Utility\Timer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -496,6 +497,7 @@
     <ClInclude Include="Physics\Particle.h" />
     <ClInclude Include="Physics\ParticleModel.h" />
     <ClInclude Include="Physics\ParticleSystem.h" />
+    <ClInclude Include="Physics\RigidBody.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Utility\COMException.h" />

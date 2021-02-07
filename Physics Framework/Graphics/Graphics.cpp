@@ -8,7 +8,6 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
-#include "Quaternion.h"
 #include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )

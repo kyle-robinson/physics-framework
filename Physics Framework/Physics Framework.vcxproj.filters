@@ -218,6 +218,9 @@
     <ClInclude Include="Utility\Timer.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\RigidBody.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -294,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="Utility\Timer.cpp">
       <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\RigidBody.cpp">
+      <Filter>Source\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

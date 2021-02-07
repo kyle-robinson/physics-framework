@@ -24,7 +24,7 @@ void ParticleModel::Move( float x, float y, float z )
 	_netForce[2] += z;
 }
 
-void ParticleModel::Update()
+void ParticleModel::Update( const float dt )
 {
 	Weight();
 	DragForce();
