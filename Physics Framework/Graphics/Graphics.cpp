@@ -221,7 +221,9 @@ void Graphics::Update( float dt )
 
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
-		cubes[i]->GetTransform()->SetRotation( 0.0f, XMConvertToRadians( rotation * 0.1f * i ), 0.0f );
+		//cubes[i]->GetTransform()->SetRotation( 0.0f, XMConvertToRadians( rotation * 0.1f * i ), 0.0f );
+		v3df worldPosition = ( cubes[i]->GetRigidBody()->GetTransform()->GetPosition() + camera->GetPosition() ) * 0.5f;
+		cubes[i]->GetRigidBody()->ApplyTorque( worldPosition - cubes[i]->GetRigidBody()->GetTransform()->GetPosition(), { 0.0f, 100.0f, 0.0f } );
 		cubes[i]->Update( dt );
 	}
 

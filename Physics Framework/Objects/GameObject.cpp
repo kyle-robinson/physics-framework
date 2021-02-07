@@ -3,6 +3,7 @@
 
 GameObject::GameObject( const std::string& id ) : _id( id )
 {
+	_rigidBody = std::make_shared<RigidBody>();
 	_transform = std::make_shared<Transform>();
 	_appearance = std::make_shared<Appearance>();
 	_particleModel = std::make_shared<ParticleModel>( _transform );
