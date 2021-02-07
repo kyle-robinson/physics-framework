@@ -211,17 +211,21 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
-	UNREFERENCED_PARAMETER( dt );
+	//UNREFERENCED_PARAMETER( dt );
 
 	camera->Update();
 	ground->Update();
+	
+	torus->GetTransform()->SetRotation( XMConvertToRadians( 90.0f * dt ), 0.0f, 0.0f );
+	torus->Update();
+
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update();
-	torus->Update();
-	skybox->Update();
 
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 		particles[i]->Update();
+
+	skybox->Update();
 }
 
 void Graphics::Draw()

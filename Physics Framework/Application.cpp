@@ -11,6 +11,8 @@ bool Application::Initialize(
 	int width,
 	int height )
 {
+	timer.Start();
+
 	if ( !renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
 		return false;
 
@@ -28,12 +30,8 @@ bool Application::ProcessMessages() noexcept
 void Application::Update()
 {
 	// update delta time
-    static float dt = 0.0f;
-    static DWORD dwTimeStart = 0;
-    DWORD dwTimeCur = GetTickCount64();
-    if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
-	dt += ( dwTimeCur - dwTimeStart ) / 1000.0f;
-	if ( dt < FPS_60 ) return;
+	float dt = timer.GetMilliSecondsElapsed();
+	timer.Restart();
 
     // read input
     while ( !keyboard.CharBufferIsEmpty() )
@@ -96,7 +94,6 @@ void Application::Update()
 			gfx.cubes[i]->GetParticleModel()->ResetForces();
 
 	gfx.Update( dt );
-	dt -= FPS_60;
 }
 
 void Application::Render()
