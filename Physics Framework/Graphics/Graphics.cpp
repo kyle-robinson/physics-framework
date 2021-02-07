@@ -183,7 +183,7 @@ bool Graphics::InitializeScene()
 	// initialize torus
 	torus = std::make_unique<GameObject>( "Torus" );
 	torus->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-	torus->GetTransform()->SetInitialPosition( -4.0f, 0.5f, 10.0f );
+	torus->GetTransform()->SetInitialPosition( 0.0f, 5.0f, 10.0f );
 	torus->GetAppearance()->SetTextureRV( textureHercules.Get() );
 	torus->GetAppearance()->SetGeometryData( herculesGeometry );
 	torus->GetAppearance()->SetMaterial( shinyMaterial );
@@ -211,12 +211,12 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
-	//UNREFERENCED_PARAMETER( dt );
-
 	camera->Update();
 	ground->Update();
 	
-	torus->GetTransform()->SetRotation( XMConvertToRadians( 90.0f * dt ), 0.0f, 0.0f );
+	static float rotation = 0.0f;
+	rotation += dt;
+	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
 	torus->Update();
 
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
