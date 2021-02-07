@@ -59,12 +59,12 @@ bool Graphics::InitializeShaders()
 {
 	try
 	{	
-		D3D11_INPUT_ELEMENT_DESC layout[] = {
+		D3D11_INPUT_ELEMENT_DESC layout_nrm[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		HRESULT hr = vertexShader.Initialize( device, L"Resources\\Shaders\\DX11 Framework.fx", layout, ARRAYSIZE( layout ) );
+		HRESULT hr = vertexShader.Initialize( device, L"Resources\\Shaders\\DX11 Framework.fx", layout_nrm, ARRAYSIZE( layout_nrm ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
 	    hr = pixelShader.Initialize( device, L"Resources\\Shaders\\DX11 Framework.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
@@ -148,14 +148,14 @@ bool Graphics::InitializeScene()
 	Geometry cubeGeometry;
 	cubeGeometry.vertexBuffer = vb_cube.Get();
 	cubeGeometry.indexBuffer = ib_cube.Get();
-	cubeGeometry.numberOfIndices = 36;
+	cubeGeometry.numberOfIndices = vb_cube.VertexCount() * sizeof( SimpleVertex );
 	cubeGeometry.vertexBufferOffset = 0;
 	cubeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	Geometry planeGeometry;
 	planeGeometry.vertexBuffer = vb_plane.Get();
 	planeGeometry.indexBuffer = ib_plane.Get();
-	planeGeometry.numberOfIndices = 6;
+	planeGeometry.numberOfIndices = vb_plane.VertexCount() * sizeof( SimpleVertex );
 	planeGeometry.vertexBufferOffset = 0;
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
@@ -271,6 +271,7 @@ void Graphics::Draw()
 	}
 
 	// Render Particles
+	cb_vs_matrix.data.IsSkybox = 1.0f;
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
@@ -281,6 +282,7 @@ void Graphics::Draw()
 	}
 
 	// Render Other Objects
+	cb_vs_matrix.data.IsSkybox = 0.0f;
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	textureToUse = torus->GetAppearance()->GetTextureRV();
 	context->PSSetShaderResources( 0, 1, &textureToUse );
