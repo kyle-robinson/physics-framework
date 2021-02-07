@@ -80,7 +80,7 @@ void Application::Update()
 	// particle movement
 	for ( unsigned int i = 0; i < gfx.particles.size(); i++ )
 	{
-		float randomNum = fmod( static_cast<float>( rand() ), 21.0f ) - 10.0f;
+		float randomNum = fmod( static_cast<float>( rand() ), gfx.xDist + 1.0f ) - ( gfx.xDist / 2.0f );
 		if ( gfx.particles[i]->GetStartTimer() < 0 )
 			gfx.particles[i]->GetParticleModel()->Move( fmod( randomNum, i ), 1.5f, 0.0f );
 	}

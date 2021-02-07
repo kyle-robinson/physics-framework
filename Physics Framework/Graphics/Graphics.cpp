@@ -146,17 +146,17 @@ bool Graphics::InitializeScene()
 	herculesGeometry.vertexBufferStride = objMeshData.VBStride;
 	
 	Geometry cubeGeometry;
-	cubeGeometry.vertexBuffer = vb_cube.Get();
-	cubeGeometry.indexBuffer = ib_cube.Get();
-	cubeGeometry.numberOfIndices = vb_cube.VertexCount() * sizeof( SimpleVertex );
 	cubeGeometry.vertexBufferOffset = 0;
+	cubeGeometry.indexBuffer = ib_cube.Get();
+	cubeGeometry.vertexBuffer = vb_cube.Get();
+	cubeGeometry.numberOfIndices = vb_cube.VertexCount() * sizeof( SimpleVertex );
 	cubeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	Geometry planeGeometry;
-	planeGeometry.vertexBuffer = vb_plane.Get();
-	planeGeometry.indexBuffer = ib_plane.Get();
-	planeGeometry.numberOfIndices = vb_plane.VertexCount() * sizeof( SimpleVertex );
 	planeGeometry.vertexBufferOffset = 0;
+	planeGeometry.indexBuffer = ib_plane.Get();
+	planeGeometry.vertexBuffer = vb_plane.Get();
+	planeGeometry.numberOfIndices = vb_plane.VertexCount() * sizeof( SimpleVertex );
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	// initialize ground
@@ -241,7 +241,7 @@ void Graphics::Draw()
 	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetProjection() ) );
 	cb_vs_matrix.data.light = basicLight;
 	cb_vs_matrix.data.EyePosW = camera->GetPosition();
-	cb_vs_matrix.data.IsSkybox = 0.0f;
+	cb_vs_matrix.data.UseLighting = 0.0f;
 
 	// Render Scene Objects
 	ID3D11ShaderResourceView* textureToUse;
@@ -271,7 +271,7 @@ void Graphics::Draw()
 	}
 
 	// Render Particles
-	cb_vs_matrix.data.IsSkybox = 1.0f;
+	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
@@ -282,7 +282,7 @@ void Graphics::Draw()
 	}
 
 	// Render Other Objects
-	cb_vs_matrix.data.IsSkybox = 0.0f;
+	cb_vs_matrix.data.UseLighting = 0.0f;
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	textureToUse = torus->GetAppearance()->GetTextureRV();
 	context->PSSetShaderResources( 0, 1, &textureToUse );
@@ -299,7 +299,7 @@ void Graphics::Draw()
 	rasterizerStates["Cubemap"]->Bind( *this );
 	skybox->GetTransform()->SetPosition( camera->GetPosition() );
 	cb_vs_matrix.data.World = XMMatrixTranspose( skybox->GetTransform()->GetWorldMatrix() );
-	cb_vs_matrix.data.IsSkybox = 1.0f;
+	cb_vs_matrix.data.UseLighting = 1.0f;
 	ID3D11ShaderResourceView* skyboxTexture = skybox->GetAppearance()->GetTextureRV();
 	context->PSSetShaderResources( 0, 1, &skyboxTexture );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
@@ -363,7 +363,8 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 	if ( ImGui::Begin( "Particle Controls", FALSE ) )
 	{
 		float size = vec[0]->GetMaxSize();
-		ImGui::SliderFloat( "Size", &size, 0.001f, 0.1f );
+		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
+		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 25.0f, "%.1f" );
 
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 			vec[i]->SetMaxSize( size );
