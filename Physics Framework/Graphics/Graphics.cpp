@@ -8,6 +8,7 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
+#include "Quaternion.h"
 #include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -220,7 +221,10 @@ void Graphics::Update( float dt )
 	torus->Update();
 
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
+	{
+		cubes[i]->GetTransform()->SetRotation( 0.0f, XMConvertToRadians( rotation * 0.1f * i ), 0.0f );
 		cubes[i]->Update();
+	}
 
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 		particles[i]->Update();
@@ -325,6 +329,9 @@ void Graphics::Draw()
 	}
 }
 
+//---------------//
+// IMGUI WINDOWS //
+//---------------//
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
 	if ( ImGui::Begin( "Cube Controls", FALSE ) )
