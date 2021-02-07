@@ -16,7 +16,10 @@ public:
 		XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );
 		XMMATRIX rotation = XMMatrixRotationX( GetRotation()[0] ) * XMMatrixRotationY( GetRotation()[1] ) * XMMatrixRotationZ( GetRotation()[2] );
 		XMMATRIX translation = XMMatrixTranslation( GetPosition()[0], GetPosition()[1], GetPosition()[2] );
-		XMStoreFloat4x4( &_world, scale * rotation * translation );
+		XMStoreFloat4x4( &_worldMatrix, scale * rotation * translation );
+
+		// Calculate rotation matrix
+		XMStoreFloat4x4( &_rotationMatrix, scale * rotation );
 	}
 
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }
@@ -37,9 +40,15 @@ public:
 	v3df GetRotation() const noexcept { return _rotation; }
 
 	void SetParent( GameObject* parent ) { _parent = parent; }
-	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4( &_world ); }
+	const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
+	const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); };
+	
+	const XMVECTOR& GetOrientation() const noexcept { return _orientation; };
+	void SetOrientationQuaternion( const XMVECTOR& orientation ) { _orientation = orientation; };
 public:
-	XMFLOAT4X4 _world;
+	XMFLOAT4X4 _worldMatrix;
+	XMFLOAT4X4 _rotationMatrix;
+	XMVECTOR _orientation = XMQuaternionIdentity();
 	GameObject* _parent;
 private:
 	v3df _scale;

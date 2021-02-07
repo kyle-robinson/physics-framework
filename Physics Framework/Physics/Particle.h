@@ -10,7 +10,7 @@ class Particle
 {
 public:
 	Particle( const std::string& id );
-	void Update();
+	void Update( const float dt );
 	void Draw( ID3D11DeviceContext* pImmediateContext );
 	void RespawnParticle();
 

@@ -212,23 +212,23 @@ bool Graphics::InitializeScene()
 void Graphics::Update( float dt )
 {
 	camera->Update();
-	ground->Update();
+	ground->Update( dt );
 	
 	static float rotation = 0.0f;
 	rotation += dt;
 	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
-	torus->Update();
+	torus->Update( dt );
 
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
 		cubes[i]->GetTransform()->SetRotation( 0.0f, XMConvertToRadians( rotation * 0.1f * i ), 0.0f );
-		cubes[i]->Update();
+		cubes[i]->Update( dt );
 	}
 
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
-		particles[i]->Update();
+		particles[i]->Update( dt );
 
-	skybox->Update();
+	skybox->Update( dt );
 }
 
 void Graphics::Draw()

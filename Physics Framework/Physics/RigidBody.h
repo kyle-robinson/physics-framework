@@ -2,6 +2,7 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
+#include "Transform.h"
 #include "ParticleModel.h"
 
 class RigidBody : public ParticleModel
@@ -13,12 +14,14 @@ public:
 
 	// apply forces
 	void ApplyTorque( v3df position, v3df force ) noexcept;
-	void ApplyAngularDrag( float angularDrag ) noexcept;
+	void ApplyAngularDrag( const float dt ) noexcept;
 
 	// compute forces
 	void ComputeAngularAcceleration() noexcept;
 	void ComputeAngularVelocity( const float dt ) noexcept;
 	void ComputeOrientation( const float dt ) noexcept;
+
+	v3df GetForceAtRelativePosition( v3df position ) noexcept;
 
 	// inertia tensors
 	void ComputeBoxInertiaTensor( float sizeX, float sizeY, float sizeZ ) noexcept;
@@ -30,7 +33,9 @@ private:
 	v3df _angularAcceleration;
 
 	XMMATRIX _inertiaTensor;
-	XMMATRIX inverseInertiaTensor;
+	XMMATRIX _inverseInertiaTensor;
+
+	std::shared_ptr<Transform> _transform;
 };
 
 #endif

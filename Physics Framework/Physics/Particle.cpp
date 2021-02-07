@@ -15,12 +15,12 @@ Particle::Particle( const std::string& id ) : id( id )
 	_appearance = std::make_shared<Appearance>();
 }
 
-void Particle::Update()
+void Particle::Update( const float dt )
 {
 
 	if ( startTimer < 0 )
 	{
-		_particleModel->Update();
+		_particleModel->Update( dt );
 		_transform->Update();
 		_transform->SetScale( v3df( energy * size, energy * size, energy * size ) );
 	}

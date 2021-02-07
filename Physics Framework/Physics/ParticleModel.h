@@ -37,6 +37,8 @@ public:
 	void SetDragFactor( float dragFactor ) { DRAG_FACTOR = dragFactor; };
 	float GetFriction() const noexcept { return FRICTION; };
 	void SetFriction( float friction ) { FRICTION = friction; };
+	float GetMass() const noexcept { return _mass; };
+	void SetMass( float newMass ) { _mass = newMass; };
 
 	// update forces
 	virtual void Update( const float dt );
