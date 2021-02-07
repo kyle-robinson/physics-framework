@@ -92,11 +92,12 @@ bool Graphics::InitializeScene()
         hr = ib_plane.Initialize( device.Get(), planeIndices, ARRAYSIZE( planeIndices ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create plane index buffer!" );
 
+		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sky.dds", nullptr, textureSky.GetAddressOf() );
+		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sand.dds", nullptr, textureSand.GetAddressOf() );
+		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\lava.dds", nullptr, textureLava.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\stone.dds", nullptr, textureStone.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\floor.dds", nullptr, textureGround.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\Hercules_COLOR.dds", nullptr, textureHercules.GetAddressOf() );
-		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sand.dds", nullptr, textureSand.GetAddressOf() );
-		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sky.dds", nullptr, textureSky.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to load textures in from file!" );
 	}
 	catch ( COMException& exception )
@@ -200,7 +201,7 @@ bool Graphics::InitializeScene()
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
-		particles[i]->GetAppearance()->SetTextureRV( textureStone.Get() );
+		particles[i]->GetAppearance()->SetTextureRV( textureLava.Get() );
 		particles[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		particles[i]->GetAppearance()->SetMaterial( noSpecMaterial );
 	}
@@ -271,7 +272,13 @@ void Graphics::Draw()
 
 	// Render Particles
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
-		particles[i]->Draw( context.Get(), cb_vs_matrix );
+	{
+		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
+		textureToUse = particles[i]->GetAppearance()->GetTextureRV();
+		context->PSSetShaderResources( 0, 1, &textureToUse );
+		if ( !cb_vs_matrix.ApplyChanges() ) return;
+		particles[i]->Draw( context.Get() );
+	}
 
 	// Render Other Objects
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
@@ -353,19 +360,10 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 {
 	if ( ImGui::Begin( "Particle Controls", FALSE ) )
 	{
-		float energy = vec[0]->GetMaxEnergy();
-		ImGui::SliderFloat( "Energy", &energy, 10, 200, "%.1f" );
+		float size = vec[0]->GetMaxSize();
+		ImGui::SliderFloat( "Size", &size, 0.001f, 0.1f );
 
-		//float life = vec[0]->GetMaxLife();
-		//ImGui::SliderFloat( "Life", &life, 0.001f, 0.1f, "%.000001f", 10 );
-
-		float size = vec[0]->GetSize();
-		ImGui::SliderFloat( "Size", &size, 0.001f, 0.01f );
 		for ( unsigned int i = 0; i < vec.size(); i++ )
-		{
-			vec[i]->SetMaxEnergy( energy );
-			vec[i]->SetSize( size );
-			//vec[i]->SetMaxLife( life );
-		}
+			vec[i]->SetMaxSize( size );
 	} ImGui::End();
 }

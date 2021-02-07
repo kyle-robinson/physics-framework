@@ -6,7 +6,6 @@ GameObject::GameObject( const std::string& id ) : _id( id )
 	_transform = std::make_shared<Transform>();
 	_appearance = std::make_shared<Appearance>();
 	_particleModel = std::make_shared<ParticleModel>( _transform );
-	//_particleSystem = std::make_shared<ParticleSystem>();
 }
 
 void GameObject::Update()

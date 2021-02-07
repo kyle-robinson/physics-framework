@@ -65,6 +65,7 @@ private:
 	// Textures
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureLava;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
