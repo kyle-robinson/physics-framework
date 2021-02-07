@@ -34,7 +34,8 @@ void Particle::Update()
 
 void Particle::Draw( ID3D11DeviceContext* pImmediateContext )
 {	
-	_appearance->Update( pImmediateContext );
+	if ( startTimer < 0 )
+		_appearance->Update( pImmediateContext );
 }
 
 void Particle::RespawnParticle()

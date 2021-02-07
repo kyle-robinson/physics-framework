@@ -203,7 +203,7 @@ bool Graphics::InitializeScene()
 		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
 		particles[i]->GetAppearance()->SetTextureRV( textureLava.Get() );
 		particles[i]->GetAppearance()->SetGeometryData( cubeGeometry );
-		particles[i]->GetAppearance()->SetMaterial( noSpecMaterial );
+		particles[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
 
 	return true;
