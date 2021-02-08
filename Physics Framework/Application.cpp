@@ -58,10 +58,17 @@ void Application::Update()
 		}
 	}
 
-	if ( keyboard.KeyIsPressed( VK_UP ) ) Camera::MoveFoward( gfx.camera );
-	if ( keyboard.KeyIsPressed( VK_DOWN ) ) Camera::MoveBackward( gfx.camera );
-	if ( keyboard.KeyIsPressed( VK_RIGHT ) ) Camera::MoveRight( gfx.camera );
-	if ( keyboard.KeyIsPressed( VK_LEFT ) ) Camera::MoveLeft( gfx.camera );
+	// camera movement
+	gfx.camera->SetCameraSpeed( 0.05f );
+	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
+		gfx.camera->UpdateCameraSpeed( 0.05f );
+
+	if ( keyboard.KeyIsPressed( 'W' ) ) Camera::MoveForward( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( 'A' ) ) Camera::MoveLeft( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( 'S' ) ) Camera::MoveBackward( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( 'D' ) ) Camera::MoveRight( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( VK_SPACE ) ) Camera::MoveUp( gfx.camera, dt );
+	if ( keyboard.KeyIsPressed( VK_CONTROL ) ) Camera::MoveDown( gfx.camera, dt );
 
 	// select cube to move
 	static int cubeToUse = 0;
@@ -72,11 +79,11 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( '5' ) ) cubeToUse = 4;
 
 	// object movement
-	if ( GetAsyncKeyState( 'W' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
-	if ( GetAsyncKeyState( 'A' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( 'S' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
-	if ( GetAsyncKeyState( 'D' ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
-	if ( GetAsyncKeyState( VK_SPACE ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
+	if ( keyboard.KeyIsPressed( VK_UP ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f,  0.1f );
+	if ( keyboard.KeyIsPressed( VK_LEFT ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( -0.1f, 0.0f,  0.0f );
+	if ( keyboard.KeyIsPressed( VK_DOWN ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.0f, 0.0f, -0.1f );
+	if ( keyboard.KeyIsPressed( VK_RIGHT ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move(  0.1f, 0.0f,  0.0f );
+	if ( keyboard.KeyIsPressed( VK_HOME ) ) gfx.cubes[cubeToUse]->GetParticleModel()->Move( 0.0f, 2.0f, 0.0f );
 
 	// particle movement
 	for ( unsigned int i = 0; i < gfx.particles.size(); i++ )
@@ -87,12 +94,12 @@ void Application::Update()
 	}
 
 	// reset object position
-	if ( GetAsyncKeyState( 'R' ) )
+	if ( keyboard.KeyIsPressed( 'R' ) )
 		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetTransform()->ResetPosition();
 
 	// reset object forces
-	if ( GetAsyncKeyState( 'F' ) )
+	if ( keyboard.KeyIsPressed( 'F' ) )
 		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetParticleModel()->ResetForces();
 

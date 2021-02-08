@@ -107,14 +107,8 @@ bool Graphics::InitializeScene()
 	}
 
 	// setup cameras
-	camera = std::make_unique<Camera>(
-		v3df( 0.0f, 2.0f, -10.0f ), // eye
-		v3df( 0.0f, 2.0f,  0.0f ), // at
-		v3df( 0.0f, 1.0f,  0.0f ), // up
-		static_cast<float>( windowWidth ),
-		static_cast<float>( windowHeight ),
-		0.01f, 500.0f
-	);
+	camera = std::make_unique<Camera>( v3df( 0.0f, 2.0f, -10.0f ),
+		static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -191,7 +185,7 @@ bool Graphics::InitializeScene()
 	// initialize skybox
 	skybox = std::make_unique<GameObject>( "Skybox" );
 	skybox->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
-	skybox->GetTransform()->SetInitialPosition( camera->GetPosition() );
+	skybox->GetTransform()->SetInitialPosition( camera->GetPositionVector3() );
 	skybox->GetAppearance()->SetTextureRV( textureSky.Get() );
 	skybox->GetAppearance()->SetGeometryData( cubeGeometry );
 	skybox->GetAppearance()->SetMaterial( noSpecMaterial );
@@ -211,7 +205,6 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
-	camera->Update();
 	ground->Update( dt );
 	
 	static float rotation = 0.0f;
@@ -245,7 +238,7 @@ void Graphics::Draw()
 
 	// Setup Constant Buffer
 	cb_vs_matrix.data.light = basicLight;
-	cb_vs_matrix.data.EyePosW = camera->GetPosition();
+	cb_vs_matrix.data.EyePosW = camera->GetPositionVector3();
 	cb_vs_matrix.data.View = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetView() ) );
 	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetProjection() ) );
 	cb_vs_matrix.data.UseLighting = 0.0f;
@@ -304,7 +297,7 @@ void Graphics::Draw()
 
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );
-	skybox->GetTransform()->SetPosition( camera->GetPosition() );
+	skybox->GetTransform()->SetPosition( camera->GetPositionVector3() );
 	cb_vs_matrix.data.World = XMMatrixTranspose( skybox->GetTransform()->GetWorldMatrix() );
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	ID3D11ShaderResourceView* skyboxTexture = skybox->GetAppearance()->GetTextureRV();
