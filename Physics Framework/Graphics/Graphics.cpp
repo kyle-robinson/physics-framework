@@ -106,9 +106,9 @@ bool Graphics::InitializeScene()
 		return false;
 	}
 
-	// setup cameras
-	camera = std::make_unique<Camera>( v3df( 0.0f, 2.0f, -10.0f ),
-		static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.01f, 500.0f );
+	// setup camera
+	camera = std::make_unique<Camera>( XMFLOAT3( 0.0f, 2.0f, -10.0f ) );
+	camera->SetProjectionValues( 40.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -239,8 +239,8 @@ void Graphics::Draw()
 	// Setup Constant Buffer
 	cb_vs_matrix.data.light = basicLight;
 	cb_vs_matrix.data.EyePosW = camera->GetPositionVector3();
-	cb_vs_matrix.data.View = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetView() ) );
-	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetProjection() ) );
+	cb_vs_matrix.data.View = XMMatrixTranspose( camera->GetViewMatrix() );
+	cb_vs_matrix.data.Projection = XMMatrixTranspose( camera->GetProjectionMatrix() );
 	cb_vs_matrix.data.UseLighting = 0.0f;
 
 	// Render Scene Objects

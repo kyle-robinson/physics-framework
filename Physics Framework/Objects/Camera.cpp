@@ -1,53 +1,40 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-Camera::Camera( v3df position, FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth ) :
-	_windowWidth( windowWidth ), _windowHeight( windowHeight ),
-	_nearDepth( nearDepth ), _farDepth( farDepth )
+Camera::Camera( const XMFLOAT3& initialPosition ) : position( initialPosition )
 {
-	this->position = { position[0], position[1], position[2] };
-	posVector = XMLoadFloat3( &this->position );
+	posVector = XMLoadFloat3( &position );
 	rotation = { 0.0f, 0.0f, 0.0f };
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
 }
 
-void Camera::Reshape( FLOAT windowWidth, FLOAT windowHeight, FLOAT nearDepth, FLOAT farDepth )
+void Camera::SetProjectionValues( FLOAT fovDegrees, FLOAT aspectRatio, FLOAT nearZ, FLOAT farZ )
 {
-	_windowWidth = windowWidth;
-	_windowHeight = windowHeight;
-	_nearDepth = nearDepth;
-	_farDepth = farDepth;
-}
-
-XMFLOAT4X4 Camera::GetViewProjection() const 
-{ 
-	XMMATRIX view = XMLoadFloat4x4( &_view );
-	XMMATRIX projection = XMLoadFloat4x4( &_projection );
-	XMFLOAT4X4 viewProj;
-
-	XMStoreFloat4x4( &viewProj, view * projection );
-
-	return viewProj;
+	this->fovDegrees = fovDegrees;
+	this->nearZ = nearZ;
+	this->farZ = farZ;
+	float fovRadians = ( fovDegrees / 360.0f ) * XM_2PI;
+	projection = XMMatrixPerspectiveFovLH( fovRadians, aspectRatio, nearZ, farZ );
 }
 
 // DIRECTION VECTORS
-const XMVECTOR& Camera::GetForwardVector( bool omitY ) noexcept
+const XMVECTOR& Camera::GetForwardVector( BOOL omitY ) noexcept
 {
 	return omitY ? vec_forward_noY : vec_forward;
 }
 
-const XMVECTOR& Camera::GetBackwardVector( bool omitY ) noexcept
+const XMVECTOR& Camera::GetBackwardVector( BOOL omitY ) noexcept
 {
 	return omitY ? vec_backward_noY : vec_backward;
 }
 
-const XMVECTOR& Camera::GetLeftVector( bool omitY ) noexcept
+const XMVECTOR& Camera::GetLeftVector( BOOL omitY ) noexcept
 {
 	return omitY ? vec_left_noY : vec_left;
 }
 
-const XMVECTOR& Camera::GetRightVector( bool omitY ) noexcept
+const XMVECTOR& Camera::GetRightVector( BOOL omitY ) noexcept
 {
 	return omitY ? vec_right_noY : vec_right;
 }
@@ -58,7 +45,7 @@ const XMVECTOR& Camera::GetUpVector() noexcept
 }
 
 // CAMERA POSITION
-void Camera::SetPosition( float x, float y, float z ) noexcept
+void Camera::SetPosition( FLOAT x, FLOAT y, FLOAT z ) noexcept
 {
 	SetPosition( XMFLOAT3( x, y, z ) );
 }
@@ -77,7 +64,7 @@ void Camera::SetPosition( const XMFLOAT3& pos ) noexcept
 	UpdateMatrix();
 }
 
-void Camera::AdjustPosition( float x, float y, float z ) noexcept
+void Camera::AdjustPosition( FLOAT x, FLOAT y, FLOAT z ) noexcept
 {
 	AdjustPosition( XMFLOAT3( x, y, z ) );
 }
@@ -99,7 +86,7 @@ void Camera::AdjustPosition( const XMFLOAT3& pos ) noexcept
 }
 
 // CAMERA ROTATION
-void Camera::SetRotation( float x, float y, float z ) noexcept
+void Camera::SetRotation( FLOAT x, FLOAT y, FLOAT z ) noexcept
 {
 	SetRotation( XMFLOAT3( x, y, z ) );
 }
@@ -118,7 +105,7 @@ void Camera::SetRotation( const XMFLOAT3& rot ) noexcept
 	UpdateMatrix();
 }
 
-void Camera::AdjustRotation( float x, float y, float z ) noexcept
+void Camera::AdjustRotation( FLOAT x, FLOAT y, FLOAT z ) noexcept
 {
 	AdjustRotation( XMFLOAT3( x, y, z ) );
 }
@@ -155,10 +142,7 @@ void Camera::UpdateMatrix()
 	camTarget += posVector;
 
 	XMVECTOR upDir = XMVector3TransformCoord( DEFAULT_UP_VECTOR, cameraRotation );
-	XMStoreFloat4x4( &_view, XMMatrixLookAtLH( posVector, camTarget, upDir ) );
-
-    // Initialize the projection matrix
-	XMStoreFloat4x4( &_projection, XMMatrixPerspectiveFovLH( 0.25f * XM_PI, _windowWidth / _windowHeight, _nearDepth, _farDepth ) );
+	view = XMMatrixLookAtLH( posVector, camTarget, upDir );
 
 	UpdateDirectionVectors();
 }
