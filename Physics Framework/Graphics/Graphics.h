@@ -93,7 +93,6 @@ private:
 	std::unique_ptr<GameObject> torus;
 	std::unique_ptr<GameObject> ground;
 	std::unique_ptr<GameObject> skybox;
-
 };
 
 #endif

@@ -9,6 +9,7 @@ class ParticleModel
 public:
 	ParticleModel() {};
 	ParticleModel( std::shared_ptr<Transform> transform );
+	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; };
 
 	// particle movement/positioning
 	void Move( float x, float y, float z );

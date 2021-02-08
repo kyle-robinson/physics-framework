@@ -45,15 +45,19 @@ void Application::Update()
 	while ( !mouse.EventBufferIsEmpty() )
 	{
 		Mouse::MouseEvent me = mouse.ReadEvent();
-		std::string outMsg = "X: ";
-		outMsg += std::to_string( me.GetPosX() );
-		outMsg += ", Y: ";
-		outMsg += std::to_string( me.GetPosY() );
-		outMsg += "\n";
-		OutputDebugStringA( outMsg.c_str() );
+		if ( mouse.IsRightDown() )
+		{
+			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
+			{
+				gfx.camera->AdjustRotation(
+					static_cast<float>( me.GetPosY() ) * 0.005f,
+					static_cast<float>( me.GetPosX() ) * 0.005f,
+					0.0f
+				);
+			}
+		}
 	}
 
-	// camera movement
 	if ( keyboard.KeyIsPressed( VK_UP ) ) Camera::MoveFoward( gfx.camera );
 	if ( keyboard.KeyIsPressed( VK_DOWN ) ) Camera::MoveBackward( gfx.camera );
 	if ( keyboard.KeyIsPressed( VK_RIGHT ) ) Camera::MoveRight( gfx.camera );

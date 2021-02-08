@@ -106,7 +106,7 @@ bool Graphics::InitializeScene()
 		return false;
 	}
 
-	// setup camera
+	// setup cameras
 	camera = std::make_unique<Camera>(
 		v3df( 0.0f, 2.0f, -1.0f ), // eye
 		v3df( 0.0f, 2.0f,  0.0f ), // at
@@ -221,9 +221,7 @@ void Graphics::Update( float dt )
 
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
-		//cubes[i]->GetTransform()->SetRotation( 0.0f, XMConvertToRadians( rotation * 0.1f * i ), 0.0f );
-		v3df worldPosition = ( cubes[i]->GetRigidBody()->GetTransform()->GetPosition() + camera->GetPosition() ) * 0.5f;
-		cubes[i]->GetRigidBody()->ApplyTorque( worldPosition - cubes[i]->GetRigidBody()->GetTransform()->GetPosition(), { 0.0f, 100.0f, 0.0f } );
+		//cubes[i]->GetRigidBody()->ApplyTorque( cubes[i]->GetRigidBody()->GetTransform()->GetPosition(), { 0.0f, 100.0f, 0.0f } );
 		cubes[i]->Update( dt );
 	}
 
@@ -246,10 +244,10 @@ void Graphics::Draw()
 	context->PSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
 
 	// Setup Constant Buffer
-	cb_vs_matrix.data.View = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetView() ) );
-	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetProjection() ) );
 	cb_vs_matrix.data.light = basicLight;
 	cb_vs_matrix.data.EyePosW = camera->GetPosition();
+	cb_vs_matrix.data.View = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetView() ) );
+	cb_vs_matrix.data.Projection = XMMatrixTranspose( XMLoadFloat4x4( &camera->GetProjection() ) );
 	cb_vs_matrix.data.UseLighting = 0.0f;
 
 	// Render Scene Objects

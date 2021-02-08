@@ -2,7 +2,7 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
-#include "Transform.h"
+#include "Appearance.h"
 #include "ParticleModel.h"
 
 class RigidBody : public ParticleModel
@@ -10,7 +10,6 @@ class RigidBody : public ParticleModel
 public:
 	RigidBody();
 	void Update( const float dt ) override;
-	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; };
 
 	// apply forces
 	void ApplyTorque( v3df position, v3df force ) noexcept;
@@ -34,8 +33,6 @@ private:
 
 	XMMATRIX _inertiaTensor;
 	XMMATRIX _inverseInertiaTensor;
-
-	std::shared_ptr<Transform> _transform;
 };
 
 #endif

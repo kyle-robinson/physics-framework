@@ -34,6 +34,7 @@ public:
 	void SetUp( v3df up ) { _up = up; }
 	void SetLookAt( v3df lookAt ) { _at = lookAt; }
 	void SetPosition( v3df position ) { _eye = position; }
+	void AdjustRotation( float x, float y, float z ) noexcept;
 
 	static void MoveFoward( std::unique_ptr<Camera>& camera );
 	static void MoveBackward( std::unique_ptr<Camera>& camera );
@@ -45,6 +46,7 @@ private:
 	float cameraOrbitRadiusMax = 50.0f;
 	float cameraOrbitAngleXZ = -90.0f;
 	float cameraSpeed = 2.0f;
+	v3df rotation;
 };
 
 #endif
