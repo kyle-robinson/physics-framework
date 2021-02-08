@@ -22,23 +22,21 @@ public:
 
 	// get/set forces
 	v3df GetVelocity() const { return _velocity; }
+	v3df GetAcceleration() const { return _acceleration; }
+
 	void SetVelocity( v3df velocity ) { _velocity = velocity; };
 	void SetVelocity( float x, float y, float z ) { _velocity = { x, y, z }; };
-	v3df GetAcceleration() const { return _acceleration; }
 	void SetAcceleration( v3df acceleration ) { _acceleration = acceleration; }
 	void SetAcceleration( float x, float y, float z ) { _acceleration = { x, y, z }; }
 
 	// update constants
-	float GetTimeStep() const { return TIME_STEP; };
-	void SetTimeStep( float timeStep ) { TIME_STEP = timeStep; };
-	float GetGravity() const noexcept { return GRAVITY; };
-	void SetGravity( float gravity ) { GRAVITY = gravity; };
-	float GetDragFactor() const noexcept { return DRAG_FACTOR; };
-	void SetDragFactor( float dragFactor ) { DRAG_FACTOR = dragFactor; };
-	float GetFriction() const noexcept { return FRICTION; };
-	void SetFriction( float friction ) { FRICTION = friction; };
 	float GetMass() const noexcept { return _mass; };
+	float GetDragFactor() const noexcept { return _dragFactor; };
+	float GetFriction() const noexcept { return _frictionMultiplier; };
+
 	void SetMass( float newMass ) { _mass = newMass; };
+	void SetDragFactor( float dragFactor ) { _dragFactor = dragFactor; };
+	void SetFriction( float friction ) { _frictionMultiplier = friction; };
 
 	// update forces
 	virtual void Update( const float dt );
@@ -47,18 +45,17 @@ public:
 	void DragLaminar();
 	void DragTurbulent();
 	void Acceleration();
-	void Friction();
-	void Velocity();
-	void ComputePosition();
+	void Friction( const float dt );
+	void Velocity( const float dt );
+	void ComputePosition( const float dt );
 	void CheckWorldCollisions();
 	void ResetForces();
 private:
 	// Constants
-	float GRAVITY = 9.81f;
-	float TIME_STEP = 0.5f;
-	float LIMITER = 0.001f;
-	float DRAG_FACTOR = 5.0f;
-	float FRICTION = 0.0002f;
+	float _gravity = 9.81f;
+	float _limiter = 0.001f;
+	float _dragFactor = 5.0f;
+	float _frictionMultiplier = 0.0002f;
 
 	// Local Variables
 	float _mass;

@@ -30,6 +30,7 @@ void Application::Update()
 	// update delta time
 	float dt = timer.GetMilliSecondsElapsed();
 	timer.Restart();
+	dt *= 0.1f;
 
     // read input
     while ( !keyboard.CharBufferIsEmpty() )

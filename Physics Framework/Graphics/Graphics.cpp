@@ -335,20 +335,12 @@ void Graphics::Draw()
 //---------------//
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
-	if ( ImGui::Begin( "Cube Controls", FALSE ) )
+	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_NoMove ) )
 	{
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 		{
 			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
 			{
-				float timeStep = vec[i]->GetParticleModel()->GetTimeStep();
-				ImGui::SliderFloat( "Time Step", &timeStep, 0.1f, 1.0f, "%.1f" );
-				vec[i]->GetParticleModel()->SetTimeStep( timeStep );
-
-				float gravity = vec[i]->GetParticleModel()->GetGravity();
-				ImGui::SliderFloat( "Gravity", &gravity, 4.905f, 19.62f, "%.7f" );
-				vec[i]->GetParticleModel()->SetGravity( gravity );
-
 				float friction = vec[i]->GetParticleModel()->GetFriction();
 				ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0008f, "%.7f", 10 );
 				vec[i]->GetParticleModel()->SetFriction( friction );
@@ -372,11 +364,11 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 {
-	if ( ImGui::Begin( "Particle Controls", FALSE ) )
+	if ( ImGui::Begin( "Particle Controls", FALSE, ImGuiWindowFlags_NoMove ) )
 	{
 		float size = vec[0]->GetMaxSize();
 		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
-		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 25.0f, "%.1f" );
+		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 10.0f, "%.1f" );
 
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 			vec[i]->SetMaxSize( size );
