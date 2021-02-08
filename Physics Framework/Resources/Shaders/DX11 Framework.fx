@@ -85,6 +85,8 @@ float4 PS(VS_OUTPUT input) : SV_Target
 
 	// Get texture data from file
 	float4 textureColour = txDiffuse.Sample(samLinear, input.Tex);
+	if ( input.PosW.y > 200.0f )
+        textureColour.rgba = float4( 0.35294f, 0.49020f, 0.93725f, 1.0f );
 
 	float3 ambient = float3(0.0f, 0.0f, 0.0f);
 	float3 diffuse = float3(0.0f, 0.0f, 0.0f);

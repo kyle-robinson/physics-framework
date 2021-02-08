@@ -12,10 +12,10 @@ Camera::Camera( v3df position, v3df at, v3df up, FLOAT windowWidth, FLOAT window
 
 void Camera::Update()
 {
-    float angleAroundZ = XMConvertToRadians( cameraOrbitAngleXZ );
-	float x = cameraOrbitRadius * cos( angleAroundZ );
-	float z = cameraOrbitRadius * sin( angleAroundZ );
-	this->SetPosition( { x, this->GetPosition()[1], z } );
+    //float angleAroundZ = XMConvertToRadians( cameraOrbitAngleXZ );
+	//float x = cameraOrbitRadius * cos( angleAroundZ );
+	//float z = cameraOrbitRadius * sin( angleAroundZ );
+	//this->SetPosition( { x, this->GetPosition()[1], z } );
 	
 	// Initialize the view matrix
 	v4df eye( _eye[0], _eye[1], _eye[2], 1.0f );

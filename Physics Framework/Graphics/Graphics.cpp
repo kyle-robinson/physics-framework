@@ -108,12 +108,12 @@ bool Graphics::InitializeScene()
 
 	// setup cameras
 	camera = std::make_unique<Camera>(
-		v3df( 0.0f, 2.0f, -1.0f ), // eye
+		v3df( 0.0f, 2.0f, -10.0f ), // eye
 		v3df( 0.0f, 2.0f,  0.0f ), // at
 		v3df( 0.0f, 1.0f,  0.0f ), // up
 		static_cast<float>( windowWidth ),
 		static_cast<float>( windowHeight ),
-		0.01f, 300.0f
+		0.01f, 500.0f
 	);
 
 	// setup the scene's light
