@@ -70,6 +70,24 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( VK_SPACE ) ) Camera::MoveUp( gfx.camera, dt );
 	if ( keyboard.KeyIsPressed( VK_CONTROL ) ) Camera::MoveDown( gfx.camera, dt );
 
+	// x world collisions
+	if ( gfx.camera->GetPositionFloat3().x <= -15.0f )
+		gfx.camera->SetPosition( -15.0f, gfx.camera->GetPositionFloat3().y, gfx.camera->GetPositionFloat3().z );
+	if ( gfx.camera->GetPositionFloat3().x >= 15.0f )
+		gfx.camera->SetPosition( 15.0f, gfx.camera->GetPositionFloat3().y, gfx.camera->GetPositionFloat3().z );
+
+	// y world collisions
+	if ( gfx.camera->GetPositionFloat3().y <= 1.0f )
+		gfx.camera->SetPosition( gfx.camera->GetPositionFloat3().x, 1.0f, gfx.camera->GetPositionFloat3().z );
+	if ( gfx.camera->GetPositionFloat3().y >= 10.0f)
+		gfx.camera->SetPosition( gfx.camera->GetPositionFloat3().x, 10.0f, gfx.camera->GetPositionFloat3().z );
+
+	// z world collisions
+	if ( gfx.camera->GetPositionFloat3().z <= -15.0f )
+		gfx.camera->SetPosition( gfx.camera->GetPositionFloat3().x, gfx.camera->GetPositionFloat3().y, -15.0f );
+	if ( gfx.camera->GetPositionFloat3().z >= 15.0f )
+		gfx.camera->SetPosition( gfx.camera->GetPositionFloat3().x, gfx.camera->GetPositionFloat3().y, 15.0f );
+
 	// select cube to move
 	static int cubeToUse = 0;
 	if ( keyboard.KeyIsPressed( '1' ) ) cubeToUse = 0;

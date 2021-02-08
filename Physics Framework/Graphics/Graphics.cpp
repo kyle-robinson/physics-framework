@@ -156,7 +156,7 @@ bool Graphics::InitializeScene()
 	// initialize ground
 	ground = std::make_unique<GameObject>( "Ground" );
 	ground->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
-	ground->GetTransform()->SetScale( 50.0f, 50.0f, 50.0f );
+	ground->GetTransform()->SetScale( 100.0f, 100.0f, 100.0f );
 	ground->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
 	ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 	ground->GetAppearance()->SetGeometryData( planeGeometry );
