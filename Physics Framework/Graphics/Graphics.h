@@ -91,8 +91,13 @@ private:
 	Light basicLight;
 	MeshData objMeshData;
 	std::unique_ptr<GameObject> torus;
-	std::unique_ptr<GameObject> ground;
 	std::unique_ptr<GameObject> skybox;
+
+	int planeWidth = 8;
+	int planeHeight = 6;
+	std::unique_ptr<GameObject> ground;
+	std::vector<XMFLOAT4X4> planeMatrices;
+	//std::vector<std::vector<std::unique_ptr<GameObject>>> plane;
 };
 
 #endif

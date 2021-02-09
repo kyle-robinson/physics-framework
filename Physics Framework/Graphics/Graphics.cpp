@@ -20,6 +20,16 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeScene() ) return false;
 	imgui.Initialize( hWnd, device.Get(), context.Get() );
 
+	// Must be a square number <= 64
+	//const int planeAmount = 64;
+	planeMatrices.reserve( planeWidth * planeHeight );
+	for ( int i = 0; i < planeWidth * planeHeight; i++ )
+    {
+        XMFLOAT4X4 worldMatrix;
+        XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
+        planeMatrices.push_back( std::move( worldMatrix ) );
+    }
+
 	return true;
 }
 
@@ -153,10 +163,18 @@ bool Graphics::InitializeScene()
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	// initialize ground
+	/*const int planeWidth = 10;
+	const int planeHeight = 10;
+	plane.reserve( planeWidth );
+	plane[0].reserve( planeHeight );
+	for ( unsigned int i = 0; i < planeWidth; i++ )
+	{
+		for ( unsigned int j = 0; j < planeHeight; j++ )
+		{
+			plane[i][j]->GetAppearance()->set
+		}
+	}*/
 	ground = std::make_unique<GameObject>( "Ground" );
-	ground->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 0.0f );
-	ground->GetTransform()->SetScale( 100.0f, 100.0f, 100.0f );
-	ground->GetTransform()->SetRotation( XMConvertToRadians( 90.0f ), 0.0f, 0.0f );
 	ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 	ground->GetAppearance()->SetGeometryData( planeGeometry );
 	ground->GetAppearance()->SetMaterial( noSpecMaterial );
@@ -204,22 +222,42 @@ bool Graphics::InitializeScene()
 
 void Graphics::Update( float dt )
 {
+	// Update Plane Matrices
+	int count = 0;
+	static int tileScale = 4;
+    for ( unsigned int row = 0; row < planeWidth; row++ )
+    {
+        for ( unsigned int col = 0; col < planeHeight; col++ )
+        {
+            XMStoreFloat4x4( &planeMatrices[count],
+				XMMatrixScaling( tileScale, tileScale, 0.0f ) *
+                XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) *
+                XMMatrixTranslation(
+					-20.0f + ( col * 2 ) * tileScale,
+					0.0f,
+					25.0f - ( row * 2 ) * tileScale
+				)
+			);
+            count++;
+        }
+    }
 	ground->Update( dt );
 	
+	// Update Torus
 	static float rotation = 0.0f;
 	rotation += dt;
 	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
 	torus->Update( dt );
 
+	// Update Cubes
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
-	{
-		//cubes[i]->GetRigidBody()->ApplyTorque( cubes[i]->GetRigidBody()->GetTransform()->GetPosition(), { 0.0f, 100.0f, 0.0f } );
 		cubes[i]->Update( dt );
-	}
 
+	// Update Particles
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 		particles[i]->Update( dt );
 
+	// Update Skybox
 	skybox->Update( dt );
 }
 
@@ -270,8 +308,20 @@ void Graphics::Draw()
 		cubes[i]->Draw( context.Get() );
 	}
 
-	// Render Particles
+	// Render Instanced Plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
+	for ( unsigned int i = 0; i < planeMatrices.size(); i++ )
+	{
+		//cb_vs_matrix.data.World = XMMatrixTranspose( ground->GetTransform()->GetWorldMatrix() );
+		cb_vs_matrix.data.World = XMMatrixTranspose( XMLoadFloat4x4( &planeMatrices[i] ) );
+		textureToUse = ground->GetAppearance()->GetTextureRV();
+		context->PSSetShaderResources( 0, 1, &textureToUse );
+		if ( !cb_vs_matrix.ApplyChanges() ) return;
+		//context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+		ground->Draw( context.Get() );
+	}
+
+	// Render Particles
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
@@ -281,19 +331,13 @@ void Graphics::Draw()
 		particles[i]->Draw( context.Get() );
 	}
 
-	// Render Other Objects
+	// Render Torus
 	cb_vs_matrix.data.UseLighting = 0.0f;
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	textureToUse = torus->GetAppearance()->GetTextureRV();
 	context->PSSetShaderResources( 0, 1, &textureToUse );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	torus->Draw( context.Get() );
-
-	cb_vs_matrix.data.World = XMMatrixTranspose( ground->GetTransform()->GetWorldMatrix() );
-	textureToUse = ground->GetAppearance()->GetTextureRV();
-	context->PSSetShaderResources( 0, 1, &textureToUse );
-	if ( !cb_vs_matrix.ApplyChanges() ) return;
-	ground->Draw( context.Get() );
 
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );
