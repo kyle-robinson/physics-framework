@@ -34,7 +34,7 @@ void Particle::Update( const float dt )
 
 void Particle::Draw( ID3D11DeviceContext* pImmediateContext )
 {	
-	if ( startTimer < 0 )
+	if ( startTimer < -1 )
 		_appearance->Update( pImmediateContext );
 }
 

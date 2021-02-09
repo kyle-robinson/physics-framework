@@ -39,7 +39,6 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
 		samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
 		samplerStates.emplace( "Point", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
-		samplerStates["Anisotropic"]->Bind( *this );
 
 		context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
@@ -230,6 +229,7 @@ void Graphics::Draw()
 	renderTarget->BindAsBuffer( *this, depthStencil.get(), clearColor );
     depthStencil->ClearDepthStencil( *this );
 	rasterizerStates["Solid"]->Bind( *this );
+	samplerStates["Anisotropic"]->Bind( *this );
 
     // Setup Buffers
 	Shaders::BindShaders( context.Get(), vertexShader, pixelShader );
