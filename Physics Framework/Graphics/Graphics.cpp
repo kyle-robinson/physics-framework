@@ -121,7 +121,7 @@ bool Graphics::InitializeScene()
 	// setup terrain
 	TerrainInfo info;
 	info.filePath = L"Resources\\Terrain\\Heightmap 513x513.raw";
-	info.heightMapScale = 50.0f;
+	info.heightMapScale = 5.0f;
 	info.numRows = 100;
 	info.numCols = 100;
 	info.cellSpacing = 0.5f;
@@ -376,20 +376,20 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
 			{
 				float friction = vec[i]->GetParticleModel()->GetFriction();
-				ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0008f, "%.7f", 10 );
+				ImGui::SliderFloat( std::string( "Friction##" ).append( std::to_string( i ) ).c_str(), &friction, 0.0f, 0.0008f, "%.7f", 10 );
 				vec[i]->GetParticleModel()->SetFriction( friction );
 
 				float dragFactor = vec[i]->GetParticleModel()->GetDragFactor();
-				ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
+				ImGui::SliderFloat( std::string( "Drag Factor##" ).append( std::to_string( i ) ).c_str(), &dragFactor, 0.0f, 10.0f, "%1.f" );
 				vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
 
 				ImGui::Text( "Drag Type: " );
 				ImGui::SameLine();
 				static int dragFactorGroup = 0;
-				if ( ImGui::RadioButton( "Laminar", &dragFactorGroup, 0 ) )
+				if ( ImGui::RadioButton( std::string( "Laminar##" ).append( std::to_string( i ) ).c_str(), &dragFactorGroup + i, 0 ) )
 					vec[i]->GetParticleModel()->SetLaminar( true );
 				ImGui::SameLine();
-				if ( ImGui::RadioButton( "Turbulent", &dragFactorGroup, 1 ) )
+				if ( ImGui::RadioButton( std::string( "Turbulent##" ).append( std::to_string( i ) ).c_str(), &dragFactorGroup + i, 1 ) )
 					vec[i]->GetParticleModel()->SetLaminar( false );
 			}
 		}
