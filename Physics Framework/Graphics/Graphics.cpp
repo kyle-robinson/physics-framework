@@ -8,6 +8,7 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
+#include "Terrain.h"
 #include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -20,8 +21,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeScene() ) return false;
 	imgui.Initialize( hWnd, device.Get(), context.Get() );
 
-	// Must be a square number <= 64
-	//const int planeAmount = 64;
 	planeMatrices.reserve( planeWidth * planeHeight );
 	for ( int i = 0; i < planeWidth * planeHeight; i++ )
     {
@@ -119,6 +118,16 @@ bool Graphics::InitializeScene()
 	camera = std::make_unique<Camera>( XMFLOAT3( 0.0f, 2.0f, -10.0f ) );
 	camera->SetProjectionValues( 40.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
+	// setup terrain
+	TerrainInfo info;
+	info.filePath = L"Resources\\Terrain\\Heightmap 513x513.raw";
+	info.heightMapScale = 50.0f;
+	info.numRows = 100;
+	info.numCols = 100;
+	info.cellSpacing = 0.5f;
+	terrain = std::make_shared<Terrain>();
+	terrain->Initialize( *this, info );
+
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
 	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -163,17 +172,6 @@ bool Graphics::InitializeScene()
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	// initialize ground
-	/*const int planeWidth = 10;
-	const int planeHeight = 10;
-	plane.reserve( planeWidth );
-	plane[0].reserve( planeHeight );
-	for ( unsigned int i = 0; i < planeWidth; i++ )
-	{
-		for ( unsigned int j = 0; j < planeHeight; j++ )
-		{
-			plane[i][j]->GetAppearance()->set
-		}
-	}*/
 	ground = std::make_unique<GameObject>( "Ground" );
 	ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 	ground->GetAppearance()->SetGeometryData( planeGeometry );
@@ -308,16 +306,17 @@ void Graphics::Draw()
 		cubes[i]->Draw( context.Get() );
 	}
 
-	// Render Instanced Plane
+	// Draw Terrain
 	cb_vs_matrix.data.UseLighting = 1.0f;
+	terrain->Draw( *this, cb_vs_matrix, XMMatrixIdentity() );
+
+	// Render Instanced Plane
 	for ( unsigned int i = 0; i < planeMatrices.size(); i++ )
 	{
-		//cb_vs_matrix.data.World = XMMatrixTranspose( ground->GetTransform()->GetWorldMatrix() );
 		cb_vs_matrix.data.World = XMMatrixTranspose( XMLoadFloat4x4( &planeMatrices[i] ) );
 		textureToUse = ground->GetAppearance()->GetTextureRV();
 		context->PSSetShaderResources( 0, 1, &textureToUse );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
-		//context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
 		ground->Draw( context.Get() );
 	}
 

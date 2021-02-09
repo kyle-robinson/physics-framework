@@ -221,6 +221,9 @@
     <ClInclude Include="Objects\Camera.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Terrain.h">
+      <Filter>Headers\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -299,6 +302,9 @@
       <Filter>Source\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Camera.cpp">
+      <Filter>Source\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Terrain.cpp">
       <Filter>Source\Objects</Filter>
     </ClCompile>
   </ItemGroup>

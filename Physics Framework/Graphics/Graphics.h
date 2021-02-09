@@ -28,6 +28,7 @@ namespace Bind
 	class Sampler;
 }
 
+class Terrain;
 class Graphics
 {
 	friend class GraphicsResource;
@@ -90,14 +91,14 @@ private:
 	// Local Objects
 	Light basicLight;
 	MeshData objMeshData;
+	std::shared_ptr<Terrain> terrain;
 	std::unique_ptr<GameObject> torus;
 	std::unique_ptr<GameObject> skybox;
 
-	int planeWidth = 8;
-	int planeHeight = 6;
+	const int planeWidth = 8;
+	const int planeHeight = 6;
 	std::unique_ptr<GameObject> ground;
 	std::vector<XMFLOAT4X4> planeMatrices;
-	//std::vector<std::vector<std::unique_ptr<GameObject>>> plane;
 };
 
 #endif
