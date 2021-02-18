@@ -8,7 +8,7 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
-#include "Terrain.h"
+//#include "Terrain.h"
 #include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -119,14 +119,14 @@ bool Graphics::InitializeScene()
 	camera->SetProjectionValues( 40.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
 	// setup terrain
-	TerrainInfo info;
+	/*TerrainInfo info;
 	info.filePath = L"Resources\\Terrain\\Heightmap 513x513.raw";
 	info.heightMapScale = 5.0f;
 	info.numRows = 100;
 	info.numCols = 100;
 	info.cellSpacing = 0.5f;
 	terrain = std::make_shared<Terrain>();
-	terrain->Initialize( *this, info );
+	terrain->Initialize( *this, info );*/
 
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -308,7 +308,7 @@ void Graphics::Draw()
 
 	// Draw Terrain
 	cb_vs_matrix.data.UseLighting = 1.0f;
-	terrain->Draw( *this, cb_vs_matrix, XMMatrixIdentity() );
+	//terrain->Draw( *this, cb_vs_matrix, XMMatrixIdentity() );
 
 	// Render Instanced Plane
 	for ( unsigned int i = 0; i < planeMatrices.size(); i++ )
@@ -343,8 +343,8 @@ void Graphics::Draw()
 	skybox->GetTransform()->SetPosition( camera->GetPositionVector3() );
 	cb_vs_matrix.data.World = XMMatrixTranspose( skybox->GetTransform()->GetWorldMatrix() );
 	cb_vs_matrix.data.UseLighting = 1.0f;
-	ID3D11ShaderResourceView* skyboxTexture = skybox->GetAppearance()->GetTextureRV();
-	context->PSSetShaderResources( 0, 1, &skyboxTexture );
+	textureToUse = skybox->GetAppearance()->GetTextureRV();
+	context->PSSetShaderResources( 0, 1, &textureToUse );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	skybox->Draw( context.Get() );
 
@@ -364,9 +364,7 @@ void Graphics::Draw()
 	}
 }
 
-//---------------//
 // IMGUI WINDOWS //
-//---------------//
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
 	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_NoMove ) )

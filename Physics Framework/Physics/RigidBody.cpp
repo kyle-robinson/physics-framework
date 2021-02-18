@@ -7,9 +7,9 @@ RigidBody::RigidBody()
 	ParticleModel::ParticleModel();
 
 	_angularDrag = 1.0f;
-	_torque = { 0.0f, 0.0f, 0.0f };
-	_angularVelocity = { 0.0f, 0.0f, 0.0f };
-	_angularAcceleration = { 0.0f, 0.0f, 0.0f };
+	_torque = XMVectorZero();
+	_angularVelocity = XMVectorZero();
+	_angularAcceleration = XMVectorZero();
 
 	ComputeBoxInertiaTensor( 1.0f, 1.0f, 1.0f );
 }
@@ -23,17 +23,15 @@ void RigidBody::Update( const float dt )
 	ApplyAngularDrag( dt );
 	ComputeOrientation( dt );
 
-	_torque = { 0.0f, 0.0f, 0.0f };
+	_torque = XMVectorZero();
 }
 
-void RigidBody::ApplyTorque( v3df position, v3df force ) noexcept
+void RigidBody::ApplyTorque( XMVECTOR position, XMVECTOR force ) noexcept
 {
 	XMMATRIX inverseRotation = XMMatrixInverse( nullptr, GetTransform()->GetRotationMatrix() );
-	XMVECTOR forceVec = XMLoadFloat3( &XMFLOAT3( force[0], force[1], force[2] ) );
-	XMVECTOR positionVec = XMLoadFloat3( &XMFLOAT3( position[0], position[1], position[2] ) );
-	float magnitude = XMVectorGetX( XMVector3Length( forceVec ) ) / XMVectorGetX( XMVector3Length( positionVec ) );
-	XMVECTOR netTorque = XMVector3Normalize( XMVector3Transform( XMVector3Cross( XMVector3Normalize( positionVec ), XMVector3Normalize( forceVec ) ), inverseRotation ) ) * magnitude;
-	_torque += { XMVectorGetX( netTorque ), XMVectorGetY( netTorque ), XMVectorGetZ( netTorque ) };
+	float magnitude = XMVectorGetX( XMVector3Length( force ) ) / XMVectorGetX( XMVector3Length( position ) );
+	_torque += XMVector3Normalize( XMVector3Transform( XMVector3Cross( XMVector3Normalize( position ),
+		XMVector3Normalize( force ) ), inverseRotation ) ) * magnitude;
 }
 
 void RigidBody::ApplyAngularDrag( const float dt ) noexcept
@@ -43,9 +41,7 @@ void RigidBody::ApplyAngularDrag( const float dt ) noexcept
 
 void RigidBody::ComputeAngularAcceleration() noexcept
 {
-	XMVECTOR netTorque = XMLoadFloat3( &XMFLOAT3( _torque[0], _torque[1], _torque[2] ) );
-	XMVECTOR accel = XMVector3Transform( netTorque, _inverseInertiaTensor );
-	_angularAcceleration = { XMVectorGetX( accel ), XMVectorGetY( accel ), XMVectorGetZ( accel ) };
+	_angularAcceleration = XMVector3Transform( _torque, _inverseInertiaTensor );
 }
 
 void RigidBody::ComputeAngularVelocity( const float dt ) noexcept
@@ -56,29 +52,29 @@ void RigidBody::ComputeAngularVelocity( const float dt ) noexcept
 
 void RigidBody::ComputeOrientation( const float dt ) noexcept
 {
-	XMVECTOR velocity = XMLoadFloat3( &XMFLOAT3( _angularVelocity[0], _angularVelocity[1], _angularVelocity[2] ) );
-
-	XMVECTOR orientationChange = velocity * dt;
+	XMVECTOR orientationChange = _angularVelocity * dt;
 	XMVECTOR oldOrientation = GetTransform()->GetOrientation();
 	XMVECTOR newOrientation = XMQuaternionNormalize( XMQuaternionMultiply( orientationChange, oldOrientation ) );
 
 	GetTransform()->SetOrientationQuaternion( newOrientation );
 }
 
-v3df RigidBody::GetForceAtRelativePosition( v3df position ) noexcept
+XMVECTOR RigidBody::GetForceAtRelativePosition( XMVECTOR position ) noexcept
 {
 	XMMATRIX inverseRotation = XMMatrixInverse( nullptr, GetTransform()->GetRotationMatrix() );
-	XMVECTOR positionVec = XMLoadFloat3( &XMFLOAT3( position[0], position[1], position[2] ) );
-	XMVECTOR relativePosition = XMVector3Transform( positionVec, inverseRotation );
+	XMVECTOR relativePosition = XMVector3Transform( position, inverseRotation );
 	
-	float magnitude = position.magnitude();
-	XMVECTOR angularVelocityVec = XMLoadFloat3( &XMFLOAT3( _angularVelocity[0], _angularVelocity[1], _angularVelocity[2] ) );
-	XMVECTOR localForce = XMVector3Normalize( XMVector3Cross( XMVector3Transform( angularVelocityVec, _inertiaTensor ), positionVec ) ) * magnitude;
+	float magnitude = XMVectorGetX( XMVector3Length( relativePosition ) ) * XMVectorGetX( XMVector3Length( _angularVelocity ) );
+	XMVECTOR forceLocal = XMVector3Normalize( XMVector3Cross( XMVector3Transform( _angularVelocity, _inertiaTensor ),
+		relativePosition ) ) * magnitude;
+	
+	v3df momentum = GetVelocity() * GetMass();
+	XMVECTOR actingForce = XMVector3Transform( forceLocal, GetTransform()->GetRotationMatrix() );
+	actingForce = XMVectorSet( XMVectorGetX( actingForce ) + momentum.x, XMVectorGetY( actingForce ) + momentum.y,
+		XMVectorGetZ( actingForce ) + momentum.z, XMVectorGetW( actingForce ) );
 
-	XMVECTOR velocity = XMLoadFloat3( &XMFLOAT3( GetVelocity()[0], GetVelocity()[1], GetVelocity()[2] ) );
-	XMVECTOR relativeForce = XMVector3Transform( localForce, GetTransform()->GetRotationMatrix() ) + GetMass() * velocity;
-	v3df relativeForceVec = { XMVectorGetX( relativeForce ), XMVectorGetY( relativeForce ), XMVectorGetZ( relativeForce ) };
-	return relativeForceVec;
+	return actingForce;
+
 }
 
 void RigidBody::ComputeBoxInertiaTensor( float sizeX, float sizeY, float sizeZ ) noexcept

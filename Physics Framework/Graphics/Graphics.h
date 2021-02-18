@@ -28,7 +28,7 @@ namespace Bind
 	class Sampler;
 }
 
-class Terrain;
+//class Terrain;
 class Graphics
 {
 	friend class GraphicsResource;
@@ -91,7 +91,7 @@ private:
 	// Local Objects
 	Light basicLight;
 	MeshData objMeshData;
-	std::shared_ptr<Terrain> terrain;
+	//std::shared_ptr<Terrain> terrain;
 	std::unique_ptr<GameObject> torus;
 	std::unique_ptr<GameObject> skybox;
 

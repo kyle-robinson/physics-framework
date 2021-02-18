@@ -12,7 +12,7 @@ public:
 	void Update( const float dt ) override;
 
 	// apply forces
-	void ApplyTorque( v3df position, v3df force ) noexcept;
+	void ApplyTorque( XMVECTOR position, XMVECTOR force ) noexcept;
 	void ApplyAngularDrag( const float dt ) noexcept;
 
 	// compute forces
@@ -20,16 +20,16 @@ public:
 	void ComputeAngularVelocity( const float dt ) noexcept;
 	void ComputeOrientation( const float dt ) noexcept;
 
-	v3df GetForceAtRelativePosition( v3df position ) noexcept;
+	XMVECTOR GetForceAtRelativePosition( XMVECTOR position ) noexcept;
 
 	// inertia tensors
 	void ComputeBoxInertiaTensor( float sizeX, float sizeY, float sizeZ ) noexcept;
 private:
 	float _angularDrag;
 
-	v3df _torque;
-	v3df _angularVelocity;
-	v3df _angularAcceleration;
+	XMVECTOR _torque;
+	XMVECTOR _angularVelocity;
+	XMVECTOR _angularAcceleration;
 
 	XMMATRIX _inertiaTensor;
 	XMMATRIX _inverseInertiaTensor;

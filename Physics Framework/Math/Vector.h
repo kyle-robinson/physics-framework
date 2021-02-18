@@ -15,6 +15,11 @@ public:
 	T dot( const Vector3D& rhs ) { return (x * rhs.x) + (y * rhs.y) + (z * rhs.z); }
 	Vector3D cross( const Vector3D& rhs ) { return Vector3D( (y * rhs.z) - (z * rhs.y), (z * rhs.x) - (x * rhs.z), (x * rhs.y) - (y * rhs.x) ); }
 
+	Vector3D operator + ( const XMVECTOR& rhs ) { return Vector3D( x + XMVectorGetX( rhs ), y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ) }
+	XMVECTOR operator + ( const XMVECTOR& rhs ) { return XMVECTOR( XMVectorSetX( x + XMVectorGetX( rhs ) ),
+		y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ) }
+	Vector3D operator * ( const Vector3D& rhs ) { return Vector3D( x * rhs.x, y * rhs.y, z * rhs.z ); }
+
 	Vector3D operator + ( const Vector3D& rhs ) { return Vector3D( x + rhs.x, y + rhs.y, z + rhs.z ); }
 	Vector3D operator - ( const Vector3D& rhs ) { return Vector3D( x - rhs.x, y - rhs.y, z - rhs.z ); }
 	Vector3D operator * ( const T& rhs ) { return Vector3D( x * rhs, y * rhs, z * rhs ); }
@@ -24,7 +29,7 @@ public:
 	Vector3D& operator *= ( const T& rhs ) { x *= rhs; y *= rhs; z *= rhs; return *this; }
 	Vector3D& operator /= ( const T& rhs ) { x /= rhs; y /= rhs; z /= rhs; return *this; }
 	T& operator [] ( const std::size_t& i ) { return *((T*)this + i); }
-private:
+public:
 	T x = 0;
 	T y = 0;
 	T z = 0;
@@ -54,7 +59,7 @@ public:
 	Vector4D& operator *= ( const T& rhs ) { x *= rhs; y *= rhs; z *= rhs; w *= rhs; return *this; }
 	Vector4D& operator /= ( const T& rhs ) { x /= rhs; y /= rhs; z /= rhs; w /= rhs; return *this; }
 	T& operator [] ( const std::size_t& i ) { return *((T*)this + i); }
-private:
+public:
 	T x = 0;
 	T y = 0;
 	T z = 0;
