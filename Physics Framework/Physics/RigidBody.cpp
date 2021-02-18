@@ -4,7 +4,7 @@
 
 RigidBody::RigidBody()
 {
-	ParticleModel::ParticleModel();
+	//ParticleModel::ParticleModel();
 
 	_angularDrag = 1.0f;
 	_torque = XMVectorZero();

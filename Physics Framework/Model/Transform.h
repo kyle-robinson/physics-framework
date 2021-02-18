@@ -2,6 +2,11 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include <Windows.h>
+#include <d3d11.h>
+#include <DirectXMath.h>
+using namespace DirectX;
+
 class GameObject;
 
 class Transform

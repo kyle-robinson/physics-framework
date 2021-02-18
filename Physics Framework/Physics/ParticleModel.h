@@ -32,17 +32,17 @@ public:
 
 	// update constants
 	float GetMass() const noexcept { return _mass; };
-	float GetDragFactor() const noexcept { return _dragFactor; };
+	float GetDragFactor() const noexcept { return _drag; };
 	float GetFriction() const noexcept { return _frictionMultiplier; };
 
 	void SetMass( float newMass ) { _mass = newMass; };
-	void SetDragFactor( float dragFactor ) { _dragFactor = dragFactor; };
+	void SetDragFactor( float dragFactor ) { _drag = dragFactor; };
 	void SetFriction( float friction ) { _frictionMultiplier = friction; };
 
 	// update forces
 	virtual void Update( const float dt );
 	void Weight();
-	void DragForce();
+	void DragForce( const float dt );
 	void DragLaminar();
 	void DragTurbulent();
 	void Acceleration();
@@ -55,14 +55,13 @@ private:
 	// Constants
 	float _gravity = 9.81f;
 	float _limiter = 0.001f;
-	float _dragFactor = 5.0f;
 	float _frictionMultiplier = 0.0002f;
 
 	// Local Variables
+	float _drag;
 	float _mass;
 	float _weight;
 	bool _useLaminar;
-	v3df _drag;
 	v3df _friction;
 	v3df _netForce;
 	v3df _velocity;

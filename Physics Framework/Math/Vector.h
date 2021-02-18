@@ -15,10 +15,11 @@ public:
 	T dot( const Vector3D& rhs ) { return (x * rhs.x) + (y * rhs.y) + (z * rhs.z); }
 	Vector3D cross( const Vector3D& rhs ) { return Vector3D( (y * rhs.z) - (z * rhs.y), (z * rhs.x) - (x * rhs.z), (x * rhs.y) - (y * rhs.x) ); }
 
-	Vector3D operator + ( const XMVECTOR& rhs ) { return Vector3D( x + XMVectorGetX( rhs ), y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ) }
-	XMVECTOR operator + ( const XMVECTOR& rhs ) { return XMVECTOR( XMVectorSetX( x + XMVectorGetX( rhs ) ),
-		y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ) }
+	Vector3D operator + ( const XMVECTOR& rhs ) { return Vector3D( x + XMVectorGetX( rhs ), y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ); }
+	//XMVECTOR operator + ( const XMVECTOR& rhs ) { return XMVECTOR( XMVectorSetX( x + XMVectorGetX( rhs ) ),
+	//	y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ); }
 	Vector3D operator * ( const Vector3D& rhs ) { return Vector3D( x * rhs.x, y * rhs.y, z * rhs.z ); }
+	Vector3D operator += ( const float& rhs ) { return Vector3D( x += rhs, y += rhs, z += rhs ); }
 
 	Vector3D operator + ( const Vector3D& rhs ) { return Vector3D( x + rhs.x, y + rhs.y, z + rhs.z ); }
 	Vector3D operator - ( const Vector3D& rhs ) { return Vector3D( x - rhs.x, y - rhs.y, z - rhs.z ); }
