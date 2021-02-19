@@ -40,7 +40,7 @@ public:
 	void Draw();
 
 	// Global Objects
-	float xDist = 5.0f;
+	float xDist = 2.0f;
 	std::unique_ptr<Camera> camera;
 	std::vector<std::unique_ptr<GameObject>> cubes;
 	std::vector<std::unique_ptr<Particle>> particles;

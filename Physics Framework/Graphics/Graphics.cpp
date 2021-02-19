@@ -400,7 +400,7 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 	{
 		float size = vec[0]->GetMaxSize();
 		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
-		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 10.0f, "%.1f" );
+		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 5.0f, "%1.f" );
 
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 			vec[i]->SetMaxSize( size );

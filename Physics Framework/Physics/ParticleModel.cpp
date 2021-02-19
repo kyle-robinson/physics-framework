@@ -58,10 +58,6 @@ void ParticleModel::DragForce( const float dt )
 		if ( _netForce.z < 0.0f ) _velocity.z *= 1.0f + _netForce.z;
 		else _velocity.z *= 1.0f - _netForce.z;
 	}
-	else
-	{
-		_velocity *= 0.75f;
-	}
 }
 
 void ParticleModel::DragLaminar()
@@ -108,6 +104,8 @@ void ParticleModel::Friction( const float dt )
 
 void ParticleModel::Velocity( const float dt )
 {
+	if ( _isParticle ) _velocity *= 0.75f;
+
 	// v = u + at
 	_velocity += _acceleration * dt;
 
