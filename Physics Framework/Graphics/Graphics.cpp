@@ -116,7 +116,7 @@ bool Graphics::InitializeScene()
 
 	// setup camera
 	camera = std::make_unique<Camera>( XMFLOAT3( 0.0f, 2.0f, -10.0f ) );
-	camera->SetProjectionValues( 40.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
+	camera->SetProjectionValues( 50.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
 	// setup terrain
 	/*TerrainInfo info;

@@ -43,15 +43,22 @@ public:
 
 	// update forces
 	virtual void Update( const float dt );
+	
 	void Weight();
-	void DragForce( const float dt );
-	void DragLaminar();
-	void DragTurbulent();
+	void ApplyThrust( const float dt );
+	void AddThrust( v3df force, float duration );
+	
 	void Acceleration();
 	void Friction( const float dt );
 	void Velocity( const float dt );
+	
+	void DragForce( const float dt );
+	void DragLaminar();
+	void DragTurbulent();
+
 	void ComputePosition( const float dt );
 	void CheckWorldCollisions();
+
 	void ResetForces();
 private:
 	// Constants
@@ -65,12 +72,15 @@ private:
 	float _weight;
 	bool _useLaminar;
 	bool _isParticle;
+
 	v3df _friction;
 	v3df _netForce;
 	v3df _velocity;
 	v3df _acceleration;
 	v3df _emitterPosition;
+
 	std::shared_ptr<Transform> _transform;
+	std::vector<std::pair<v3df, float>> _thrustForces;
 };
 
 #endif

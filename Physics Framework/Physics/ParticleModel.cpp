@@ -26,6 +26,7 @@ void ParticleModel::Move( float x, float y, float z )
 void ParticleModel::Update( const float dt )
 {
 	Weight();
+	ApplyThrust( dt );
 	Acceleration();
 	Friction( dt );
 	Velocity( dt );
@@ -39,6 +40,30 @@ void ParticleModel::Update( const float dt )
 void ParticleModel::Weight()
 {
 	_netForce.y -= _weight * _limiter;
+}
+
+void ParticleModel::ApplyThrust( const float dt )
+{
+	std::vector<int> deadForces;
+
+	for ( int i = 0; i < _thrustForces.size(); ++i )
+	{
+		_netForce += _thrustForces[i].first;
+
+		_thrustForces[i].second -= dt;
+
+		if ( _thrustForces[i].second <= 0.0f )
+			deadForces.push_back( i );
+	}
+
+	// Remove dead forces
+	for ( int i = deadForces.size() - 1; i >= 0; --i )
+		_thrustForces.erase( _thrustForces.begin() + deadForces[i] );
+}
+
+void ParticleModel::AddThrust( v3df force, float duration )
+{
+	_thrustForces.push_back( std::make_pair( force, duration ) );
 }
 
 void ParticleModel::DragForce( const float dt )
