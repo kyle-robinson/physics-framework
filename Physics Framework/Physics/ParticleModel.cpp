@@ -5,11 +5,12 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transfor
 {
 	_mass = 50.0f;
 	_useLaminar = true;
+	_isParticle = false;
 	
 	// f = m * g
 	_weight = _mass * _gravity;
 
-	_drag = 5.0f;
+	_drag = 2.0f;
 	_friction = { 0.0f, 0.0f, 0.0f };
 	_netForce = { 0.0f, 0.0f, 0.0f };
 	_velocity = { 0.0f, 0.0f, 0.0f };
@@ -25,7 +26,6 @@ void ParticleModel::Move( float x, float y, float z )
 void ParticleModel::Update( const float dt )
 {
 	Weight();
-	//DragForce();
 	Acceleration();
 	Friction( dt );
 	Velocity( dt );
@@ -39,26 +39,29 @@ void ParticleModel::Update( const float dt )
 void ParticleModel::Weight()
 {
 	_netForce.y -= _weight * _limiter;
-	//if ( _transform->GetPosition().y <= _transform->GetInitialPosition().y )
-	//	_netForce.y += _weight * _limiter;
 }
 
 void ParticleModel::DragForce( const float dt )
 {
-	if ( _useLaminar )
-		DragLaminar();
+	if ( !_isParticle )
+	{		
+		// calculate drag factor
+		if ( _useLaminar ) DragLaminar();
+		else DragTurbulent();
+
+		// add to velocity and adjust for negative values
+		if ( _netForce.x < 0.0f ) _velocity.x *= 1.0f + _netForce.x;
+		else _velocity.x *= 1.0f - _netForce.x;
+
+		if ( _netForce.y < 0.0f ) _velocity.y *= 1.0f + _netForce.y;
+
+		if ( _netForce.z < 0.0f ) _velocity.z *= 1.0f + _netForce.z;
+		else _velocity.z *= 1.0f - _netForce.z;
+	}
 	else
-		DragTurbulent();
-
-	// adjust for negative values
-	if ( _netForce.x < 0.0f ) _velocity.x *= 1.0f + _netForce.x;
-	else _velocity.x *= 1.0f - _netForce.x;
-
-	if ( _netForce.y < 0.0f ) _velocity.y *= 1.0f + _netForce.y;
-	else _velocity.y *= 1.0f - _netForce.y;
-
-	if ( _netForce.z < 0.0f ) _velocity.z *= 1.0f + _netForce.z;
-	else _velocity.z *= 1.0f - _netForce.z;
+	{
+		_velocity *= 0.75f;
+	}
 }
 
 void ParticleModel::DragLaminar()

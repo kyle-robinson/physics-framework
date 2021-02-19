@@ -12,12 +12,12 @@ Particle::Particle( const std::string& id ) : id( id )
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
 	_transform->SetInitialPosition( 0.0f, 0.5f, 0.5f );
 	_particleModel = std::make_shared<ParticleModel>( _transform );
+	_particleModel->SetIsParticle( true );
 	_appearance = std::make_shared<Appearance>();
 }
 
 void Particle::Update( const float dt )
 {
-
 	if ( startTimer < 0 )
 	{
 		_particleModel->Update( dt );
