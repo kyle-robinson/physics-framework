@@ -7,12 +7,12 @@
 #include "resource.h"
 #include "Particle.h"
 #include "OBJLoader.h"
-#include "GameObject.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "ImGuiManager.h"
 #include "ConstantBuffer.h"
 #include "DDSTextureLoader.h"
+#include "PhysicsGameObject.h"
 
 #define PARTICLE_COUNT 20
 #define NUMBER_OF_CUBES 5
@@ -99,6 +99,7 @@ private:
 	const int planeHeight = 6;
 	std::unique_ptr<GameObject> ground;
 	std::vector<XMFLOAT4X4> planeMatrices;
+	std::shared_ptr<GameObject> physicsCube;
 };
 
 #endif

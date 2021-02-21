@@ -11,6 +11,7 @@ class VertexBuffer
 {
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+	std::vector<XMFLOAT3> vertexPositions;
 	UINT stride = sizeof( T );
 	UINT vertexCount = 0;
 public:
@@ -48,6 +49,10 @@ public:
 	const UINT* StridePtr() const noexcept
 	{
 		return &stride;
+	}
+	const std::vector<XMFLOAT3>& GetVertexPositions() const noexcept
+	{
+		return vertexPositions;
 	}
 	HRESULT Initialize( ID3D11Device* device, T* data, UINT vertexCount )
 	{

@@ -18,6 +18,7 @@ bool Application::Initialize(
 		return false;
 
 	keyboard.DisableAutoRepeatKeys();
+	keyboard.DisableAutoRepeatChars();
 
 	return true;
 }
@@ -34,8 +35,6 @@ void Application::Update()
 	timer.Restart();
 	dt *= 0.1f;
 
-	static int cubeToUse = 0;
-
     // read input
     while ( !keyboard.CharBufferIsEmpty() )
 	{
@@ -46,24 +45,29 @@ void Application::Update()
 		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();
 		unsigned char keycode = kbe.GetKeyCode();
 
-		// select cube to move
-		switch ( kbe.GetKeyCode() )
+		if ( kbe.IsPress() )
 		{
-		case '1': cubeToUse = 0; break;
-		case '2': cubeToUse = 1; break;
-		case '3': cubeToUse = 2; break;
-		case '4': cubeToUse = 3; break;
-		case '5': cubeToUse = 4; break;
-		}
+			static int cubeToUse = 0;
+
+			// select cube to move
+			switch ( kbe.GetKeyCode() )
+			{
+			case '1': cubeToUse = 0; break;
+			case '2': cubeToUse = 1; break;
+			case '3': cubeToUse = 2; break;
+			case '4': cubeToUse = 3; break;
+			case '5': cubeToUse = 4; break;
+			}
 		
-		// object movement
-		switch ( kbe.GetKeyCode() )
-		{
-		case VK_UP: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f,  0.1f }, 25.0f ); break;
-		case VK_LEFT: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { -0.1f, 0.0f,  0.0f }, 25.0f ); break;
-		case VK_DOWN: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f, -0.1f }, 25.0f ); break;
-		case VK_RIGHT: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.1f, 0.0f,  0.0f }, 25.0f ); break;
-		case VK_HOME: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.15f, 0.0f }, 50.0f ); break;
+			// object movement
+			switch ( kbe.GetKeyCode() )
+			{
+			case VK_UP: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f,  0.1f }, 25.0f ); break;
+			case VK_LEFT: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { -0.1f, 0.0f,  0.0f }, 25.0f ); break;
+			case VK_DOWN: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f, -0.1f }, 25.0f ); break;
+			case VK_RIGHT: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.1f, 0.0f,  0.0f }, 25.0f ); break;
+			case VK_HOME: gfx.cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.5f, 0.0f }, 25.0f ); break;
+			}
 		}
 	}
 	while ( !mouse.EventBufferIsEmpty() )

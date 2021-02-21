@@ -18,9 +18,9 @@ public:
 	void Update()
 	{
 		// Calculate world matrix
-		XMMATRIX scale = XMMatrixScaling( GetScale()[0], GetScale()[1], GetScale()[2] );
-		XMMATRIX rotation = XMMatrixRotationX( GetRotation()[0] ) * XMMatrixRotationY( GetRotation()[1] ) * XMMatrixRotationZ( GetRotation()[2] );
-		XMMATRIX translation = XMMatrixTranslation( GetPosition()[0], GetPosition()[1], GetPosition()[2] );
+		XMMATRIX scale = XMMatrixScaling( GetScale().x, GetScale().y, GetScale().z );
+		XMMATRIX rotation = XMMatrixRotationX( GetRotation().x ) * XMMatrixRotationY( GetRotation().y ) * XMMatrixRotationZ( GetRotation().z );
+		XMMATRIX translation = XMMatrixTranslation( GetPosition().x, GetPosition().y, GetPosition().z );
 		XMStoreFloat4x4( &_worldMatrix, scale * rotation * translation );
 
 		// Calculate rotation matrix

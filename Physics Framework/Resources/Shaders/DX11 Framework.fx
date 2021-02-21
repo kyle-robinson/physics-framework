@@ -24,6 +24,7 @@ cbuffer ConstantBuffer : register( b0 )
 	matrix World;
 	matrix View;
 	matrix Projection;
+    matrix Rotation;
 
 	SurfaceInfo surface;
 	Light light;
@@ -31,6 +32,8 @@ cbuffer ConstantBuffer : register( b0 )
 	float3 EyePosW;
 	float HasTexture;
     float UseLighting;
+	
+    bool useRotation;
 }
 
 struct VS_INPUT
@@ -59,9 +62,19 @@ VS_OUTPUT VS(VS_INPUT input)
 
 	float4 posW = mul(input.PosL, World);
 	output.PosW = posW.xyz;
+    if ( useRotation )
+    {
+		
+        output.PosH = mul(posW, Rotation);
+		output.PosH = mul(output.PosH, View);
+		output.PosH = mul(output.PosH, Projection);
+    }
+    else
+    {
+		output.PosH = mul(posW, View);
+		output.PosH = mul(output.PosH, Projection);
+    }
 
-	output.PosH = mul(posW, View);
-	output.PosH = mul(output.PosH, Projection);
 	output.Tex = input.Tex;
 
 	float3 normalW = mul(float4(input.NormL, 0.0f), World).xyz;

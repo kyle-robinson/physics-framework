@@ -156,19 +156,23 @@ bool Graphics::InitializeScene()
 	herculesGeometry.vertexBuffer = objMeshData.VertexBuffer;
 	herculesGeometry.vertexBufferOffset = objMeshData.VBOffset;
 	herculesGeometry.vertexBufferStride = objMeshData.VBStride;
+	herculesGeometry.numberOfVertices = objMeshData.VertexCount;
 	
 	Geometry cubeGeometry;
 	cubeGeometry.vertexBufferOffset = 0;
 	cubeGeometry.indexBuffer = ib_cube.Get();
 	cubeGeometry.vertexBuffer = vb_cube.Get();
-	cubeGeometry.numberOfIndices = vb_cube.VertexCount() * sizeof( SimpleVertex );
+	cubeGeometry.numberOfVertices = vb_cube.VertexCount() * sizeof( SimpleVertex );
+	cubeGeometry.numberOfIndices = ib_cube.IndexCount() * sizeof( WORD );
 	cubeGeometry.vertexBufferStride = sizeof( SimpleVertex );
+	cubeGeometry.vertices = cubePositions;
 
 	Geometry planeGeometry;
 	planeGeometry.vertexBufferOffset = 0;
 	planeGeometry.indexBuffer = ib_plane.Get();
 	planeGeometry.vertexBuffer = vb_plane.Get();
-	planeGeometry.numberOfIndices = vb_plane.VertexCount() * sizeof( SimpleVertex );
+	planeGeometry.numberOfVertices = vb_plane.VertexCount() * sizeof( SimpleVertex );
+	planeGeometry.numberOfIndices = ib_plane.IndexCount() * sizeof( WORD );
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
 	// initialize ground
@@ -215,6 +219,14 @@ bool Graphics::InitializeScene()
 		particles[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
 
+	// initialize physics objects
+	physicsCube = std::make_shared<GameObject>( "PhysicsCube" );
+	physicsCube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 3.5f );
+	physicsCube->GetAppearance()->SetTextureRV( textureStone.Get() );
+	physicsCube->GetAppearance()->SetGeometryData( cubeGeometry );
+	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );
+
 	return true;
 }
 
@@ -251,6 +263,15 @@ void Graphics::Update( float dt )
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update( dt );
 
+	// Update Physics Objects
+	XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
+		physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
+	XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
+		camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
+	XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
+	physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
+	physicsCube->Update( dt );
+
 	// Update Particles
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
 		particles[i]->Update( dt );
@@ -278,6 +299,7 @@ void Graphics::Draw()
 	cb_vs_matrix.data.View = XMMatrixTranspose( camera->GetViewMatrix() );
 	cb_vs_matrix.data.Projection = XMMatrixTranspose( camera->GetProjectionMatrix() );
 	cb_vs_matrix.data.UseLighting = 0.0f;
+	cb_vs_matrix.data.UseRotation = FALSE;
 
 	// Render Scene Objects
 	ID3D11ShaderResourceView* textureToUse;
@@ -305,6 +327,13 @@ void Graphics::Draw()
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		cubes[i]->Draw( context.Get() );
 	}
+
+	//cb_vs_matrix.data.UseRotation = TRUE;
+	cb_vs_matrix.data.World = XMMatrixTranspose( physicsCube->GetTransform()->GetWorldMatrix() );
+	//cb_vs_matrix.data.Rotation = XMMatrixTranspose( physicsCube->GetTransform()->GetRotationMatrix() );
+	if ( !cb_vs_matrix.ApplyChanges() ) return;
+	physicsCube->Draw( context.Get() );
+	//cb_vs_matrix.data.UseRotation = FALSE;
 
 	// Draw Terrain
 	cb_vs_matrix.data.UseLighting = 1.0f;

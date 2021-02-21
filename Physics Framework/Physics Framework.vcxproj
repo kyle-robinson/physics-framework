@@ -92,7 +92,7 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <SourcePath>$(ProjectDir)DirectXTK\Src;$(SourcePath)</SourcePath>
-    <IncludePath>$(SolutionDir)External;$(ProjectDir)Input;$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)External;$(ProjectDir)Window;$(ProjectDir)Input;$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -415,10 +415,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Objects\Terrain.cpp" />
+    <ClCompile Include="Physics\PhysicsGameObject.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
     <ClCompile Include="Utility\Timer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Window\RenderWindow.cpp" />
+    <ClCompile Include="Window\WindowContainer.cpp" />
     <ClCompile Include="WinMain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
@@ -429,7 +432,6 @@
     <ClCompile Include="Physics\Particle.cpp" />
     <ClCompile Include="Physics\ParticleModel.cpp" />
     <ClCompile Include="Physics\ParticleSystem.cpp" />
-    <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="Utility\ErrorLogger.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -440,7 +442,6 @@
     <ClCompile Include="Utility\StringConverter.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WindowContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\DX11 Framework.fx">
@@ -501,8 +502,8 @@
     <ClInclude Include="Physics\Particle.h" />
     <ClInclude Include="Physics\ParticleModel.h" />
     <ClInclude Include="Physics\ParticleSystem.h" />
+    <ClInclude Include="Physics\PhysicsGameObject.h" />
     <ClInclude Include="Physics\RigidBody.h" />
-    <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Utility\COMException.h" />
     <ClInclude Include="Utility\ErrorLogger.h" />
@@ -510,7 +511,8 @@
     <ClInclude Include="Utility\StringConverter.h" />
     <ClInclude Include="Utility\Structures.h" />
     <ClInclude Include="Utility\Timer.h" />
-    <ClInclude Include="WindowContainer.h" />
+    <ClInclude Include="Window\RenderWindow.h" />
+    <ClInclude Include="Window\WindowContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds" />

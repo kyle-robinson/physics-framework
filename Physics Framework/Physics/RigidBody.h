@@ -2,7 +2,6 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
-#include "Appearance.h"
 #include "ParticleModel.h"
 
 class RigidBody : public ParticleModel

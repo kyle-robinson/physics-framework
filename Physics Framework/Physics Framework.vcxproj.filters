@@ -66,6 +66,12 @@
     <Filter Include="Resource Files\ImGui">
       <UniqueIdentifier>{c5141d88-08d5-4fca-baa4-35b3f151b87b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Window">
+      <UniqueIdentifier>{4a0a9c57-391d-407f-8a93-aca1c97a98f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Window">
+      <UniqueIdentifier>{91c4e7fa-0d28-48da-b024-358a6dd3b51e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\VertexBuffer.h">
@@ -170,12 +176,6 @@
     <ClInclude Include="Graphics\Graphics.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="WindowContainer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderWindow.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Input\Keyboard.h">
       <Filter>Headers\Input</Filter>
     </ClInclude>
@@ -224,6 +224,15 @@
     <ClInclude Include="Objects\Terrain.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Window\WindowContainer.h">
+      <Filter>Headers\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\RenderWindow.h">
+      <Filter>Headers\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsGameObject.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -261,12 +270,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\Graphics.cpp">
       <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowContainer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderWindow.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Input\Mouse.cpp">
       <Filter>Source\Input</Filter>
@@ -306,6 +309,15 @@
     </ClCompile>
     <ClCompile Include="Objects\Terrain.cpp">
       <Filter>Source\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\WindowContainer.cpp">
+      <Filter>Source\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\RenderWindow.cpp">
+      <Filter>Source\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsGameObject.cpp">
+      <Filter>Source\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
