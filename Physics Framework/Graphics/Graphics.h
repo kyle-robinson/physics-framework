@@ -99,7 +99,7 @@ private:
 	const int planeHeight = 6;
 	std::unique_ptr<GameObject> ground;
 	std::vector<XMFLOAT4X4> planeMatrices;
-	std::shared_ptr<GameObject> physicsCube;
+	std::unique_ptr<GameObject> physicsCube;
 };
 
 #endif

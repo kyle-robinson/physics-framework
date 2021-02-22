@@ -1,13 +1,7 @@
 #include "stdafx.h"
 #include "PhysicsGameObject.h"
 
-PhysicsGameObject::PhysicsGameObject( const std::string& id ) : GameObject( id )
-{
-	BoundingBox::CreateFromPoints( boundingBox, GetAppearance()->GetGeometryData().numberOfVertices,
-		&( GetAppearance()->GetGeometryData().vertices[0] ), sizeof( XMFLOAT3 ) );
-	GetRigidBody()->ComputeBoxInertiaTensor( boundingBox.Extents.x * 2.0f, boundingBox.Extents.y * 2.0f,
-		boundingBox.Extents.z * 2.0f );
-}
+PhysicsGameObject::PhysicsGameObject( const std::string& id ) : GameObject( id ) { }
 
 PhysicsGameObject::~PhysicsGameObject() { }
 
@@ -15,7 +9,15 @@ void PhysicsGameObject::Update( const float dt )
 {
 	GameObject::Update( dt );
 	GetRigidBody()->Update( dt );
-	UpdateWorldSpaceBoundingBox();
+	//UpdateWorldSpaceBoundingBox();
+}
+
+void PhysicsGameObject::InitializeInertiaTensor()
+{
+	BoundingBox::CreateFromPoints( boundingBox, GetAppearance()->GetGeometryData().numberOfVertices,
+		&( GetAppearance()->GetGeometryData().vertices[0] ), sizeof( XMFLOAT3 ) );
+	GetRigidBody()->ComputeBoxInertiaTensor( boundingBox.Extents.x * 2.0f, boundingBox.Extents.y * 2.0f,
+		boundingBox.Extents.z * 2.0f );
 }
 
 void PhysicsGameObject::UpdateWorldSpaceBoundingBox()

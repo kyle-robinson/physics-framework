@@ -220,7 +220,8 @@ bool Graphics::InitializeScene()
 	}
 
 	// initialize physics objects
-	physicsCube = std::make_shared<GameObject>( "PhysicsCube" );
+	physicsCube = std::make_unique<GameObject>( "PhysicsCube" );
+	//physicsCube->InitializeInertiaTensor();
 	physicsCube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 3.5f );
 	physicsCube->GetAppearance()->SetTextureRV( textureStone.Get() );
@@ -264,12 +265,12 @@ void Graphics::Update( float dt )
 		cubes[i]->Update( dt );
 
 	// Update Physics Objects
-	XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
-		physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
-	XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
-		camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
-	XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
-	physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
+	//XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
+	//	physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
+	//XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
+	//	camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
+	//XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
+	//physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
 	physicsCube->Update( dt );
 
 	// Update Particles

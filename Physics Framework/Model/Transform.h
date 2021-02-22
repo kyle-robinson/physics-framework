@@ -46,10 +46,10 @@ public:
 
 	void SetParent( GameObject* parent ) { _parent = parent; }
 	const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
-	const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); };
+	const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); }
 	
-	const XMVECTOR& GetOrientation() const noexcept { return _orientation; };
-	void SetOrientationQuaternion( const XMVECTOR& orientation ) { _orientation = orientation; };
+	const XMVECTOR& GetOrientation() const noexcept { return _orientation; }
+	void SetOrientationQuaternion( const XMVECTOR& orientation ) { _orientation = orientation; }
 public:
 	XMFLOAT4X4 _worldMatrix;
 	XMFLOAT4X4 _rotationMatrix;

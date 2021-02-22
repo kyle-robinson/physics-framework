@@ -13,6 +13,7 @@ public:
 
 	void Update( const float dt ) override;
 	void UpdateWorldSpaceBoundingBox();
+	void InitializeInertiaTensor();
 
 	BoundingBox GetBoundingbox() const noexcept { return boundingBox; }
 	BoundingOrientedBox GetWorldSpaceBoundingBox() const noexcept { return worldSpaceBoundingBox; }
