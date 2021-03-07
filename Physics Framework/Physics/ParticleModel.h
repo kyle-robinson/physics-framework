@@ -18,9 +18,9 @@ public:
 
 	// particle movement/positioning
 	void Move( float x, float y, float z );
-	v3df GetEmitterPosition() const { return _emitterPosition; }
-	void SetEmitterPosition( v3df position ) { _emitterPosition = position; }
-	void SetEmitterPosition( float x, float y, float z ) { _emitterPosition = { x, y, z }; }
+	v3df GetEmitterPosition() const noexcept { return _emitterPosition; }
+	void SetEmitterPosition( v3df position ) noexcept { _emitterPosition = position; }
+	void SetEmitterPosition( float x, float y, float z ) noexcept { _emitterPosition = { x, y, z }; }
 
 	// particle state
 	bool IsLaminar() const noexcept { return _useLaminar; }
@@ -29,22 +29,25 @@ public:
 	void SetIsParticle( bool isParticle ) noexcept { _isParticle = isParticle; }
 
 	// get/set forces
+	v3df GetNetForce() const { return _netForce; }
 	v3df GetVelocity() const { return _velocity; }
 	v3df GetAcceleration() const { return _acceleration; }
 
-	void SetVelocity( v3df velocity ) { _velocity = velocity; }
-	void SetVelocity( float x, float y, float z ) { _velocity = { x, y, z }; }
-	void SetAcceleration( v3df acceleration ) { _acceleration = acceleration; }
-	void SetAcceleration( float x, float y, float z ) { _acceleration = { x, y, z }; }
+	void SetNetForce( v3df netForce ) noexcept { _netForce = netForce; }
+	void SetNetForce( float x, float y, float z ) noexcept { _netForce = { x, y, z }; }
+	void SetVelocity( v3df velocity ) noexcept { _velocity = velocity; }
+	void SetVelocity( float x, float y, float z ) noexcept { _velocity = { x, y, z }; }
+	void SetAcceleration( v3df acceleration ) noexcept { _acceleration = acceleration; }
+	void SetAcceleration( float x, float y, float z ) noexcept { _acceleration = { x, y, z }; }
 
 	// update constants
 	float GetMass() const noexcept { return _mass; }
 	float GetDragFactor() const noexcept { return _drag; }
 	float GetFriction() const noexcept { return _frictionMultiplier; }
 
-	void SetMass( float newMass ) { _mass = newMass; }
-	void SetDragFactor( float dragFactor ) { _drag = dragFactor; }
-	void SetFriction( float friction ) { _frictionMultiplier = friction; }
+	void SetMass( float newMass ) noexcept { _mass = newMass; }
+	void SetDragFactor( float dragFactor ) noexcept { _drag = dragFactor; }
+	void SetFriction( float friction ) noexcept { _frictionMultiplier = friction; }
 
 	// update forces
 	virtual void Update( const float dt );
@@ -52,6 +55,7 @@ public:
 	void Weight();
 	void ApplyThrust( const float dt );
 	void AddThrust( v3df force, float duration );
+	void AddForce( v3df force ) noexcept { _netForce += force; }
 	
 	void Acceleration();
 	void Friction( const float dt );

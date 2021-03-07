@@ -196,6 +196,7 @@ void ParticleModel::CheckWorldCollisions()
 
 void ParticleModel::ResetForces()
 {
+	_netForce = { 0.0f, 0.0f, 0.0f };
 	_velocity = { 0.0f, 0.0f, 0.0f };
 	_acceleration = { 0.0f, 0.0f, 0.0f };
 }

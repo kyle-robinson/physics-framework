@@ -245,6 +245,10 @@ void Graphics::Update( float dt )
 	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
 	torus->Update( dt );
 
+	// Update Cubes
+	for ( unsigned int i = 0; i < cubes.size(); i++ )
+		cubes[i]->Update( dt );
+
 	// Check Collisions
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
@@ -253,15 +257,29 @@ void Graphics::Update( float dt )
 			if ( i != j && cubes[i]->GetParticleModel()->CollisionCheck(
 				cubes[j]->GetTransform()->GetPosition(), cubes[j]->GetParticleModel()->GetCollisionRadius() ) )
 			{
-				cubes[i]->GetParticleModel()->ResetForces();
-				cubes[j]->GetParticleModel()->ResetForces();
+				float velocityOne = max( cubes[i]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
+				float velocityTwo = max( cubes[j]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
+
+				float forceMagnitude = (
+					cubes[i]->GetParticleModel()->GetMass() * velocityOne +
+					cubes[j]->GetParticleModel()->GetMass() * velocityTwo
+				) / dt;
+				
+				v3df force = (
+					cubes[j]->GetTransform()->GetPosition() -
+					cubes[i]->GetTransform()->GetPosition()
+				).normalize() * forceMagnitude * 0.0015f;
+				
+				v3df inverseForce;
+				inverseForce.x = -force.x;
+				inverseForce.y = -force.y;
+				inverseForce.z = -force.z;
+
+				cubes[i]->GetParticleModel()->AddForce( inverseForce );
+				cubes[j]->GetParticleModel()->AddForce( force );
 			}
 		}
 	}
-
-	// Update Cubes
-	for ( unsigned int i = 0; i < cubes.size(); i++ )
-		cubes[i]->Update( dt );
 
 	// Update Physics Objects
 	//XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
