@@ -14,8 +14,8 @@ void PhysicsGameObject::Update( const float dt )
 
 void PhysicsGameObject::InitializeInertiaTensor()
 {
-	BoundingBox::CreateFromPoints( boundingBox, GetAppearance()->GetGeometryData().numberOfVertices,
-		&( GetAppearance()->GetGeometryData().vertices[0] ), sizeof( XMFLOAT3 ) );
+	//BoundingBox::CreateFromPoints( boundingBox, GetAppearance()->GetGeometryData().numberOfVertices,
+	//	&( GetAppearance()->GetGeometryData().vertices[0] ), sizeof( XMFLOAT3 ) );
 	GetRigidBody()->ComputeBoxInertiaTensor( boundingBox.Extents.x * 2.0f, boundingBox.Extents.y * 2.0f,
 		boundingBox.Extents.z * 2.0f );
 }

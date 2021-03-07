@@ -91,7 +91,6 @@ private:
 	// Local Objects
 	Light basicLight;
 	MeshData objMeshData;
-	//std::shared_ptr<Terrain> terrain;
 	std::unique_ptr<GameObject> torus;
 	std::unique_ptr<GameObject> skybox;
 

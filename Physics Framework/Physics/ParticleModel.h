@@ -11,6 +11,11 @@ public:
 	ParticleModel( std::shared_ptr<Transform> transform );
 	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; }
 
+	// collisions
+	bool CollisionCheck( v3df position, float radius );
+	float GetCollisionRadius() const noexcept { return _boundingSphere; }
+	void SetCollisionRadius( float radius ) noexcept { _boundingSphere = radius; }
+
 	// particle movement/positioning
 	void Move( float x, float y, float z );
 	v3df GetEmitterPosition() const { return _emitterPosition; }
@@ -64,6 +69,7 @@ private:
 	// Constants
 	float _gravity = 9.81f;
 	float _limiter = 0.001f;
+	float _boundingSphere = 1.0f;
 	float _frictionMultiplier = 0.0002f;
 
 	// Local Variables

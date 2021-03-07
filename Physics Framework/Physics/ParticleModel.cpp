@@ -18,6 +18,19 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transfor
 	_emitterPosition = { 0.0f, 0.0f, 0.0f };
 }
 
+bool ParticleModel::CollisionCheck( v3df position, float radius )
+{
+	if ( ( GetTransform()->GetPosition().x - position.x ) *
+		 ( GetTransform()->GetPosition().x - position.x ) +
+		 ( GetTransform()->GetPosition().y - position.y ) *
+		 ( GetTransform()->GetPosition().y - position.y ) +
+		 ( GetTransform()->GetPosition().z - position.z ) *
+		 ( GetTransform()->GetPosition().z - position.z ) <= radius * radius )
+		 return true;
+	else
+		 return false;
+}
+
 void ParticleModel::Move( float x, float y, float z )
 {
 	_netForce = { x, y, z };

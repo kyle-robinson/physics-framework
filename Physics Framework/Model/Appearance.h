@@ -17,12 +17,9 @@ struct Geometry
 {
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
-	int numberOfVertices;
 	int numberOfIndices;
 	UINT vertexBufferStride;
 	UINT vertexBufferOffset;
-	std::vector<XMFLOAT3> vertices;
-	std::vector<unsigned short> indices;
 };
 
 class Appearance

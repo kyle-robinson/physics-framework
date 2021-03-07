@@ -8,7 +8,6 @@
 #include "Sampler.h"
 #include "Vertices.h"
 #include "Indices.h"
-//#include "Terrain.h"
 #include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -118,16 +117,6 @@ bool Graphics::InitializeScene()
 	camera = std::make_unique<Camera>( XMFLOAT3( 0.0f, 2.0f, -10.0f ) );
 	camera->SetProjectionValues( 50.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ), 0.01f, 500.0f );
 
-	// setup terrain
-	/*TerrainInfo info;
-	info.filePath = L"Resources\\Terrain\\Heightmap 513x513.raw";
-	info.heightMapScale = 5.0f;
-	info.numRows = 100;
-	info.numCols = 100;
-	info.cellSpacing = 0.5f;
-	terrain = std::make_shared<Terrain>();
-	terrain->Initialize( *this, info );*/
-
 	// setup the scene's light
 	basicLight.AmbientLight = { 0.5f, 0.5f, 0.5f, 1.0f };
 	basicLight.DiffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -156,22 +145,18 @@ bool Graphics::InitializeScene()
 	herculesGeometry.vertexBuffer = objMeshData.VertexBuffer;
 	herculesGeometry.vertexBufferOffset = objMeshData.VBOffset;
 	herculesGeometry.vertexBufferStride = objMeshData.VBStride;
-	herculesGeometry.numberOfVertices = objMeshData.VertexCount;
 	
 	Geometry cubeGeometry;
 	cubeGeometry.vertexBufferOffset = 0;
 	cubeGeometry.indexBuffer = ib_cube.Get();
 	cubeGeometry.vertexBuffer = vb_cube.Get();
-	cubeGeometry.numberOfVertices = vb_cube.VertexCount() * sizeof( SimpleVertex );
 	cubeGeometry.numberOfIndices = ib_cube.IndexCount() * sizeof( WORD );
 	cubeGeometry.vertexBufferStride = sizeof( SimpleVertex );
-	cubeGeometry.vertices = cubePositions;
 
 	Geometry planeGeometry;
 	planeGeometry.vertexBufferOffset = 0;
 	planeGeometry.indexBuffer = ib_plane.Get();
 	planeGeometry.vertexBuffer = vb_plane.Get();
-	planeGeometry.numberOfVertices = vb_plane.VertexCount() * sizeof( SimpleVertex );
 	planeGeometry.numberOfIndices = ib_plane.IndexCount() * sizeof( WORD );
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
 
@@ -259,6 +244,20 @@ void Graphics::Update( float dt )
 	rotation += dt;
 	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
 	torus->Update( dt );
+
+	// Check Collisions
+	for ( unsigned int i = 0; i < cubes.size(); i++ )
+	{
+		for ( unsigned int j = 0; j < cubes.size(); j++ )
+		{
+			if ( i != j && cubes[i]->GetParticleModel()->CollisionCheck(
+				cubes[j]->GetTransform()->GetPosition(), cubes[j]->GetParticleModel()->GetCollisionRadius() ) )
+			{
+				cubes[i]->GetParticleModel()->ResetForces();
+				cubes[j]->GetParticleModel()->ResetForces();
+			}
+		}
+	}
 
 	// Update Cubes
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
