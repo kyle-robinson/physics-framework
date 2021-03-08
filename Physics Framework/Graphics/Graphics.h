@@ -49,6 +49,7 @@ private:
 	bool InitializeShaders();
 	bool InitializeScene();
 
+	void CollisionResolution( std::unique_ptr<GameObject>& cube1, std::unique_ptr<GameObject>& cube2, float dt );
 	void SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec );
 	void SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec );
 
@@ -87,6 +88,7 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
+	bool useAABB = true;
 
 	// Local Objects
 	Light basicLight;

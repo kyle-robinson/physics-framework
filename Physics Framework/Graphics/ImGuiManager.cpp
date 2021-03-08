@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ImGuiManager.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -33,6 +33,34 @@ void ImGuiManager::EndRender() const noexcept
 {
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+}
+
+void ImGuiManager::SpawnInstructionWindow() const noexcept
+{
+    if ( ImGui::Begin( "Scene Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    {
+        if ( ImGui::CollapsingHeader( "Camera Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
+        {
+            ImGui::Text( "WASD    ->  Move Camera" );
+            ImGui::Text( "SPACE   ->  Move Up" );
+            ImGui::Text( "CONTROL ->  Move Down" );
+            ImGui::Text( "SHIFT   ->  Move Faster" );
+            ImGui::Text( "RMB     ->  Rotate Camera" );
+        }
+
+        if ( ImGui::CollapsingHeader( "Cube Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
+        {
+            ImGui::Text( "12345   ->  Select Cube" );
+            ImGui::Text( "UP      ->  Move Cube Forward" );
+            ImGui::Text( "DOWN    ->  Move Cube Backward" );
+            ImGui::Text( "LEFT    ->  Move Cube Left" );
+            ImGui::Text( "RIGHT   ->  Move Cube Right" );
+            ImGui::Text( "HOME    ->  Move Cube Up" );
+            ImGui::Text( "R       ->  Reset Position" );
+            ImGui::Text( "F       ->  Reset Forces" );
+        }
+    }
+    ImGui::End();
 }
 
 void ImGuiManager::SetCherryTheme() const noexcept

@@ -216,6 +216,30 @@ bool Graphics::InitializeScene()
 	return true;
 }
 
+void Graphics::CollisionResolution( std::unique_ptr<GameObject>& cube1, std::unique_ptr<GameObject>& cube2, float dt )
+{
+	float velocityOne = max( cube1->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
+	float velocityTwo = max( cube2->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
+
+	float forceMagnitude = (
+		cube1->GetParticleModel()->GetMass() * velocityOne +
+		cube2->GetParticleModel()->GetMass() * velocityTwo
+		) / dt;
+
+	v3df force = (
+		cube2->GetTransform()->GetPosition() -
+		cube1->GetTransform()->GetPosition()
+		).normalize() * forceMagnitude * 0.0015f;
+
+	v3df inverseForce;
+	inverseForce.x = -force.x;
+	inverseForce.y = -force.y;
+	inverseForce.z = -force.z;
+
+	cube1->GetParticleModel()->AddForce( inverseForce );
+	cube2->GetParticleModel()->AddForce( force );
+}
+
 void Graphics::Update( float dt )
 {
 	// Update Plane Matrices
@@ -254,30 +278,21 @@ void Graphics::Update( float dt )
 	{
 		for ( unsigned int j = 0; j < cubes.size(); j++ )
 		{
-			//if ( i != j && cubes[i]->GetParticleModel()->CollisionCheckCircle(
-			//	cubes[j]->GetTransform()->GetPosition(), cubes[j]->GetParticleModel()->GetCollisionRadius() ) )
-			if ( i != j && cubes[i]->GetParticleModel()->CollisionCheckAABB( cubes[j]->GetTransform()->GetPosition() ) )
+			if ( i != j )
 			{
-				float velocityOne = max( cubes[i]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
-				float velocityTwo = max( cubes[j]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
-
-				float forceMagnitude = (
-					cubes[i]->GetParticleModel()->GetMass() * velocityOne +
-					cubes[j]->GetParticleModel()->GetMass() * velocityTwo
-				) / dt;
-				
-				v3df force = (
-					cubes[j]->GetTransform()->GetPosition() -
-					cubes[i]->GetTransform()->GetPosition()
-				).normalize() * forceMagnitude * 0.0015f;
-				
-				v3df inverseForce;
-				inverseForce.x = -force.x;
-				inverseForce.y = -force.y;
-				inverseForce.z = -force.z;
-
-				cubes[i]->GetParticleModel()->AddForce( inverseForce );
-				cubes[j]->GetParticleModel()->AddForce( force );
+				if ( useAABB )
+				{
+					if ( cubes[i]->GetParticleModel()->CollisionCheckAABB( cubes[j]->GetTransform()->GetPosition() ) )
+						CollisionResolution( cubes[i], cubes[j], dt );
+				}
+				else
+				{
+					if ( cubes[i]->GetParticleModel()->CollisionCheckCircle(
+						cubes[j]->GetTransform()->GetPosition(),
+						cubes[j]->GetParticleModel()->GetCollisionRadius()
+					) )
+						CollisionResolution( cubes[i], cubes[j], dt );
+				}
 			}
 		}
 	}
@@ -399,6 +414,7 @@ void Graphics::Draw()
 	imgui.BeginRender();
 	SpawnControlWindow( cubes );
 	SpawnControlWindow( particles );
+	imgui.SpawnInstructionWindow();
 	imgui.EndRender();
 
     // display frame
@@ -415,12 +431,26 @@ void Graphics::Draw()
 // IMGUI WINDOWS //
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
-	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_NoMove ) )
+	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
+		ImGui::Text( "Collision Type:" );
+		ImGui::SameLine();
+		static int collisionGroup = 0;
+		if ( ImGui::RadioButton( "AABB", &collisionGroup, 0 ) )
+			useAABB = true;
+		ImGui::SameLine();
+		if ( ImGui::RadioButton( "Circle", &collisionGroup, 1 ) )
+			useAABB = false;
+
+		// update individual cube properties
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 		{
 			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
 			{
+				float mass = vec[i]->GetParticleModel()->GetMass();
+				ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 1.0f, 100.0f, "%1.f" );
+				vec[i]->GetParticleModel()->SetMass( mass );
+
 				float friction = vec[i]->GetParticleModel()->GetFriction();
 				ImGui::SliderFloat( std::string( "Friction##" ).append( std::to_string( i ) ).c_str(), &friction, 0.0f, 0.0008f, "%.7f", 10 );
 				vec[i]->GetParticleModel()->SetFriction( friction );
@@ -439,7 +469,8 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 					vec[i]->GetParticleModel()->SetLaminar( false );
 			}
 		}
-	} ImGui::End();
+	}
+	ImGui::End();
 }
 
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
@@ -452,5 +483,6 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 
 		for ( unsigned int i = 0; i < vec.size(); i++ )
 			vec[i]->SetMaxSize( size );
-	} ImGui::End();
+	}
+	ImGui::End();
 }
