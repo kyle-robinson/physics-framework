@@ -18,7 +18,24 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transfor
 	_emitterPosition = { 0.0f, 0.0f, 0.0f };
 }
 
-bool ParticleModel::CollisionCheck( v3df position, float radius )
+bool ParticleModel::CollisionCheckAABB( v3df position )
+{
+	static float offset = 0.5f;
+	if ( ( GetTransform()->GetPosition().x - offset <= position.x + offset &&
+		   GetTransform()->GetPosition().x + offset >= position.x - offset ) &&
+		( GetTransform()->GetPosition().y - offset <= position.y + offset &&
+			GetTransform()->GetPosition().y + offset >= position.y - offset ) &&
+		( GetTransform()->GetPosition().z - offset <= position.z + offset &&
+			GetTransform()->GetPosition().z + offset >= position.z - offset )
+	   )
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ParticleModel::CollisionCheckCircle( v3df position, float radius )
 {
 	if ( ( GetTransform()->GetPosition().x - position.x ) *
 		 ( GetTransform()->GetPosition().x - position.x ) +

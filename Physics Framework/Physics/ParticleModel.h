@@ -12,7 +12,8 @@ public:
 	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; }
 
 	// collisions
-	bool CollisionCheck( v3df position, float radius );
+	bool CollisionCheckAABB( v3df position );
+	bool CollisionCheckCircle( v3df position, float radius );
 	float GetCollisionRadius() const noexcept { return _boundingSphere; }
 	void SetCollisionRadius( float radius ) noexcept { _boundingSphere = radius; }
 

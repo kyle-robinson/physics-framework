@@ -254,8 +254,9 @@ void Graphics::Update( float dt )
 	{
 		for ( unsigned int j = 0; j < cubes.size(); j++ )
 		{
-			if ( i != j && cubes[i]->GetParticleModel()->CollisionCheck(
-				cubes[j]->GetTransform()->GetPosition(), cubes[j]->GetParticleModel()->GetCollisionRadius() ) )
+			//if ( i != j && cubes[i]->GetParticleModel()->CollisionCheckCircle(
+			//	cubes[j]->GetTransform()->GetPosition(), cubes[j]->GetParticleModel()->GetCollisionRadius() ) )
+			if ( i != j && cubes[i]->GetParticleModel()->CollisionCheckAABB( cubes[j]->GetTransform()->GetPosition() ) )
 			{
 				float velocityOne = max( cubes[i]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
 				float velocityTwo = max( cubes[j]->GetParticleModel()->GetNetForce().magnitude(), 1.0f );
