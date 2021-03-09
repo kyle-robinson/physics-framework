@@ -24,9 +24,6 @@ struct MeshData
 	UINT VBStride;
 	UINT VBOffset;
 	UINT IndexCount;
-	UINT VertexCount;
-	std::vector<XMFLOAT3> vertices;
-	std::vector<unsigned short> indices;
 };
 
 #endif

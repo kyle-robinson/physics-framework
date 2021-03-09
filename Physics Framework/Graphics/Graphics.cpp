@@ -206,7 +206,6 @@ bool Graphics::InitializeScene()
 
 	// initialize physics objects
 	physicsCube = std::make_unique<GameObject>( "PhysicsCube" );
-	//physicsCube->InitializeInertiaTensor();
 	physicsCube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 3.5f );
 	physicsCube->GetAppearance()->SetTextureRV( textureStone.Get() );
@@ -273,6 +272,8 @@ void Graphics::Update( float dt )
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update( dt );
 
+	physicsCube->Update( dt );
+
 	// Check Collisions
 	for ( unsigned int i = 0; i < cubes.size(); i++ )
 	{
@@ -296,9 +297,6 @@ void Graphics::Update( float dt )
 			}
 		}
 	}
-
-	// Update Physics Objects
-	physicsCube->Update( dt );
 
 	// Update Particles
 	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
@@ -356,18 +354,12 @@ void Graphics::Draw()
 		cubes[i]->Draw( context.Get() );
 	}
 
-	//cb_vs_matrix.data.UseRotation = TRUE;
 	cb_vs_matrix.data.World = XMMatrixTranspose( physicsCube->GetTransform()->GetWorldMatrix() );
-	//cb_vs_matrix.data.Rotation = XMMatrixTranspose( physicsCube->GetTransform()->GetRotationMatrix() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	physicsCube->Draw( context.Get() );
-	//cb_vs_matrix.data.UseRotation = FALSE;
-
-	// Draw Terrain
-	cb_vs_matrix.data.UseLighting = 1.0f;
-	//terrain->Draw( *this, cb_vs_matrix, XMMatrixIdentity() );
 
 	// Render Instanced Plane
+	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( unsigned int i = 0; i < planeMatrices.size(); i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( XMLoadFloat4x4( &planeMatrices[i] ) );
@@ -429,12 +421,12 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 	{
 		if ( ImGui::Button( "Apply Torque" ) )
 		{
-			XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
-				physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
-			XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
-				camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
-			XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
-			physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
+			v3df worldPos = ( physicsCube->GetTransform()->GetPosition()
+				- v3df( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z )
+			) * 0.5f;
+
+			physicsCube->GetRigidBody()->ApplyTorque( worldPos - physicsCube->GetTransform()->GetPosition(),
+				{ 0.0f, 100.0f, 0.0f } );
 		}
 		
 		ImGui::Text( "Collision Type:" );

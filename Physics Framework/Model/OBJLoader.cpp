@@ -192,8 +192,6 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 			CreateIndices(expandedVertices, expandedTexCoords, expandedNormals, meshIndices, meshVertices, meshTexCoords, meshNormals);
 
 			MeshData meshData;
-			meshData.vertices = verts;
-			meshData.indices = meshIndices;
 
 			//Turn data from vector form to arrays
 			SimpleVertex* finalVerts = new SimpleVertex[meshVertices.size()];
@@ -225,7 +223,6 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 			meshData.VertexBuffer = vertexBuffer;
 			meshData.VBOffset = 0;
 			meshData.VBStride = sizeof(SimpleVertex);
-			meshData.VertexCount = meshVertices.size();
 
 			unsigned short* indicesArray = new unsigned short[meshIndices.size()];
 			unsigned int numMeshIndices = meshIndices.size();

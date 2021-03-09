@@ -221,17 +221,11 @@
     <ClInclude Include="Objects\Camera.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Terrain.h">
-      <Filter>Headers\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Window\WindowContainer.h">
       <Filter>Headers\Window</Filter>
     </ClInclude>
     <ClInclude Include="Window\RenderWindow.h">
       <Filter>Headers\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\PhysicsGameObject.h">
-      <Filter>Headers\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -307,17 +301,11 @@
     <ClCompile Include="Objects\Camera.cpp">
       <Filter>Source\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Terrain.cpp">
-      <Filter>Source\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Window\WindowContainer.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
     <ClCompile Include="Window\RenderWindow.cpp">
       <Filter>Source\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\PhysicsGameObject.cpp">
-      <Filter>Source\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
