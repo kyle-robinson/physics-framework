@@ -89,21 +89,24 @@ bool Graphics::InitializeScene()
 {
 	try
 	{
+		// initialize vertex buffers
 		HRESULT hr = vb_cube.Initialize( device.Get(), cubeVertices, ARRAYSIZE( cubeVertices ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
         hr = ib_cube.Initialize( device.Get(), cubeIndices, ARRAYSIZE( cubeIndices ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
+		// initialize index buffers
 		hr = vb_plane.Initialize( device.Get(), planeVertices, ARRAYSIZE( planeVertices ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create plane vertex buffer!" );
         hr = ib_plane.Initialize( device.Get(), planeIndices, ARRAYSIZE( planeIndices ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create plane index buffer!" );
 
-		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sky.dds", nullptr, textureSky.GetAddressOf() );
+		// initialize textures
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\sand.dds", nullptr, textureSand.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\lava.dds", nullptr, textureLava.GetAddressOf() );
-		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\stone.dds", nullptr, textureStone.GetAddressOf() );
+		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\beach.dds", nullptr, textureBeach.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\floor.dds", nullptr, textureGround.GetAddressOf() );
+		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\marble_brown.dds", nullptr, textureMarble.GetAddressOf() );
 		hr = CreateDDSTextureFromFile( device.Get(), L"Resources\\Textures\\Hercules_COLOR.dds", nullptr, textureHercules.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to load textures in from file!" );
 	}
@@ -139,26 +142,34 @@ bool Graphics::InitializeScene()
 
 	// create geometry pieces
 	Geometry herculesGeometry;
-	objMeshData = OBJLoader::Load( "Resources\\Models\\donut.obj", device.Get() );
-	herculesGeometry.indexBuffer = objMeshData.IndexBuffer;
-	herculesGeometry.numberOfIndices = objMeshData.IndexCount;
-	herculesGeometry.vertexBuffer = objMeshData.VertexBuffer;
-	herculesGeometry.vertexBufferOffset = objMeshData.VBOffset;
-	herculesGeometry.vertexBufferStride = objMeshData.VBStride;
+	MeshData torusData = OBJLoader::Load( "Resources\\Models\\donut.obj", device.Get(), false );
+	herculesGeometry.indexBuffer = torusData.IndexBuffer;
+	herculesGeometry.numberOfIndices = torusData.IndexCount;
+	herculesGeometry.vertexBuffer = torusData.VertexBuffer;
+	herculesGeometry.vertexBufferOffset = torusData.VBOffset;
+	herculesGeometry.vertexBufferStride = torusData.VBStride;
+
+	Geometry sphereGeometry;
+	MeshData sphereData = OBJLoader::Load( "Resources\\Models\\sphere.obj", device.Get(), false );
+	sphereGeometry.indexBuffer = sphereData.IndexBuffer;
+	sphereGeometry.numberOfIndices = sphereData.IndexCount;
+	sphereGeometry.vertexBuffer = sphereData.VertexBuffer;
+	sphereGeometry.vertexBufferOffset = sphereData.VBOffset;
+	sphereGeometry.vertexBufferStride = sphereData.VBStride;
 	
 	Geometry cubeGeometry;
 	cubeGeometry.vertexBufferOffset = 0;
 	cubeGeometry.indexBuffer = ib_cube.Get();
 	cubeGeometry.vertexBuffer = vb_cube.Get();
-	cubeGeometry.numberOfIndices = ib_cube.IndexCount() * sizeof( WORD );
 	cubeGeometry.vertexBufferStride = sizeof( SimpleVertex );
+	cubeGeometry.numberOfIndices = ib_cube.IndexCount() * sizeof( WORD );
 
 	Geometry planeGeometry;
 	planeGeometry.vertexBufferOffset = 0;
 	planeGeometry.indexBuffer = ib_plane.Get();
 	planeGeometry.vertexBuffer = vb_plane.Get();
-	planeGeometry.numberOfIndices = ib_plane.IndexCount() * sizeof( WORD );
 	planeGeometry.vertexBufferStride = sizeof( SimpleVertex );
+	planeGeometry.numberOfIndices = ib_plane.IndexCount() * sizeof( WORD );
 
 	// initialize ground
 	ground = std::make_unique<GameObject>( "Ground" );
@@ -173,7 +184,7 @@ bool Graphics::InitializeScene()
 		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
 		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-		cubes[i]->GetAppearance()->SetTextureRV( textureStone.Get() );
+		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		cubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
@@ -186,17 +197,17 @@ bool Graphics::InitializeScene()
 	torus->GetAppearance()->SetGeometryData( herculesGeometry );
 	torus->GetAppearance()->SetMaterial( shinyMaterial );
 
-	// initialize skybox
-	skybox = std::make_unique<GameObject>( "Skybox" );
-	skybox->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
-	skybox->GetTransform()->SetInitialPosition( camera->GetPositionVector3() );
-	skybox->GetAppearance()->SetTextureRV( textureSky.Get() );
-	skybox->GetAppearance()->SetGeometryData( cubeGeometry );
-	skybox->GetAppearance()->SetMaterial( noSpecMaterial );
+	// initialize skysphere
+	skysphere = std::make_unique<GameObject>( "Skysphere" );
+	skysphere->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
+	skysphere->GetTransform()->SetInitialPosition( camera->GetPositionVector3() );
+	skysphere->GetAppearance()->SetTextureRV( textureBeach.Get() );
+	skysphere->GetAppearance()->SetGeometryData( sphereGeometry );
+	skysphere->GetAppearance()->SetMaterial( noSpecMaterial );
 
 	// setup particle system
 	particles.resize( PARTICLE_COUNT );
-	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
+	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
 		particles[i]->GetAppearance()->SetTextureRV( textureLava.Get() );
@@ -208,7 +219,7 @@ bool Graphics::InitializeScene()
 	physicsCube = std::make_unique<GameObject>( "PhysicsCube" );
 	physicsCube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 3.5f );
-	physicsCube->GetAppearance()->SetTextureRV( textureStone.Get() );
+	physicsCube->GetAppearance()->SetTextureRV( textureMarble.Get() );
 	physicsCube->GetAppearance()->SetGeometryData( cubeGeometry );
 	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );
 
@@ -223,12 +234,12 @@ void Graphics::CollisionResolution( std::unique_ptr<GameObject>& cube1, std::uni
 	float forceMagnitude = (
 		cube1->GetParticleModel()->GetMass() * velocityOne +
 		cube2->GetParticleModel()->GetMass() * velocityTwo
-		) / dt;
+	) / dt;
 
 	v3df force = (
 		cube2->GetTransform()->GetPosition() -
 		cube1->GetTransform()->GetPosition()
-		).normalize() * forceMagnitude * 0.0015f;
+	).normalize() * forceMagnitude * 0.0015f;
 
 	v3df inverseForce;
 	inverseForce.x = -force.x;
@@ -244,9 +255,9 @@ void Graphics::Update( float dt )
 	// Update Plane Matrices
 	int count = 0;
 	static int tileScale = 4;
-    for ( unsigned int row = 0; row < planeWidth; row++ )
+    for ( uint32_t row = 0; row < planeWidth; row++ )
     {
-        for ( unsigned int col = 0; col < planeHeight; col++ )
+        for ( uint32_t col = 0; col < planeHeight; col++ )
         {
             XMStoreFloat4x4( &planeMatrices[count],
 				XMMatrixScaling( tileScale, tileScale, 0.0f ) *
@@ -269,15 +280,15 @@ void Graphics::Update( float dt )
 	torus->Update( dt );
 
 	// Update Cubes
-	for ( unsigned int i = 0; i < cubes.size(); i++ )
+	for ( uint32_t i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update( dt );
 
 	physicsCube->Update( dt );
 
 	// Check Collisions
-	for ( unsigned int i = 0; i < cubes.size(); i++ )
+	for ( uint32_t i = 0; i < cubes.size(); i++ )
 	{
-		for ( unsigned int j = 0; j < cubes.size(); j++ )
+		for ( uint32_t j = 0; j < cubes.size(); j++ )
 		{
 			if ( i != j )
 			{
@@ -299,11 +310,11 @@ void Graphics::Update( float dt )
 	}
 
 	// Update Particles
-	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
-		particles[i]->Update( dt );
+	//for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+	//	particles[i]->Update( dt );
 
-	// Update Skybox
-	skybox->Update( dt );
+	// Update Skysphere
+	//skysphere->Update( dt );
 }
 
 void Graphics::Draw()
@@ -325,11 +336,9 @@ void Graphics::Draw()
 	cb_vs_matrix.data.View = XMMatrixTranspose( camera->GetViewMatrix() );
 	cb_vs_matrix.data.Projection = XMMatrixTranspose( camera->GetProjectionMatrix() );
 	cb_vs_matrix.data.UseLighting = 0.0f;
-	cb_vs_matrix.data.UseRotation = FALSE;
 
 	// Render Scene Objects
-	ID3D11ShaderResourceView* textureToUse;
-	for ( unsigned int i = 0; i < cubes.size(); i++ )
+	for ( uint32_t i = 0; i < cubes.size(); i++ )
 	{
 		// Get Materials
 		Material material = cubes[i]->GetAppearance()->GetMaterial();
@@ -341,8 +350,7 @@ void Graphics::Draw()
 		// Set Textures
 		if ( cubes[i]->GetAppearance()->HasTexture() )
 		{
-			textureToUse = cubes[i]->GetAppearance()->GetTextureRV();
-			context->PSSetShaderResources( 0, 1, &textureToUse );
+			context->PSSetShaderResources( 0, 1, cubes[i]->GetAppearance()->GetTextureRV() );
 			cb_vs_matrix.data.HasTexture = 1.0f;
 		}
 		else
@@ -360,21 +368,19 @@ void Graphics::Draw()
 
 	// Render Instanced Plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
-	for ( unsigned int i = 0; i < planeMatrices.size(); i++ )
+	for ( uint32_t i = 0; i < planeMatrices.size(); i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( XMLoadFloat4x4( &planeMatrices[i] ) );
-		textureToUse = ground->GetAppearance()->GetTextureRV();
-		context->PSSetShaderResources( 0, 1, &textureToUse );
+		context->PSSetShaderResources( 0, 1, ground->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		ground->Draw( context.Get() );
 	}
 
 	// Render Particles
-	for ( unsigned int i = 0; i < PARTICLE_COUNT; i++ )
+	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
-		textureToUse = particles[i]->GetAppearance()->GetTextureRV();
-		context->PSSetShaderResources( 0, 1, &textureToUse );
+		context->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		particles[i]->Draw( context.Get() );
 	}
@@ -382,20 +388,18 @@ void Graphics::Draw()
 	// Render Torus
 	cb_vs_matrix.data.UseLighting = 0.0f;
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
-	textureToUse = torus->GetAppearance()->GetTextureRV();
-	context->PSSetShaderResources( 0, 1, &textureToUse );
+	context->PSSetShaderResources( 0, 1, torus->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	torus->Draw( context.Get() );
 
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );
-	skybox->GetTransform()->SetPosition( camera->GetPositionVector3() );
-	cb_vs_matrix.data.World = XMMatrixTranspose( skybox->GetTransform()->GetWorldMatrix() );
+	skysphere->GetTransform()->SetPosition( camera->GetPositionVector3() );
+	cb_vs_matrix.data.World = XMMatrixTranspose( skysphere->GetTransform()->GetWorldMatrix() );
 	cb_vs_matrix.data.UseLighting = 1.0f;
-	textureToUse = skybox->GetAppearance()->GetTextureRV();
-	context->PSSetShaderResources( 0, 1, &textureToUse );
+	context->PSSetShaderResources( 0, 1, skysphere->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
-	skybox->Draw( context.Get() );
+	skysphere->Draw( context.Get() );
 
 	imgui.BeginRender();
 	SpawnControlWindow( cubes );
@@ -418,17 +422,7 @@ void Graphics::Draw()
 void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
 	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
-	{
-		if ( ImGui::Button( "Apply Torque" ) )
-		{
-			v3df worldPos = ( physicsCube->GetTransform()->GetPosition()
-				- v3df( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z )
-			) * 0.5f;
-
-			physicsCube->GetRigidBody()->ApplyTorque( worldPos - physicsCube->GetTransform()->GetPosition(),
-				{ 0.0f, 100.0f, 0.0f } );
-		}
-		
+	{		
 		ImGui::Text( "Collision Type:" );
 		ImGui::SameLine();
 		static int collisionGroup = 0;
@@ -439,7 +433,7 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 			useAABB = false;
 
 		// update individual cube properties
-		for ( unsigned int i = 0; i < vec.size(); i++ )
+		for ( uint32_t i = 0; i < vec.size(); i++ )
 		{
 			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
 			{
@@ -465,6 +459,19 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 					vec[i]->GetParticleModel()->SetLaminar( false );
 			}
 		}
+
+		if ( ImGui::CollapsingHeader( "Physics Cube" ) )
+		{
+			if ( ImGui::Button( "Apply Torque" ) )
+			{
+				v3df worldPos = ( physicsCube->GetTransform()->GetPosition()
+					- v3df( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z )
+					) * 0.5f;
+
+				physicsCube->GetRigidBody()->ApplyTorque( worldPos - physicsCube->GetTransform()->GetPosition(),
+					{ 0.0f, 100.0f, 0.0f } );
+			}
+		}
 	}
 	ImGui::End();
 }
@@ -477,7 +484,7 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
 		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
 		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 5.0f, "%1.f" );
 
-		for ( unsigned int i = 0; i < vec.size(); i++ )
+		for ( uint32_t i = 0; i < vec.size(); i++ )
 			vec[i]->SetMaxSize( size );
 	}
 	ImGui::End();

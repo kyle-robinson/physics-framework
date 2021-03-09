@@ -1,6 +1,6 @@
 #pragma once
-
-using namespace DirectX;
+#ifndef OBJLOADER_H
+#define OBJLOADER_H
 
 namespace OBJLoader
 {
@@ -14,3 +14,5 @@ namespace OBJLoader
 	//Re-creates a single index buffer from the 3 given in the OBJ file
 	void CreateIndices(const std::vector<XMFLOAT3>& inVertices, const std::vector<XMFLOAT2>& inTexCoords, const std::vector<XMFLOAT3>& inNormals, std::vector<unsigned short>& outIndices, std::vector<XMFLOAT3>& outVertices, std::vector<XMFLOAT2>& outTexCoords, std::vector<XMFLOAT3>& outNormals);
 };
+
+#endif

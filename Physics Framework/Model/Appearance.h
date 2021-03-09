@@ -35,20 +35,19 @@ public:
 		context->DrawIndexed( _geometry.numberOfIndices, 0, 0 );
 	}
 
-	Material GetMaterial() const { return _material; }
-	void SetMaterial( Material material ) { _material = material; }
+	Material GetMaterial() const noexcept { return _material; }
+	void SetMaterial( Material material ) noexcept { _material = material; }
 
-	Geometry GetGeometryData() const { return _geometry; }
-	void SetGeometryData( Geometry geometry ) { _geometry = geometry; }
+	Geometry GetGeometryData() const noexcept { return _geometry; }
+	void SetGeometryData( Geometry geometry ) noexcept { _geometry = geometry; }
 
-	void SetTextureRV( ID3D11ShaderResourceView* textureRV ) { _textureRV = textureRV; }
-	ID3D11ShaderResourceView* GetTextureRV() const { return _textureRV; }
-	bool HasTexture() const { return _textureRV ? true : false; }
-public:
-	Geometry _geometry;
+	void SetTextureRV( ID3D11ShaderResourceView* textureRV ) noexcept { _textureRV = textureRV; }
+	ID3D11ShaderResourceView** GetTextureRV() noexcept { return _textureRV.GetAddressOf(); }
+	bool HasTexture() const noexcept { return _textureRV ? true : false; }
 private:
+	Geometry _geometry;
 	Material _material;
-	ID3D11ShaderResourceView* _textureRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _textureRV;
 };
 
 #endif

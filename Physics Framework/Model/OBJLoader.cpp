@@ -171,8 +171,8 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 			std::vector<XMFLOAT3> expandedVertices;
 			std::vector<XMFLOAT3> expandedNormals;
 			std::vector<XMFLOAT2> expandedTexCoords;
-			unsigned int numIndices = vertIndices.size();
-			for(unsigned int i = 0; i < numIndices; i++)
+			uint32_t numIndices = vertIndices.size();
+			for(uint32_t i = 0; i < numIndices; i++)
 			{
 				expandedVertices.push_back(verts[vertIndices[i]]);
 				expandedTexCoords.push_back(texCoords[textureIndices[i]]);
@@ -195,8 +195,8 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 
 			//Turn data from vector form to arrays
 			SimpleVertex* finalVerts = new SimpleVertex[meshVertices.size()];
-			unsigned int numMeshVertices = meshVertices.size();
-			for(unsigned int i = 0; i < numMeshVertices; ++i)
+			uint32_t numMeshVertices = meshVertices.size();
+			for(uint32_t i = 0; i < numMeshVertices; ++i)
 			{
 				finalVerts[i].Position = meshVertices[i];
 				finalVerts[i].Normal = meshNormals[i];
@@ -225,16 +225,16 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 			meshData.VBStride = sizeof(SimpleVertex);
 
 			unsigned short* indicesArray = new unsigned short[meshIndices.size()];
-			unsigned int numMeshIndices = meshIndices.size();
-			for(unsigned int i = 0; i < numMeshIndices; ++i)
+			uint32_t numMeshIndices = meshIndices.size();
+			for(uint32_t i = 0; i < numMeshIndices; ++i)
 			{
 				indicesArray[i] = meshIndices[i];
 			}
 
 			//Output data into binary file, the next time you run this function, the binary file will exist and will load that instead which is much quicker than parsing into vectors
 			std::ofstream outbin(binaryFilename.c_str(), std::ios::out | std::ios::binary);
-			outbin.write((char*)&numMeshVertices, sizeof(unsigned int));
-			outbin.write((char*)&numMeshIndices, sizeof(unsigned int));
+			outbin.write((char*)&numMeshVertices, sizeof(uint32_t));
+			outbin.write((char*)&numMeshIndices, sizeof(uint32_t));
 			outbin.write((char*)finalVerts, sizeof(SimpleVertex) * numMeshVertices);
 			outbin.write((char*)indicesArray, sizeof(unsigned short) * numMeshIndices);
 			outbin.close();
@@ -264,12 +264,12 @@ MeshData OBJLoader::Load(char* filename, ID3D11Device* device, bool invertTexCoo
 	else
 	{
 		MeshData meshData;
-		unsigned int numVertices;
-		unsigned int numIndices;
+		uint32_t numVertices;
+		uint32_t numIndices;
 
 		//Read in array sizes
-		binaryInFile.read((char*)&numVertices, sizeof(unsigned int));
-		binaryInFile.read((char*)&numIndices, sizeof(unsigned int));
+		binaryInFile.read((char*)&numVertices, sizeof(uint32_t));
+		binaryInFile.read((char*)&numIndices, sizeof(uint32_t));
 		
 		//Read in data from binary file
 		SimpleVertex* finalVerts = new SimpleVertex[numVertices];

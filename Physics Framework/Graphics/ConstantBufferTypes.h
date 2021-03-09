@@ -10,13 +10,11 @@ struct CB_VS_matrix
 	DirectX::XMMATRIX World;
 	DirectX::XMMATRIX View;
 	DirectX::XMMATRIX Projection;
-	DirectX::XMMATRIX Rotation;
 	SurfaceInfo surface;
 	Light light;
 	v3df EyePosW;
 	float HasTexture;
 	float UseLighting;
-	BOOL UseRotation;
 };
 
 #endif

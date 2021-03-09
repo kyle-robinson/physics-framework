@@ -115,7 +115,7 @@ void Application::Update()
 		gfx.camera->SetPosition( gfx.camera->GetPositionFloat3().x, gfx.camera->GetPositionFloat3().y, 15.0f );
 
 	// particle movement
-	for ( unsigned int i = 0; i < gfx.particles.size(); i++ )
+	for ( uint32_t i = 0; i < gfx.particles.size(); i++ )
 	{
 		float randomNum = fmod( static_cast<float>( rand() ), gfx.xDist + 1.0f ) - ( gfx.xDist / 2.0f );
 		if ( gfx.particles[i]->GetStartTimer() < 0 )
@@ -124,12 +124,12 @@ void Application::Update()
 
 	// reset object position
 	if ( keyboard.KeyIsPressed( 'R' ) )
-		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
+		for ( uint32_t i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetTransform()->ResetPosition();
 
 	// reset object forces
 	if ( keyboard.KeyIsPressed( 'F' ) )
-		for ( unsigned int i = 0; i < gfx.cubes.size(); i++ )
+		for ( uint32_t i = 0; i < gfx.cubes.size(); i++ )
 			gfx.cubes[i]->GetParticleModel()->ResetForces();
 
 	gfx.Update( dt );

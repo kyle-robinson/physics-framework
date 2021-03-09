@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Shaders.h"
 
+#pragma region Shaders
 void Shaders::BindShaders( ID3D11DeviceContext* context, VertexShader& vs, PixelShader& ps ) noexcept
 {
     context->VSSetShader( vs.GetShader(), NULL, 0 );
@@ -28,7 +29,9 @@ HRESULT Shaders::CompileShaderFromFile( std::wstring szFileName, LPCSTR szEntryP
 
     return hr;
 }
+#pragma endregion
 
+#pragma region VertexShader
 HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, std::wstring shaderPath, D3D11_INPUT_ELEMENT_DESC* layoutDesc, UINT numElements )
 {
 	// Compile the vertex shader
@@ -61,7 +64,9 @@ HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, 
 
 	return hr;
 }
+#pragma endregion
 
+#pragma region PixelShader
 HRESULT PixelShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, std::wstring shaderPath )
 {
 	// Compile the pixel shader
@@ -85,3 +90,4 @@ HRESULT PixelShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, s
 
     return hr;
 }
+#pragma endregion

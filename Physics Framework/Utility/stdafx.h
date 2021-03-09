@@ -6,6 +6,7 @@
 #include <algorithm>
 
 // Data Structures
+#include <unordered_map>
 #include <string>
 #include <sstream>
 #include <fstream>

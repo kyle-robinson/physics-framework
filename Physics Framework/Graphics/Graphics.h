@@ -61,14 +61,14 @@ private:
 	std::shared_ptr<Bind::SwapChain> swapChain;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;
-	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
-	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
+	std::unordered_map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
+	std::unordered_map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 
 	// Textures
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSky;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureLava;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureStone;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureBeach;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureMarble;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
 
@@ -91,9 +91,8 @@ private:
 
 	// Local Objects
 	Light basicLight;
-	MeshData objMeshData;
 	std::unique_ptr<GameObject> torus;
-	std::unique_ptr<GameObject> skybox;
+	std::unique_ptr<GameObject> skysphere;
 
 	const int planeWidth = 8;
 	const int planeHeight = 6;

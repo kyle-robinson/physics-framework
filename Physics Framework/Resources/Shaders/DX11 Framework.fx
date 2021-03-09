@@ -24,7 +24,6 @@ cbuffer ConstantBuffer : register( b0 )
 	matrix World;
 	matrix View;
 	matrix Projection;
-    matrix Rotation;
 
 	SurfaceInfo surface;
 	Light light;
@@ -32,8 +31,6 @@ cbuffer ConstantBuffer : register( b0 )
 	float3 EyePosW;
 	float HasTexture;
     float UseLighting;
-	
-    bool useRotation;
 }
 
 struct VS_INPUT
@@ -62,18 +59,8 @@ VS_OUTPUT VS(VS_INPUT input)
 
 	float4 posW = mul(input.PosL, World);
 	output.PosW = posW.xyz;
-    if ( useRotation )
-    {
-		
-        output.PosH = mul(posW, Rotation);
-		output.PosH = mul(output.PosH, View);
-		output.PosH = mul(output.PosH, Projection);
-    }
-    else
-    {
-		output.PosH = mul(posW, View);
-		output.PosH = mul(output.PosH, Projection);
-    }
+	output.PosH = mul(posW, View);
+	output.PosH = mul(output.PosH, Projection);
 
 	output.Tex = input.Tex;
 
@@ -98,10 +85,6 @@ float4 PS(VS_OUTPUT input) : SV_Target
 
 	// Get texture data from file
 	float4 textureColour = txDiffuse.Sample(samLinear, input.Tex);
-	if ( input.PosW.y > 200.0f )
-        textureColour.rgba = float4( 0.35294f, 0.49020f, 0.93725f, 1.0f );
-	if ( input.PosW.y < -190.0f )
-        textureColour.rgba = float4( 0.32157f, 0.38039f, 0.64706f, 1.0f );
 
 	float3 ambient = float3(0.0f, 0.0f, 0.0f);
 	float3 diffuse = float3(0.0f, 0.0f, 0.0f);
