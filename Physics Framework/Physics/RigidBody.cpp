@@ -14,8 +14,6 @@ RigidBody::RigidBody()
 
 void RigidBody::Update( const float dt )
 {
-	ParticleModel::Update( dt );
-
 	ComputeAngularAcceleration();
 	ComputeAngularVelocity( dt );
 	ApplyAngularDrag( dt );

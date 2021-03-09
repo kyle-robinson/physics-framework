@@ -298,12 +298,6 @@ void Graphics::Update( float dt )
 	}
 
 	// Update Physics Objects
-	//XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
-	//	physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
-	//XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
-	//	camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
-	//XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
-	//physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
 	physicsCube->Update( dt );
 
 	// Update Particles
@@ -433,6 +427,16 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 {
 	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
+		if ( ImGui::Button( "Apply Torque" ) )
+		{
+			XMVECTOR cubePos = XMVectorSet( physicsCube->GetTransform()->GetPosition().x,
+				physicsCube->GetTransform()->GetPosition().y, physicsCube->GetTransform()->GetPosition().z, 1.0f );
+			XMVECTOR cameraPos = XMVectorSet( camera->GetPositionFloat3().x,
+				camera->GetPositionFloat3().y, camera->GetPositionFloat3().z, 1.0f );
+			XMVECTOR worldPos = ( cubePos + cameraPos ) * 0.5f;
+			physicsCube->GetRigidBody()->ApplyTorque( worldPos - cubePos, XMVectorSet( 0.0f, 100.0f, 0.0f, 0.0f ) );
+		}
+		
 		ImGui::Text( "Collision Type:" );
 		ImGui::SameLine();
 		static int collisionGroup = 0;

@@ -12,9 +12,10 @@ GameObject::GameObject( const std::string& id ) : _id( id )
 void GameObject::Update( const float dt )
 {
 	_particleModel->Update( dt );
+	_rigidBody->Update( dt );
 	_transform->Update();
-	if ( _transform->_parent != nullptr )
-			XMStoreFloat4x4( &_transform->_worldMatrix, _transform->GetWorldMatrix() * _transform->_parent->GetTransform()->GetWorldMatrix() );
+	if ( _transform->GetParent() != nullptr )
+			XMStoreFloat4x4( &_transform->GetWorldMatrixFloat4x4(), _transform->GetWorldMatrix() * _transform->GetParent()->GetTransform()->GetWorldMatrix() );
 }
 
 void GameObject::Draw( ID3D11DeviceContext* pImmediateContext )
