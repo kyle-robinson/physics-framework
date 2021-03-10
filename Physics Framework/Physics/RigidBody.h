@@ -9,6 +9,7 @@
 class RigidBody : public ParticleModel
 {
 public:
+	RigidBody( std::shared_ptr<Transform> transform );
 	void CalculateDerivedData();
 	void Update( const float dt ) override;
 

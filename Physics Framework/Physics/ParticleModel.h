@@ -9,7 +9,6 @@ class ParticleModel
 public:
 	ParticleModel() {}
 	ParticleModel( std::shared_ptr<Transform> transform );
-	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; }
 
 	// collisions
 	bool CollisionCheckAABB( v3df position );
@@ -19,9 +18,6 @@ public:
 
 	// particle movement/positioning
 	void Move( float x, float y, float z );
-	v3df GetEmitterPosition() const noexcept { return _emitterPosition; }
-	void SetEmitterPosition( v3df position ) noexcept { _emitterPosition = position; }
-	void SetEmitterPosition( float x, float y, float z ) noexcept { _emitterPosition = { x, y, z }; }
 
 	// particle state
 	bool IsLaminar() const noexcept { return _useLaminar; }
@@ -70,6 +66,18 @@ public:
 	void CheckWorldCollisions();
 
 	virtual void ResetForces();
+protected:
+	float _mass;
+	float _drag;
+	bool _useLaminar;
+	bool _isParticle;
+
+	v3df _friction;
+	v3df _netForce;
+	v3df _velocity;
+	v3df _acceleration;
+
+	std::shared_ptr<Transform> _transform;
 private:
 	// Constants
 	float _gravity = 9.81f;
@@ -78,19 +86,7 @@ private:
 	float _frictionMultiplier = 0.0002f;
 
 	// Local Variables
-	float _drag;
-	float _mass;
 	float _weight;
-	bool _useLaminar;
-	bool _isParticle;
-
-	v3df _friction;
-	v3df _netForce;
-	v3df _velocity;
-	v3df _acceleration;
-	v3df _emitterPosition;
-
-	std::shared_ptr<Transform> _transform;
 	std::vector<std::pair<v3df, float>> _thrustForces;
 };
 

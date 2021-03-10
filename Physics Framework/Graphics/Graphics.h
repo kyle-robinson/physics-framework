@@ -88,6 +88,7 @@ private:
 	UINT windowHeight;
 	ImGuiManager imgui;
 	bool useAABB = true;
+	bool useParticles = false;
 
 	// Local Objects
 	Light basicLight;

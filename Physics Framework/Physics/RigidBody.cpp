@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "RigidBody.h"
 
+RigidBody::RigidBody( std::shared_ptr<Transform> transform ) : ParticleModel( transform )
+{
+	_motion = 0.0f;
+	_canSleep = true;
+	_isAwake = false;
+	_angularDamping = 0.8f;
+	_rotation = { 0.0f, 0.0f, 0.0f };
+	_orientation = { 1.0f, 0.0f, 0.0f, 0.0f };
+}
+
 #pragma region Quaternion_Calculations
 static inline void CalculateTransformMatrix(
 	Matrix4& transformMatrix, const v3df& position, const Quaternion& orientation )
@@ -47,7 +57,7 @@ static inline void CalculateInertiaTensor( Matrix3& iitWorld, const Quaternion& 
 void RigidBody::CalculateDerivedData()
 {
 	_orientation.normalise();
-	CalculateTransformMatrix( _transformMatrix, GetTransform()->GetPosition(), _orientation );
+	CalculateTransformMatrix( _transformMatrix, _transform->GetPosition(), _orientation );
 	CalculateInertiaTensor( _inverseInertiaTensorWorld, _orientation, _inverseInertiaTensor, _transformMatrix );
 }
 
@@ -56,22 +66,22 @@ void RigidBody::Update( const float dt )
 	if ( !_isAwake ) return;
 
 	//Calculate linear acceleration from the force inputs
-	_previousAcceleration = GetAcceleration();
-	_previousAcceleration.AddScaledVector( GetNetForce(), -GetMass() );
+	_previousAcceleration = _acceleration;
+	_previousAcceleration.AddScaledVector( _netForce, -_mass );
 
 	//Calculate angular acceleration from torque forces
 	v3df angularAcceleration = _inverseInertiaTensorWorld.Transform( _torque );
 
 	//Calculate Velocity and rotation changes
-	GetVelocity().AddScaledVector( _previousAcceleration, dt );
+	_velocity.AddScaledVector( _previousAcceleration, dt );
 	_rotation.AddScaledVector( angularAcceleration, dt );
 
 	//Applies damping to velocity a
-	GetVelocity() *= powf( GetDragFactor(), dt );
+	_velocity *= powf( _drag, dt );
 	_rotation *= powf( _angularDamping, dt );
-
+	
 	//Updates position
-	GetTransform()->GetPosition().AddScaledVector( GetVelocity(), dt );
+	_transform->GetPosition().AddScaledVector( _velocity, dt );
 
 	//Updates Orientation
 	_orientation.AddScaledVector( _rotation, dt );
@@ -83,7 +93,7 @@ void RigidBody::Update( const float dt )
 	ResetForces();
 
 	if ( _canSleep ) {
-		float currentMotion = GetVelocity().ScalarProduct( GetVelocity() ) + _rotation.ScalarProduct( _rotation );
+		float currentMotion = _velocity.ScalarProduct( _velocity ) + _rotation.ScalarProduct( _rotation );
 		float bias = powf( 0.5, dt );
 
 		_motion = bias * _motion + ( 1 - bias ) * currentMotion;
@@ -266,7 +276,7 @@ void RigidBody::SetCanSleep( const bool canSleep )
 #pragma region Forces
 void RigidBody::AddVelocity( const v3df& deltaVelocity )
 {
-	v3df velocity = GetVelocity();
+	v3df velocity = _velocity;
 	velocity += deltaVelocity;
 	SetVelocity( velocity );
 }
@@ -286,7 +296,7 @@ void RigidBody::AddForceAtPoint( const v3df& force, const v3df& point )
 {
 	v3df pt = point;
 
-	v3df newForce = GetNetForce() + force;
+	v3df newForce = _netForce + force;
 	newForce += pt % force;
 	SetNetForce( newForce );
 }
