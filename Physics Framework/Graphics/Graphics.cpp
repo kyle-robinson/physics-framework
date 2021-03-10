@@ -200,7 +200,6 @@ bool Graphics::InitializeScene()
 	// initialize skysphere
 	skysphere = std::make_unique<GameObject>( "Skysphere" );
 	skysphere->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
-	skysphere->GetTransform()->SetInitialPosition( camera->GetPositionVector3() );
 	skysphere->GetAppearance()->SetTextureRV( textureBeach.Get() );
 	skysphere->GetAppearance()->SetGeometryData( sphereGeometry );
 	skysphere->GetAppearance()->SetMaterial( noSpecMaterial );
@@ -314,12 +313,12 @@ void Graphics::Update( float dt )
 	//	particles[i]->Update( dt );
 
 	// Update Skysphere
-	//skysphere->Update( dt );
+	skysphere->Update( dt );
 }
 
 void Graphics::Draw()
 {
-	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	static float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	renderTarget->BindAsBuffer( *this, depthStencil.get(), clearColor );
     depthStencil->ClearDepthStencil( *this );
 	rasterizerStates["Solid"]->Bind( *this );
@@ -395,6 +394,7 @@ void Graphics::Draw()
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );
 	skysphere->GetTransform()->SetPosition( camera->GetPositionVector3() );
+	skysphere->GetTransform()->SetRotation( 0.0f, 0.0f, XM_PI );
 	cb_vs_matrix.data.World = XMMatrixTranspose( skysphere->GetTransform()->GetWorldMatrix() );
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	context->PSSetShaderResources( 0, 1, skysphere->GetAppearance()->GetTextureRV() );
