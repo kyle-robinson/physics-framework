@@ -69,7 +69,7 @@ public:
 	void ComputePosition( const float dt );
 	void CheckWorldCollisions();
 
-	void ResetForces();
+	virtual void ResetForces();
 private:
 	// Constants
 	float _gravity = 9.81f;

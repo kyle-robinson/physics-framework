@@ -217,10 +217,29 @@ bool Graphics::InitializeScene()
 	// initialize physics objects
 	physicsCube = std::make_unique<GameObject>( "PhysicsCube" );
 	physicsCube->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 0.5f, 3.5f );
+	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 5.5f, 3.5f );
 	physicsCube->GetAppearance()->SetTextureRV( textureMarble.Get() );
 	physicsCube->GetAppearance()->SetGeometryData( cubeGeometry );
 	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );
+
+	physicsCube->GetRigidBody()->SetMass( 5.0f );
+	physicsCube->GetRigidBody()->SetOrientation( 1.0f, 0.0f, 0.0f, 0.0f );
+	physicsCube->GetRigidBody()->SetCanSleep( true );
+	physicsCube->GetRigidBody()->SetAwake( false );
+	physicsCube->GetRigidBody()->SetAngularDamping( 0.8f );
+	physicsCube->GetRigidBody()->SetLinearDamping( 0.95f );
+	physicsCube->GetRigidBody()->SetVelocity( 0.0f, 0.0f, 0.0f );
+	physicsCube->GetRigidBody()-> SetAcceleration( 0.0f, -10.0f, 0.0f );
+
+	Matrix3 tensor;
+
+	float coeff = 0.4 * physicsCube->GetRigidBody()->GetMass() * 1.0 * 1.0;
+	tensor.SetInertiaTensorCoeffs( coeff, coeff, coeff );
+	tensor.SetBlockInertiaTensor( v3df( 1.0, 1.0, 1.0 ), 5.0 );
+	physicsCube->GetRigidBody()->SetInertiaTensor( tensor );
+
+	physicsCube->GetRigidBody()->ResetForces();
+	physicsCube->GetRigidBody()->CalculateDerivedData();
 
 	return true;
 }
@@ -464,12 +483,14 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 		{
 			if ( ImGui::Button( "Apply Torque" ) )
 			{
-				v3df worldPos = ( physicsCube->GetTransform()->GetPosition()
+				/*v3df worldPos = ( physicsCube->GetTransform()->GetPosition()
 					- v3df( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z )
 					) * 0.5f;
 
 				physicsCube->GetRigidBody()->ApplyTorque( worldPos - physicsCube->GetTransform()->GetPosition(),
-					{ 0.0f, 100.0f, 0.0f } );
+					{ 0.0f, 100.0f, 0.0f } );*/
+
+				physicsCube->GetRigidBody()->AddForceAtPoint( { 0.0f, 100.0f, 0.0f }, { 0.5f, 0.5f, 0.5f } );
 			}
 		}
 	}

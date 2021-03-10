@@ -227,6 +227,12 @@
     <ClInclude Include="Window\RenderWindow.h">
       <Filter>Headers\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Matrix3.h">
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix4.h">
+      <Filter>Headers\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">

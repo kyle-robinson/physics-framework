@@ -139,12 +139,9 @@ public:
 	*
 	* @param scale The amount of the vector to add.
 	*/
-	void addScaledVector(v3df& vector, float scale)
+	void AddScaledVector(const v3df& vector, float scale)
 	{
-		Quaternion q(0,
-			vector[0] * scale,
-			vector[1] * scale,
-			vector[2] * scale);
+		Quaternion q(0, vector.x * scale, vector.y * scale, vector.z * scale);
 		q *= *this;
 		r += q.r * 0.5f;
 		i += q.i * 0.5f;
