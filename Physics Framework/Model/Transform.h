@@ -12,7 +12,7 @@ class Transform
 {
 public:
 	Transform() :
-		_scale( 0.0f, 0.0f, 0.0f ),
+		_scale( 1.0f, 1.0f, 1.0f ),
 		_rotation( 0.0f, 0.0f, 0.0f ),
 		_position( 0.0f, 0.0f, 0.0f ),
 		_initialPosition( 0.0f, 0.0f, 0.0f ),
@@ -33,6 +33,22 @@ public:
 
 		// Calculate rotation matrix
 		XMStoreFloat4x4( &_rotationMatrix, scale * rotation );
+
+		//Loads the transform matrix
+		/*XMMATRIX transformMatrix = XMLoadFloat4x4( &_worldMatrix );
+		XMMATRIX rotationMatrix = XMLoadFloat4x4( &_rotationMatrix );
+
+		//Sets the scale, position and rotation matrices
+		XMMATRIX objectScale = XMMatrixScaling( _scale.x, _scale.y, _scale.z );
+		XMMATRIX objectPosition = XMMatrixTranslation( _position.x, _position.y, _position.z );
+		XMMATRIX objectRotation = XMMatrixRotationRollPitchYaw( _rotation.x, _rotation.y, _rotation.z );
+
+		//Calculates the transform
+		XMMATRIX calculatedTransform = XMMatrixMultiply( transformMatrix, objectScale );
+
+		//Stores the transform
+		XMStoreFloat4x4( &_worldMatrix, calculatedTransform );
+		XMStoreFloat4x4( &_rotationMatrix, objectScale * objectRotation );*/
 	}
 
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }

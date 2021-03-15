@@ -48,12 +48,12 @@ void GameObject::Update( const float dt )
 {
 	_rigidBody->GetTransform()->SetPosition( _transform->GetPosition() );
 	
-	//_particleModel->Update( dt );
 	_rigidBody->Update( dt );
+	_particleModel->Update( dt );
 	//_transform->Update();
-	//if ( _transform->GetParent() != nullptr )
-	//		XMStoreFloat4x4( &_transform->GetWorldMatrixFloat4x4(),
-	//			_transform->GetWorldMatrix() * _transform->GetParent()->GetTransform()->GetWorldMatrix() );
+	if ( _transform->GetParent() != nullptr )
+			XMStoreFloat4x4( &_transform->GetWorldMatrixFloat4x4(),
+				_transform->GetWorldMatrix() * _transform->GetParent()->GetTransform()->GetWorldMatrix() );
 }
 
 void GameObject::Draw( ID3D11DeviceContext* pImmediateContext )

@@ -182,12 +182,15 @@ bool Graphics::InitializeScene()
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
 		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
-		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
+		cubes[i]->GetTransform()->SetScale( 1.0f, 1.0f, 1.0f );
 		//cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		if ( i == 0 )
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 2.5f, 1.0f );
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( -1.0f, 2.5f, 1.0f );
 		if ( i == 1 )
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 1.0f );
+		{
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 1.0f, 2.5f, 1.0f );
+			cubes[i]->GetRigidBody()->GetTransform()->SetRotation( 0.5f, 0.5f, 0.0f );
+		}
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		cubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
@@ -228,12 +231,12 @@ bool Graphics::InitializeScene()
 
 	// rigid bodies
 	pBottomCube = new Box();
-	pBottomCube->_halfSize = v3df( 1.0, 1.0, 1.0 );
+	pBottomCube->_halfSize = v3df( 1.0f, 1.0f, 1.0f );
 	pBottomCube->_body = cubes[0]->GetRigidBody();
 	pBottomCube->CalculateInternals();
 
 	pTopCube = new Box();
-	pTopCube->_halfSize = v3df( 1.0, 1.0, 1.0 );
+	pTopCube->_halfSize = v3df( 1.0f, 1.0f, 1.0f );
 	pTopCube->_body = cubes[1]->GetRigidBody();
 	pTopCube->CalculateInternals();
 
