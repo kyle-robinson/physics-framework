@@ -183,7 +183,11 @@ bool Graphics::InitializeScene()
 	{
 		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
 		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
-		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		//cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
+		if ( i == 0 )
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 2.5f, 1.0f );
+		if ( i == 1 )
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 0.0f, 1.0f );
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		cubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
@@ -222,6 +226,30 @@ bool Graphics::InitializeScene()
 	physicsCube->GetAppearance()->SetGeometryData( cubeGeometry );
 	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );
 
+	// rigid bodies
+	pBottomCube = new Box();
+	pBottomCube->_halfSize = v3df( 1.0, 1.0, 1.0 );
+	pBottomCube->_body = cubes[0]->GetRigidBody();
+	pBottomCube->CalculateInternals();
+
+	pTopCube = new Box();
+	pTopCube->_halfSize = v3df( 1.0, 1.0, 1.0 );
+	pTopCube->_body = cubes[1]->GetRigidBody();
+	pTopCube->CalculateInternals();
+
+	cubes[0]->GetRigidBody()->SetAwake();
+	cubes[1]->GetRigidBody()->SetAwake();
+
+	pGround = new CollisionPlane();
+	pGround->_direction = v3df( 0, 1, 0 );
+	pGround->_offset = 0;
+
+	cResolver = new ContactResolver( MAX_CONTACTS );
+	cData._contactArray = contacts;
+	cData._friction = 0.9;
+	cData._restitution = 0.1;
+	cData._tolerance = 0.1;
+
 	return true;
 }
 
@@ -252,7 +280,7 @@ void Graphics::CollisionResolution( std::unique_ptr<GameObject>& cube1, std::uni
 void Graphics::Update( float dt )
 {
 	// Update Plane Matrices
-	int count = 0;
+	/*int count = 0;
 	static int tileScale = 4;
     for ( uint32_t row = 0; row < planeWidth; row++ )
     {
@@ -269,23 +297,23 @@ void Graphics::Update( float dt )
 			);
             count++;
         }
-    }
-	ground->Update( dt );
+    }*/
+	//ground->Update( dt );
 	
 	// Update Torus
-	static float rotation = 0.0f;
-	rotation += dt;
-	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
-	torus->Update( dt );
+	//static float rotation = 0.0f;
+	//rotation += dt;
+	//torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
+	//torus->Update( dt );
 
 	// Update Cubes
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update( dt );
 
-	physicsCube->Update( dt );
+	//physicsCube->Update( dt );
 
 	// Check Collisions
-	for ( uint32_t i = 0; i < cubes.size(); i++ )
+	/*for ( uint32_t i = 0; i < cubes.size(); i++ )
 	{
 		for ( uint32_t j = 0; j < cubes.size(); j++ )
 		{
@@ -306,15 +334,35 @@ void Graphics::Update( float dt )
 				}
 			}
 		}
-	}
+	}*/
 
 	// Update Particles
-	if ( useParticles )
-		for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
-			particles[i]->Update( dt );
+	//if ( useParticles )
+	//	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+			//particles[i]->Update( dt );
+
+	// Update Rigid Bodies
+	pTopCube->CalculateInternals();
+	pBottomCube->CalculateInternals();
+
+	cData.Reset( MAX_CONTACTS );
+	cData._friction = ( float )0.9;
+	cData._restitution = ( float )0.1;
+	cData._tolerance = ( float )0.1;
+
+	if ( cData.HasMoreContacts() ) {
+		CollisionDetector::BoxAndHalfSpace( *pTopCube, *pGround, &cData );
+		CollisionDetector::BoxAndHalfSpace( *pBottomCube, *pGround, &cData );
+		CollisionDetector::BoxAndBox( *pTopCube, *pBottomCube, &cData );
+
+		cResolver->ResolveContacts( cData._contactArray, cData._contactCount, dt );
+	}
+
+	for ( uint32_t i = 0; i < cubes.size(); i++ )
+		cubes[i]->UpdateTransforms();
 
 	// Update Skysphere
-	skysphere->Update( dt );
+	//skysphere->Update( dt );
 }
 
 void Graphics::Draw()
@@ -345,7 +393,7 @@ void Graphics::Draw()
 		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
 		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
-		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetTransform()->GetWorldMatrix() );
+		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetRigidBody()->GetTransform()->GetWorldMatrix() );
 
 		// Set Textures
 		if ( cubes[i]->GetAppearance()->HasTexture() )
@@ -362,9 +410,9 @@ void Graphics::Draw()
 		cubes[i]->Draw( context.Get() );
 	}
 
-	cb_vs_matrix.data.World = XMMatrixTranspose( physicsCube->GetTransform()->GetWorldMatrix() );
+	/*cb_vs_matrix.data.World = XMMatrixTranspose( physicsCube->GetTransform()->GetWorldMatrix() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
-	physicsCube->Draw( context.Get() );
+	//physicsCube->Draw( context.Get() );
 
 	// Render Instanced Plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
@@ -373,7 +421,7 @@ void Graphics::Draw()
 		cb_vs_matrix.data.World = XMMatrixTranspose( XMLoadFloat4x4( &planeMatrices[i] ) );
 		context->PSSetShaderResources( 0, 1, ground->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
-		ground->Draw( context.Get() );
+		//ground->Draw( context.Get() );
 	}
 
 	// Render Particles
@@ -382,8 +430,8 @@ void Graphics::Draw()
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
 		context->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
-		if ( useParticles )
-			particles[i]->Draw( context.Get() );
+		//if ( useParticles )
+			//particles[i]->Draw( context.Get() );
 	}
 
 	// Render Torus
@@ -391,7 +439,7 @@ void Graphics::Draw()
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	context->PSSetShaderResources( 0, 1, torus->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
-	torus->Draw( context.Get() );
+	//torus->Draw( context.Get() );
 
 	// Render Cubemap
 	rasterizerStates["Cubemap"]->Bind( *this );
@@ -401,7 +449,7 @@ void Graphics::Draw()
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	context->PSSetShaderResources( 0, 1, skysphere->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
-	skysphere->Draw( context.Get() );
+	//skysphere->Draw( context.Get() );*/
 
 	imgui.BeginRender();
 	SpawnControlWindow( cubes );
@@ -466,7 +514,9 @@ void Graphics::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec
 		{
 			if ( ImGui::Button( "Apply Torque" ) )
 			{
-				physicsCube->GetRigidBody()->AddForceAtPoint( { 0.0f, 100.0f, 0.0f }, { 0.5f, 0.5f, 0.5f } );
+				//physicsCube->GetRigidBody()->AddForceAtPoint( { 0.0f, 100.0f, 0.0f }, { 0.5f, 0.5f, 0.5f } );
+				cubes[0]->GetRigidBody()->AddForceAtPoint( { 0.0f, 100.0f, 0.0f }, { 0.5f, 0.5f, 0.5f } );
+				cubes[0]->GetRigidBody()->AddForceAtBodyPoint( { 0.0f, 100.0f, 0.0f }, { 0.5f, 0.5f, 0.5f } );
 			}
 		}
 	}

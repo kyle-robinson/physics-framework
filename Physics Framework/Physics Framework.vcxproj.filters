@@ -233,6 +233,16 @@
     <ClInclude Include="Math\Matrix4.h">
       <Filter>Headers\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Contact.h" />
+    <ClInclude Include="CollisionData.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactResolver.h" />
+    <ClInclude Include="CollisionPrimitives.h">
+      <Filter>Headers\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="IntersectionTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -313,6 +323,10 @@
     <ClCompile Include="Window\RenderWindow.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
+    <ClCompile Include="Contact.cpp" />
+    <ClCompile Include="ContactResolver.cpp" />
+    <ClCompile Include="CollisionDetector.cpp" />
+    <ClCompile Include="IntersectionTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds">

@@ -58,6 +58,9 @@ public:
 	XMFLOAT4X4 GetRotationMatrixFloat4x4() const noexcept { return _rotationMatrix; }
 	const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
 	const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); }
+
+	void SetWorldMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _worldMatrix = matrix; }
+	void SetRotationMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _rotationMatrix = matrix; }
 private:
 	v3df _scale;
 	v3df _rotation;
@@ -65,6 +68,7 @@ private:
 	v3df _initialPosition;
 
 	GameObject* _parent;
+	//XMFLOAT4X4 _transform;
 	XMFLOAT4X4 _worldMatrix;
 	XMFLOAT4X4 _rotationMatrix;
 };

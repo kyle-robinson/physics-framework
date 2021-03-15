@@ -14,9 +14,16 @@
 #include "ConstantBuffer.h"
 #include "DDSTextureLoader.h"
 
+#include "../Contact.h"
+#include "../CollisionData.h"
+#include "../ContactResolver.h"
+#include "../CollisionDetector.h"
+#include "../CollisionPrimitives.h"
+
 #define PARTICLE_COUNT 20
-#define NUMBER_OF_CUBES 5
+#define NUMBER_OF_CUBES 2
 #define FPS_60 1.0f/60.0f
+#define MAX_CONTACTS 10
 
 namespace Bind
 {
@@ -100,6 +107,15 @@ private:
 	std::unique_ptr<GameObject> ground;
 	std::vector<XMFLOAT4X4> planeMatrices;
 	std::unique_ptr<GameObject> physicsCube;
+
+	// Rigid Bodies
+	Contact contacts[MAX_CONTACTS];
+	CollisionData cData;
+	ContactResolver* cResolver;
+
+	Box* pBottomCube;
+	Box* pTopCube;
+	CollisionPlane* pGround;
 };
 
 #endif

@@ -1,15 +1,7 @@
 #include "stdafx.h"
 #include "RigidBody.h"
 
-RigidBody::RigidBody( std::shared_ptr<Transform> transform ) : ParticleModel( transform )
-{
-	_motion = 0.0f;
-	_canSleep = true;
-	_isAwake = false;
-	_angularDamping = 0.8f;
-	_rotation = { 0.0f, 0.0f, 0.0f };
-	_orientation = { 1.0f, 0.0f, 0.0f, 0.0f };
-}
+RigidBody::RigidBody( std::shared_ptr<Transform> transform ) : ParticleModel( transform ) { }
 
 #pragma region Quaternion_Calculations
 static inline void CalculateTransformMatrix(
@@ -67,7 +59,7 @@ void RigidBody::Update( const float dt )
 
 	//Calculate linear acceleration from the force inputs
 	_previousAcceleration = _acceleration;
-	_previousAcceleration.AddScaledVector( _netForce, -_mass );
+	_previousAcceleration.AddScaledVector( _netForce, 1.0f / _mass );
 
 	//Calculate angular acceleration from torque forces
 	v3df angularAcceleration = _inverseInertiaTensorWorld.Transform( _torque );
@@ -290,6 +282,7 @@ void RigidBody::AddTorque( const v3df& torque )
 void RigidBody::AddForce( const v3df& force )
 {
 	ParticleModel::AddForce( force );
+	_isAwake = true;
 }
 
 void RigidBody::AddForceAtPoint( const v3df& force, const v3df& point )
@@ -299,12 +292,15 @@ void RigidBody::AddForceAtPoint( const v3df& force, const v3df& point )
 	v3df newForce = _netForce + force;
 	newForce += pt % force;
 	SetNetForce( newForce );
+
+	_isAwake = true;
 }
 
 void RigidBody::AddForceAtBodyPoint( const v3df& force, const v3df& point )
 {
 	v3df pt = GetPointInWorldSpace( point );
 	AddForceAtPoint( force, pt );
+	_isAwake = true;
 }
 
 

@@ -44,11 +44,6 @@ bool ParticleModel::CollisionCheckCircle( v3df position, float radius )
 		 return false;
 }
 
-void ParticleModel::Move( float x, float y, float z )
-{
-	_netForce = { x, y, z };
-}
-
 void ParticleModel::Update( const float dt )
 {
 	Weight();
@@ -192,8 +187,9 @@ void ParticleModel::CheckWorldCollisions()
 	// floor/ceiling collisions
 	if ( position.y < _transform->GetInitialPosition().y )
 	{
-		_velocity = { _velocity.x, 0.0f, _velocity.z };
-		_transform->SetPosition( { position.x, _transform->GetInitialPosition().y, position.z } );
+		_velocity.y = 0.0f;
+		position.y = _transform->GetInitialPosition().y;
+		_transform->SetPosition( { position } );
 	}
 	else if ( position.y > 7.5f )
 	{
@@ -212,6 +208,6 @@ void ParticleModel::CheckWorldCollisions()
 void ParticleModel::ResetForces()
 {
 	_netForce = { 0.0f, 0.0f, 0.0f };
-	_velocity = { 0.0f, 0.0f, 0.0f };
-	_acceleration = { 0.0f, 0.0f, 0.0f };
+	//_velocity = { 0.0f, 0.0f, 0.0f };
+	//_acceleration = { 0.0f, 0.0f, 0.0f };
 }

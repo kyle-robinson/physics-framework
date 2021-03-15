@@ -11,29 +11,45 @@ public:
 	Vector3D( const Vector3D& vec ) : x( vec.x ), y( vec.y ), z( vec.z ) {}
 
 	T magnitude() { return sqrt( x * x + y * y + z * z ); }
+	T squareMagnitude() const { return x * x + y * y + z * z; }
 	Vector3D normalize() { T unit = 1 / magnitude(); return Vector3D( unit * x, unit * y, unit * z ); }
 	T dot( const Vector3D& rhs ) { return (x * rhs.x) + (y * rhs.y) + (z * rhs.z); }
 	Vector3D cross( const Vector3D& rhs ) { return Vector3D( (y * rhs.z) - (z * rhs.y), (z * rhs.x) - (x * rhs.z), (x * rhs.y) - (y * rhs.x) ); }
 
-	Vector3D operator + ( const XMVECTOR& rhs ) { return Vector3D( x + XMVectorGetX( rhs ), y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ); }
-	Vector3D operator * ( const Vector3D& rhs ) { return Vector3D( x * rhs.x, y * rhs.y, z * rhs.z ); }
-	Vector3D operator += ( const float& rhs ) { return Vector3D( x += rhs, y += rhs, z += rhs ); }
+	//Vector3D operator + ( const XMVECTOR& rhs ) { return Vector3D( x + XMVectorGetX( rhs ), y + XMVectorGetY( rhs ), z + XMVectorGetZ( rhs ) ); }
+	//Vector3D operator * ( const Vector3D& rhs ) { return Vector3D( x * rhs.x, y * rhs.y, z * rhs.z ); }
+	//Vector3D operator += ( const float& rhs ) { return Vector3D( x += rhs, y += rhs, z += rhs ); }
 
 	Vector3D operator + ( const Vector3D& rhs ) { return Vector3D( x + rhs.x, y + rhs.y, z + rhs.z ); }
+	Vector3D operator + ( const Vector3D& rhs ) const { return Vector3D( x + rhs.x, y + rhs.y, z + rhs.z ); }
 	Vector3D operator - ( const Vector3D& rhs ) { return Vector3D( x - rhs.x, y - rhs.y, z - rhs.z ); }
+	Vector3D operator - ( const Vector3D& rhs ) const { return Vector3D( x - rhs.x, y - rhs.y, z - rhs.z ); }
 	Vector3D operator * ( const T& rhs ) { return Vector3D( x * rhs, y * rhs, z * rhs ); }
+	Vector3D operator * ( const float rhs ) const { return Vector3D( x * rhs, y * rhs, z * rhs ); }
 	Vector3D operator / ( const T& rhs ) { return Vector3D( x / rhs, y / rhs, z / rhs ); }
-	Vector3D& operator += ( const Vector3D& rhs ) { x += rhs.x; y += rhs.y; z += rhs.z; return *this; }
+	//Vector3D& operator += ( const Vector3D& rhs ) { x += rhs.x; y += rhs.y; z += rhs.z; return *this; }
 	Vector3D& operator -= ( const Vector3D& rhs ) { x -= rhs.x; y -= rhs.y; z -= rhs.z; return *this; }
-	//Vector3D& operator *= ( const T& rhs ) { x *= rhs; y *= rhs; z *= rhs; return *this; }
-	void operator*=( const float val ) { x *= val; y *= val; z *= val; }
-	Vector3D& operator /= ( const T& rhs ) { x /= rhs; y /= rhs; z /= rhs; return *this; }
-	T& operator [] ( const std::size_t& i ) { return *((T*)this + i); }
+	Vector3D& operator *= ( const T& rhs ) { x *= rhs; y *= rhs; z *= rhs; return *this; }
+	//void operator*=( const float val ) { x *= val; y *= val; z *= val; }
+	//Vector3D& operator /= ( const T& rhs ) { x /= rhs; y /= rhs; z /= rhs; return *this; }
+	//T& operator [] ( const std::size_t& i ) { return *((T*)this + i); }
 
-	Vector3D ComponentProduct( const Vector3D& vec ) const { return Vector3D( x * vec.x, y * vec.y, z * vec.z ); }
 	void AddScaledVector( const Vector3D& vec, float scale ) { x += vec.x * scale; y += vec.y * scale; z += vec.z * scale; }
+
+	void ComponentProductUpdate( const Vector3D& vec ) { x *= vec.x; y *= vec.y; z *= vec.z; }
+	Vector3D ComponentProduct( const Vector3D& vec ) const { return Vector3D( x * vec.x, y * vec.y, z * vec.z ); }
+
 	float ScalarProduct( const Vector3D& vec ) const { return x * vec.x + y * vec.y + z * vec.z; }
+	Vector3D VectorProduct( const Vector3D& vec ) const { return Vector3D( y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x ); }
+
 	Vector3D operator % ( const Vector3D& vec ) { return Vector3D( y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x ); }
+	float operator * ( const Vector3D& vec ) const { return x * vec.x + y * vec.y + z * vec.z; }
+	void operator += ( const Vector3D& vec ) { x += vec.x; y += vec.y; z += vec.z; }
+	float operator[]( unsigned i ) const { if ( i == 0 ) return x; if ( i == 1 ) return y; return z; }
+	float& operator[]( unsigned i ) { if ( i == 0 ) return x; if ( i == 1 ) return y; return z; }
+
+	operator XMFLOAT3 () const { return XMFLOAT3( x, y, z ); }
+	operator XMFLOAT3& () const { return XMFLOAT3( x, y, z ); }
 public:
 	T x = 0;
 	T y = 0;

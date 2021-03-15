@@ -9,6 +9,7 @@ class ParticleModel
 public:
 	ParticleModel() {}
 	ParticleModel( std::shared_ptr<Transform> transform );
+	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; }
 
 	// collisions
 	bool CollisionCheckAABB( v3df position );
@@ -17,7 +18,7 @@ public:
 	void SetCollisionRadius( float radius ) noexcept { _boundingSphere = radius; }
 
 	// particle movement/positioning
-	void Move( float x, float y, float z );
+	void Move( float x, float y, float z ) noexcept { _netForce = { x, y, z }; }
 
 	// particle state
 	bool IsLaminar() const noexcept { return _useLaminar; }
@@ -40,37 +41,25 @@ public:
 	// update constants
 	float GetMass() const noexcept { return _mass; }
 	float GetDragFactor() const noexcept { return _drag; }
+	float GetInverseMass() const noexcept { return 1.0f / _mass; }
 	float GetFriction() const noexcept { return _frictionMultiplier; }
 
 	void SetMass( float newMass ) noexcept { _mass = newMass; }
+	void SetInverseMass( float value ) noexcept { _inverseMass = 1.0f / value; }
 	void SetDragFactor( float dragFactor ) noexcept { _drag = dragFactor; }
 	void SetFriction( float friction ) noexcept { _frictionMultiplier = friction; }
 
 	// update forces
 	virtual void Update( const float dt );
-	
-	void Weight();
-	void ApplyThrust( const float dt );
 	void AddThrust( v3df force, float duration );
 	void AddForce( v3df force ) noexcept { _netForce += force; }
-	
-	void Acceleration();
-	void Friction( const float dt );
-	void Velocity( const float dt );
-	
-	void DragForce( const float dt );
-	void DragLaminar();
-	void DragTurbulent();
-
-	void ComputePosition( const float dt );
-	void CheckWorldCollisions();
-
 	virtual void ResetForces();
 protected:
 	float _mass;
 	float _drag;
 	bool _useLaminar;
 	bool _isParticle;
+	float _inverseMass;
 
 	v3df _friction;
 	v3df _netForce;
@@ -79,6 +68,21 @@ protected:
 
 	std::shared_ptr<Transform> _transform;
 private:
+	// update forces
+	void Weight();
+	void ApplyThrust( const float dt );
+
+	void Acceleration();
+	void Friction( const float dt );
+	void Velocity( const float dt );
+
+	void DragForce( const float dt );
+	void DragLaminar();
+	void DragTurbulent();
+
+	void ComputePosition( const float dt );
+	void CheckWorldCollisions();
+
 	// Constants
 	float _gravity = 9.81f;
 	float _limiter = 0.001f;

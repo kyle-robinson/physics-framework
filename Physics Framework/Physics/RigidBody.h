@@ -44,6 +44,7 @@ public:
 	v3df GetPointInWorldSpace( const v3df& point ) const;
 	v3df GetDirectionInWorldSpace( const v3df& point ) const;
 	v3df GetDirectionInLocalSpace( const v3df& point ) const;
+	v3df GetLastFrameAcceleration() const noexcept { return _previousAcceleration; }
 
 	// rotation
 	void AddRotation( const v3df& rotation );
@@ -71,7 +72,7 @@ private:
 	float _motion;
 	bool _isAwake;
 	bool _canSleep;
-	float _sleepEpsilon = 0.1;
+	float _sleepEpsilon = 0.1f;
 	v3df _previousAcceleration;
 	
 	v3df _torque;

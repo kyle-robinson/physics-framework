@@ -12,6 +12,7 @@ class GameObject
 public:
 	GameObject( const std::string& id );
 
+	void UpdateTransforms();
 	virtual void Update( const float dt );
 	virtual void Draw( ID3D11DeviceContext* pImmediateContext );
 	const std::string& GetID() const noexcept { return _id; }
