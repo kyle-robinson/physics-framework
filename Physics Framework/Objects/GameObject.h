@@ -17,6 +17,20 @@ public:
 	virtual void Draw( ID3D11DeviceContext* pImmediateContext );
 	const std::string& GetID() const noexcept { return _id; }
 
+	void SetPosition( float x, float y, float z ) noexcept
+	{
+		_transform->SetPosition( x, y, z );
+		_rigidBody->SetPosition( x, y, z );
+		_rigidBody->CalculateDerivedData();
+	}
+
+	void SetRotation( float x, float y, float z ) noexcept
+	{
+		_transform->SetRotation( x, y, z );
+		_rigidBody->SetRotation( x, y, z );
+		_rigidBody->CalculateDerivedData();
+	}
+
 	std::shared_ptr<RigidBody> GetRigidBody() const noexcept { return _rigidBody; };
 	std::shared_ptr<Transform> GetTransform() const noexcept { return _transform; }
 	std::shared_ptr<Appearance> GetAppearance() const noexcept { return _appearance; }

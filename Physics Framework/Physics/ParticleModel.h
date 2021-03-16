@@ -19,6 +19,9 @@ public:
 
 	// particle movement/positioning
 	void Move( float x, float y, float z ) noexcept { _netForce = { x, y, z }; }
+	v3df GetPosition() const noexcept { return _position; }
+	void SetPosition( v3df position ) noexcept { _position = position; }
+	void SetPosition( float x, float y, float z ) noexcept { _position = { x, y, z }; }
 
 	// particle state
 	bool IsLaminar() const noexcept { return _useLaminar; }
@@ -64,6 +67,7 @@ protected:
 	v3df _friction;
 	v3df _netForce;
 	v3df _velocity;
+	v3df _position;
 	v3df _acceleration;
 
 	std::shared_ptr<Transform> _transform;

@@ -186,14 +186,14 @@ bool Graphics::InitializeScene()
 		//cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		if ( i == 0 )
 		{
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.5f, 4.0f, 1.0f );
-			cubes[i]->GetRigidBody()->GetTransform()->SetPosition( 0.5f, 4.0f, 1.0f );
+			//cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.5f, 4.0f, 1.0f );
+			cubes[i]->SetPosition( 0.5f, 6.0f, 1.0f );
 			cubes[i]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.5f, 0.0f );
 		}
 		if ( i == 1 )
 		{
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 1.0f, 1.0f );
-			cubes[i]->GetRigidBody()->GetTransform()->SetPosition( 0.0f, 1.0f, 1.0f );
+			//cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 1.0f, 1.0f );
+			cubes[i]->SetPosition( 0.0f, 2.0f, 1.0f );
 		}
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
@@ -315,7 +315,7 @@ void Graphics::Update( float dt )
 
 	// Update Cubes
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
-		cubes[i]->Update( dt );
+		cubes[i]->Update( dt / 100.0f );
 
 	//physicsCube->Update( dt );
 
@@ -353,11 +353,12 @@ void Graphics::Update( float dt )
 	pBottomCube->CalculateInternals();
 
 	cData.Reset( MAX_CONTACTS );
-	cData._friction = ( float )0.9;
-	cData._restitution = ( float )0.1;
-	cData._tolerance = ( float )0.1;
+	cData._friction = 0.9f;
+	cData._restitution = 0.1f;
+	cData._tolerance = 0.1f;
 
-	if ( cData.HasMoreContacts() ) {
+	if ( cData.HasMoreContacts() )
+	{
 		CollisionDetector::BoxAndHalfSpace( *pTopCube, *pGround, &cData );
 		CollisionDetector::BoxAndHalfSpace( *pBottomCube, *pGround, &cData );
 		CollisionDetector::BoxAndBox( *pTopCube, *pBottomCube, &cData );

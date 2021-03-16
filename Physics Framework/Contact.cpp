@@ -8,9 +8,9 @@ void Contact::CalculateInternals( float dt )
 
 	CalculateContactBasis();
 
-	_relativeContactPosition[0] = _contactPoint - _bodies[0]->GetTransform()->GetPosition();
+	_relativeContactPosition[0] = _contactPoint - _bodies[0]->GetPosition();
 	if ( _bodies[1] ) {
-		_relativeContactPosition[1] = _contactPoint - _bodies[1]->GetTransform()->GetPosition();
+		_relativeContactPosition[1] = _contactPoint - _bodies[1]->GetPosition();
 	}
 
 	_contactVelocity = CalculateLocalVelocity( 0, dt );
@@ -241,9 +241,9 @@ void Contact::ApplyPositionChange( v3df linearChange[2], v3df angularChange[2], 
 
 		v3df pos;
 
-		pos = _bodies[i]->GetTransform()->GetPosition();
+		pos = _bodies[i]->GetPosition();
 		pos.AddScaledVector( _contactNormal, linearMove[i] );
-		_bodies[i]->GetTransform()->SetPosition( pos );
+		_bodies[i]->SetPosition( pos );
 
 		Quaternion q;
 		_bodies[i]->GetOrientation( &q );

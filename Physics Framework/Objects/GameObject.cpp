@@ -6,7 +6,7 @@ GameObject::GameObject( const std::string& id ) : _id( id )
 	_transform = std::make_shared<Transform>();
 	_appearance = std::make_shared<Appearance>();
 
-	_particleModel = std::make_shared<ParticleModel>( _transform );
+	//_particleModel = std::make_shared<ParticleModel>( _transform );
 	_rigidBody = std::make_shared<RigidBody>( _transform );
 
 	_rigidBody->SetMass( 50.0f );
@@ -33,7 +33,7 @@ GameObject::GameObject( const std::string& id ) : _id( id )
 
 void GameObject::UpdateTransforms()
 {
-	_transform->SetPosition( _rigidBody->GetTransform()->GetPosition() );
+	_transform->SetPosition( _rigidBody->GetPosition() );
 	_transform->SetRotation( _rigidBody->GetOrientation().identity() );
 
 	float transform[16];
@@ -48,9 +48,9 @@ void GameObject::UpdateTransforms()
 void GameObject::Update( const float dt )
 {
 	//_rigidBody->GetTransform()->SetPosition( _transform->GetPosition() );
-	//_rigidBody->GetTransform()->SetPosition( _transform->GetPosition() );
+	_rigidBody->SetPosition( _transform->GetPosition() );
 	
-	_particleModel->Update( dt );
+	//_particleModel->Update( dt );
 	_rigidBody->Update( dt );
 	//_transform->Update();
 	//if ( _transform->GetParent() != nullptr )
