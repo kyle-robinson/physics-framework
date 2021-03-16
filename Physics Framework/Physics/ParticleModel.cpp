@@ -18,11 +18,11 @@ bool ParticleModel::CollisionCheckAABB( v3df position )
 {
 	static float offset = 0.5f;
 	if ( ( _transform->GetPosition().x - offset <= position.x + offset &&
-		_transform->GetPosition().x + offset >= position.x - offset ) &&
-		( _transform->GetPosition().y - offset <= position.y + offset &&
-			_transform->GetPosition().y + offset >= position.y - offset ) &&
-		( _transform->GetPosition().z - offset <= position.z + offset &&
-			_transform->GetPosition().z + offset >= position.z - offset )
+		   _transform->GetPosition().x + offset >= position.x - offset ) &&
+		 ( _transform->GetPosition().y - offset <= position.y + offset &&
+		   _transform->GetPosition().y + offset >= position.y - offset ) &&
+		 ( _transform->GetPosition().z - offset <= position.z + offset &&
+		   _transform->GetPosition().z + offset >= position.z - offset )
 	   )
 	{
 		return true;
@@ -208,6 +208,4 @@ void ParticleModel::CheckWorldCollisions()
 void ParticleModel::ResetForces()
 {
 	_netForce = { 0.0f, 0.0f, 0.0f };
-	//_velocity = { 0.0f, 0.0f, 0.0f };
-	//_acceleration = { 0.0f, 0.0f, 0.0f };
 }

@@ -172,24 +172,28 @@ bool Graphics::InitializeScene()
 	planeGeometry.numberOfIndices = ib_plane.IndexCount() * sizeof( WORD );
 
 	// initialize ground
-	ground = std::make_unique<GameObject>( "Ground" );
+	/*ground = std::make_unique<GameObject>( "Ground" );
 	ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 	ground->GetAppearance()->SetGeometryData( planeGeometry );
-	ground->GetAppearance()->SetMaterial( noSpecMaterial );
+	ground->GetAppearance()->SetMaterial( noSpecMaterial );*/
 
 	// initialize cubes
 	cubes.resize( NUMBER_OF_CUBES );
 	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
 		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
-		cubes[i]->GetTransform()->SetScale( 1.0f, 1.0f, 1.0f );
+		//cubes[i]->GetTransform()->SetScale( 1.0f, 1.0f, 1.0f );
 		//cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		if ( i == 0 )
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( -1.0f, 2.5f, 1.0f );
+		{
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.5f, 4.0f, 1.0f );
+			cubes[i]->GetRigidBody()->GetTransform()->SetPosition( 0.5f, 4.0f, 1.0f );
+			cubes[i]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.5f, 0.0f );
+		}
 		if ( i == 1 )
 		{
-			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 1.0f, 2.5f, 1.0f );
-			cubes[i]->GetRigidBody()->GetTransform()->SetRotation( 0.5f, 0.5f, 0.0f );
+			cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.0f, 1.0f, 1.0f );
+			cubes[i]->GetRigidBody()->GetTransform()->SetPosition( 0.0f, 1.0f, 1.0f );
 		}
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
@@ -197,7 +201,7 @@ bool Graphics::InitializeScene()
 	}
 
 	// initialize torus
-	torus = std::make_unique<GameObject>( "Torus" );
+	/*torus = std::make_unique<GameObject>( "Torus" );
 	torus->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	torus->GetTransform()->SetInitialPosition( 0.0f, 5.0f, 10.0f );
 	torus->GetAppearance()->SetTextureRV( textureHercules.Get() );
@@ -227,7 +231,7 @@ bool Graphics::InitializeScene()
 	physicsCube->GetTransform()->SetInitialPosition( 0.0f, 2.5f, 3.5f );
 	physicsCube->GetAppearance()->SetTextureRV( textureMarble.Get() );
 	physicsCube->GetAppearance()->SetGeometryData( cubeGeometry );
-	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );
+	physicsCube->GetAppearance()->SetMaterial( shinyMaterial );*/
 
 	// rigid bodies
 	pBottomCube = new Box();
@@ -244,14 +248,14 @@ bool Graphics::InitializeScene()
 	cubes[1]->GetRigidBody()->SetAwake();
 
 	pGround = new CollisionPlane();
-	pGround->_direction = v3df( 0, 1, 0 );
-	pGround->_offset = 0;
+	pGround->_direction = v3df( 0.0f, 1.0f, 0.0f );
+	pGround->_offset = 0.0f;
 
 	cResolver = new ContactResolver( MAX_CONTACTS );
 	cData._contactArray = contacts;
-	cData._friction = 0.9;
-	cData._restitution = 0.1;
-	cData._tolerance = 0.1;
+	cData._friction = 0.9f;
+	cData._restitution = 0.1f;
+	cData._tolerance = 0.1f;
 
 	return true;
 }
@@ -396,7 +400,7 @@ void Graphics::Draw()
 		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
 		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
-		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetRigidBody()->GetTransform()->GetWorldMatrix() );
+		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetRigidBody()->GetTransform()->GetTransformMatrix() );
 
 		// Set Textures
 		if ( cubes[i]->GetAppearance()->HasTexture() )
@@ -456,7 +460,7 @@ void Graphics::Draw()
 
 	imgui.BeginRender();
 	SpawnControlWindow( cubes );
-	SpawnControlWindow( particles );
+	//SpawnControlWindow( particles );
 	imgui.SpawnInstructionWindow();
 	imgui.EndRender();
 

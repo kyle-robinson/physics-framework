@@ -41,7 +41,7 @@ public:
 	// update constants
 	float GetMass() const noexcept { return _mass; }
 	float GetDragFactor() const noexcept { return _drag; }
-	float GetInverseMass() const noexcept { return 1.0f / _mass; }
+	float GetInverseMass() const noexcept { return _inverseMass; }
 	float GetFriction() const noexcept { return _frictionMultiplier; }
 
 	void SetMass( float newMass ) noexcept { _mass = newMass; }

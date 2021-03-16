@@ -49,7 +49,7 @@ static inline void CalculateInertiaTensor( Matrix3& iitWorld, const Quaternion& 
 void RigidBody::CalculateDerivedData()
 {
 	_orientation.normalise();
-	CalculateTransformMatrix( _transformMatrix, _transform->GetPosition(), _orientation );
+	CalculateTransformMatrix( _transformMatrix, GetTransform()->GetPosition(), _orientation );
 	CalculateInertiaTensor( _inverseInertiaTensorWorld, _orientation, _inverseInertiaTensor, _transformMatrix );
 }
 
@@ -59,7 +59,7 @@ void RigidBody::Update( const float dt )
 
 	//Calculate linear acceleration from the force inputs
 	_previousAcceleration = _acceleration;
-	_previousAcceleration.AddScaledVector( _netForce, 1.0f / _mass );
+	_previousAcceleration.AddScaledVector( _netForce, _inverseMass );
 
 	//Calculate angular acceleration from torque forces
 	v3df angularAcceleration = _inverseInertiaTensorWorld.Transform( _torque );
@@ -73,6 +73,10 @@ void RigidBody::Update( const float dt )
 	_rotation *= powf( _angularDamping, dt );
 	
 	//Updates position
+	//v3df position = _transform->GetPosition();
+	//position.AddScaledVector( _velocity, dt );
+	//_transform->SetPosition( position );
+	//_position.AddScaledVector( _velocity, dt );
 	_transform->GetPosition().AddScaledVector( _velocity, dt );
 
 	//Updates Orientation
