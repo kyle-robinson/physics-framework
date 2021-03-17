@@ -187,8 +187,8 @@ bool Graphics::InitializeScene()
 		if ( i == 0 )
 		{
 			//cubes[i]->GetRigidBody()->GetTransform()->SetInitialPosition( 0.5f, 4.0f, 1.0f );
-			cubes[i]->SetPosition( 0.5f, 6.0f, 1.0f );
-			cubes[i]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.5f, 0.0f );
+			cubes[i]->SetPosition( 1.0f, 6.0f, 1.0f );
+			cubes[i]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.25f, 0.0f );
 		}
 		if ( i == 1 )
 		{
@@ -313,11 +313,14 @@ void Graphics::Update( float dt )
 	//torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
 	//torus->Update( dt );
 
+	// Update Particles
+	//if ( useParticles )
+	//	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+			//particles[i]->Update( dt );
+
 	// Update Cubes
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
-		cubes[i]->Update( dt / 100.0f );
-
-	//physicsCube->Update( dt );
+		cubes[i]->Update( dt / 50.0f );
 
 	// Check Collisions
 	/*for ( uint32_t i = 0; i < cubes.size(); i++ )
@@ -342,11 +345,6 @@ void Graphics::Update( float dt )
 			}
 		}
 	}*/
-
-	// Update Particles
-	//if ( useParticles )
-	//	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
-			//particles[i]->Update( dt );
 
 	// Update Rigid Bodies
 	pTopCube->CalculateInternals();

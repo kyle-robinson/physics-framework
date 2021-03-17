@@ -9,8 +9,8 @@ GameObject::GameObject( const std::string& id ) : _id( id )
 	//_particleModel = std::make_shared<ParticleModel>( _transform );
 	_rigidBody = std::make_shared<RigidBody>( _transform );
 
-	_rigidBody->SetMass( 50.0f );
-	_rigidBody->SetInverseMass( 50.0f );
+	_rigidBody->SetMass( 5.0f );
+	_rigidBody->SetInverseMass( 5.0f );
 	_rigidBody->SetOrientation( 1.0f, 0.0f, 0.0f, 0.0f );
 	_rigidBody->SetRotation( 0.0f, 0.0f, 0.0f );
 	_rigidBody->SetCanSleep( true );
