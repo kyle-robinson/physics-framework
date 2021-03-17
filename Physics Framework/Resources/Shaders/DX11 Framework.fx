@@ -116,16 +116,16 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	// Sum all the terms together and copy over the diffuse alpha.
 	float4 finalColour;
 
-    if ( HasTexture == 1.0f && !UseLighting )
+    if ( HasTexture && !UseLighting )
 	{
 		finalColour.rgb = (textureColour.rgb * (ambient + diffuse)) + specular;
     }
-    else if ( UseLighting )
+    if ( HasTexture && UseLighting )
     {
         ambient = float3( 1.0f, 1.0f, 1.0f );
         finalColour.rgb = textureColour.rgb * ambient;
     }
-    else
+    if ( !HasTexture && !UseLighting )
     {
         finalColour.rgb = ambient + diffuse + specular;
     }

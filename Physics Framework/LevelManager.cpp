@@ -252,6 +252,12 @@ void LevelManager::BeginRender( Graphics& gfx )
 
 void LevelManager::EndRender( Graphics& gfx )
 {
+	// setup materials
+	Material material = torus->GetAppearance()->GetMaterial();
+	cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
+	cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
+	cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
+
 	// Render Instanced Plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < planeMatrices.size(); i++ )

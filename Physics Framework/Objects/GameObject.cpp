@@ -41,7 +41,6 @@ void GameObject::UpdateTransforms()
 
 	_transform->SetTransform( XMFLOAT4X4( transform ) );
 
-	//Updates transform
 	_transform->Update();
 }
 
@@ -52,9 +51,9 @@ void GameObject::Update( const float dt )
 	_particleModel->Update( dt );
 	//_rigidBody->Update( dt );
 	_transform->Update();
-	//if ( _transform->GetParent() != nullptr )
-	//		XMStoreFloat4x4( &_transform->GetWorldMatrixFloat4x4(),
-	//			_transform->GetWorldMatrix() * _transform->GetParent()->GetTransform()->GetWorldMatrix() );
+	if ( _transform->GetParent() != nullptr )
+			XMStoreFloat4x4( &_transform->GetWorldMatrixFloat4x4(),
+				_transform->GetWorldMatrix() * _transform->GetParent()->GetTransform()->GetWorldMatrix() );
 	//if ( _transform->GetParent() != nullptr )
 	//	XMStoreFloat4x4( &_transform->GetTransform(),
 	//		_transform->GetTransformMatrix() * _transform->GetParent()->GetTransform()->GetTransformMatrix() );

@@ -50,7 +50,7 @@ void Level2::Render( Graphics& gfx )
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
-		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetTransformMatrix() );
+		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
 		GetContext( gfx )->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		if ( useParticles ) particles[i]->Draw( GetContext( gfx ) );

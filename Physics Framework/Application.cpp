@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Application.h"
-#include "Camera.h"
 
 bool Application::Initialize(
 	HINSTANCE hInstance,
