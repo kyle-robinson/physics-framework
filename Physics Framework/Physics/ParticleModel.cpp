@@ -3,7 +3,7 @@
 
 ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transform( transform )
 {
-	_mass = 5.0f;
+	_mass = 50.0f;
 	_useLaminar = true;
 	_isParticle = false;
 

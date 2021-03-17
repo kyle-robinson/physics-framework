@@ -72,6 +72,18 @@
     <Filter Include="Headers\Window">
       <UniqueIdentifier>{91c4e7fa-0d28-48da-b024-358a6dd3b51e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Levels">
+      <UniqueIdentifier>{f8d968ee-7326-4798-9fb5-688612d5730f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Levels">
+      <UniqueIdentifier>{d52524e5-c94b-495f-afb4-0dbf041fcdf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Physics\Collisions">
+      <UniqueIdentifier>{9609beb0-c6cd-44b3-a86f-026e983d4a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics\Collisions">
+      <UniqueIdentifier>{87b25e6a-68e9-4775-aef2-d2cfedbab494}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\VertexBuffer.h">
@@ -233,16 +245,36 @@
     <ClInclude Include="Math\Matrix4.h">
       <Filter>Headers\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Contact.h" />
-    <ClInclude Include="CollisionData.h">
-      <Filter>Headers\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="ContactResolver.h" />
     <ClInclude Include="CollisionPrimitives.h">
       <Filter>Headers\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionDetector.h" />
-    <ClInclude Include="IntersectionTests.h" />
+    <ClInclude Include="IntersectionTests.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetector.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Contact.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactResolver.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionData.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Headers\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2.h">
+      <Filter>Headers\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1.h">
+      <Filter>Headers\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level3.h">
+      <Filter>Headers\Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shaders.cpp">
@@ -323,10 +355,30 @@
     <ClCompile Include="Window\RenderWindow.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Contact.cpp" />
-    <ClCompile Include="ContactResolver.cpp" />
-    <ClCompile Include="CollisionDetector.cpp" />
-    <ClCompile Include="IntersectionTests.cpp" />
+    <ClCompile Include="IntersectionTests.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactResolver.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="Contact.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDetector.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Level1.cpp">
+      <Filter>Source\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2.cpp">
+      <Filter>Source\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Level3.cpp">
+      <Filter>Source\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\floor.dds">

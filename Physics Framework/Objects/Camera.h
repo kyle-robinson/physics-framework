@@ -46,27 +46,27 @@ public:
 	void SetCameraSpeed( FLOAT newSpeed ) noexcept { cameraSpeed = newSpeed; };
 	void UpdateCameraSpeed( FLOAT updateSpeed ) noexcept { cameraSpeed += updateSpeed; };
 
-	static void MoveForward( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveForward( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( camera->GetForwardVector() * camera->GetCameraSpeed() * dt );
 	}
-	static void MoveBackward( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveBackward( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( camera->GetBackwardVector() * camera->GetCameraSpeed() * dt );
 	}
-	static void MoveLeft( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveLeft( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( camera->GetLeftVector() * camera->GetCameraSpeed() * dt );
 	}
-	static void MoveRight( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveRight( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( camera->GetRightVector() * camera->GetCameraSpeed() * dt );
 	}
-	static void MoveUp( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveUp( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( 0.0f, camera->GetCameraSpeed() * dt, 0.0f );
 	}
-	static void MoveDown( std::unique_ptr<Camera>& camera, FLOAT dt ) noexcept
+	static void MoveDown( std::shared_ptr<Camera>& camera, FLOAT dt ) noexcept
 	{
 		camera->AdjustPosition( 0.0f, -camera->GetCameraSpeed() * dt, 0.0f );
 	}

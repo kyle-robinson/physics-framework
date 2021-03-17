@@ -18,25 +18,24 @@ public:
 		_initialPosition( 0.0f, 0.0f, 0.0f ),
 		_parent( nullptr )
 	{
-		//XMMATRIX matrix = XMMatrixIdentity();
-		//XMStoreFloat4x4( &_worldMatrix, matrix );
-		//XMStoreFloat4x4( &_rotationMatrix, matrix );
-		XMStoreFloat4x4( &_transform, XMMatrixIdentity() );
+		XMStoreFloat4x4( &_worldMatrix, XMMatrixIdentity() );
+		XMStoreFloat4x4( &_rotationMatrix, XMMatrixIdentity() );
+		//XMStoreFloat4x4( &_transform, XMMatrixIdentity() );
 	}
 
 	void Update()
 	{
 		// Calculate world matrix
-		/*XMMATRIX scale = XMMatrixScaling( GetScale().x, GetScale().y, GetScale().z );
+		XMMATRIX scale = XMMatrixScaling( GetScale().x, GetScale().y, GetScale().z );
 		XMMATRIX rotation = XMMatrixRotationX( GetRotation().x ) * XMMatrixRotationY( GetRotation().y ) * XMMatrixRotationZ( GetRotation().z );
 		XMMATRIX translation = XMMatrixTranslation( GetPosition().x, GetPosition().y, GetPosition().z );
 		XMStoreFloat4x4( &_worldMatrix, scale * rotation * translation );
 
 		// Calculate rotation matrix
-		XMStoreFloat4x4( &_rotationMatrix, scale * rotation );*/
+		XMStoreFloat4x4( &_rotationMatrix, scale * rotation );
 
 		//Loads the transform matrix
-		XMMATRIX transformMatrix = XMLoadFloat4x4( &_transform );
+		/*XMMATRIX transformMatrix = XMLoadFloat4x4( &_transform );
 
 		//Sets the scale, position and rotation matrices
 		XMMATRIX objectScale = XMMatrixScaling( _scale.x, _scale.y, _scale.z );
@@ -47,7 +46,7 @@ public:
 		XMMATRIX calculatedTransform = XMMatrixMultiply( transformMatrix, objectScale );
 
 		//Stores the transform
-		XMStoreFloat4x4( &_transform, calculatedTransform );
+		XMStoreFloat4x4( &_transform, calculatedTransform );*/
 	}
 
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }
@@ -69,13 +68,13 @@ public:
 
 	GameObject* GetParent() const noexcept { return _parent; }
 	void SetParent( GameObject* parent ) noexcept { _parent = parent; }
-	//XMFLOAT4X4 GetWorldMatrixFloat4x4() const noexcept { return _worldMatrix; }
-	//XMFLOAT4X4 GetRotationMatrixFloat4x4() const noexcept { return _rotationMatrix; }
-	//const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
-	//const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); }
+	XMFLOAT4X4 GetWorldMatrixFloat4x4() const noexcept { return _worldMatrix; }
+	XMFLOAT4X4 GetRotationMatrixFloat4x4() const noexcept { return _rotationMatrix; }
+	const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
+	const XMMATRIX& GetRotationMatrix() const noexcept { return XMLoadFloat4x4( &_rotationMatrix ); }
 
-	//void SetWorldMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _worldMatrix = matrix; }
-	//void SetRotationMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _rotationMatrix = matrix; }
+	void SetWorldMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _worldMatrix = matrix; }
+	void SetRotationMatrixFloat4x4( XMFLOAT4X4 matrix ) noexcept { _rotationMatrix = matrix; }
 
 	XMFLOAT4X4 GetTransform() const noexcept { return _transform; }
 	void SetTransform( XMFLOAT4X4 transform ) noexcept { _transform = transform; }
@@ -88,8 +87,8 @@ private:
 
 	GameObject* _parent;
 	XMFLOAT4X4 _transform;
-	//XMFLOAT4X4 _worldMatrix;
-	//XMFLOAT4X4 _rotationMatrix;
+	XMFLOAT4X4 _worldMatrix;
+	XMFLOAT4X4 _rotationMatrix;
 };
 
 #endif

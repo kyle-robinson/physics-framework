@@ -3,6 +3,7 @@
 #define APPLICATION_H
 
 #include "Timer.h"
+#include "Level1.h"
 #include "WindowContainer.h"
 
 class Application : public WindowContainer
@@ -20,6 +21,7 @@ public:
 	void Render();
 private:
 	Timer timer;
+	Level1 level1;
 };
 
 #endif
