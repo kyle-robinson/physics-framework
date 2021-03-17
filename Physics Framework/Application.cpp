@@ -16,10 +16,13 @@ bool Application::Initialize(
 	if ( !gfx.Initialize( renderWindow.GetHWND(), width, height ) )
 		return false;
 
+	// initialize levels
 	level1.Initialize( gfx );
 	level2.Initialize( gfx );
-	//level3.Initialize( gfx );
-	currentLevel = CurrentLevel::LEVEL_1;
+	level3.Initialize( gfx );
+
+	// starting level
+	activeLevel = ActiveLevel::LEVEL_1;
 
 	keyboard.DisableAutoRepeatKeys();
 	keyboard.DisableAutoRepeatChars();
@@ -39,16 +42,17 @@ void Application::Update()
 	timer.Restart();
 	dt *= 0.05f;
 
-	if ( keyboard.KeyIsPressed( VK_F1 ) ) currentLevel = CurrentLevel::LEVEL_1;
-	if ( keyboard.KeyIsPressed( VK_F2 ) ) currentLevel = CurrentLevel::LEVEL_2;
-	if ( keyboard.KeyIsPressed( VK_F3 ) ) currentLevel = CurrentLevel::LEVEL_3;
+	// change current level
+	if ( keyboard.KeyIsPressed( VK_F1 ) ) activeLevel = ActiveLevel::LEVEL_1;
+	if ( keyboard.KeyIsPressed( VK_F2 ) ) activeLevel = ActiveLevel::LEVEL_2;
+	if ( keyboard.KeyIsPressed( VK_F3 ) ) activeLevel = ActiveLevel::LEVEL_3;
 
 	// update current level
-	switch ( currentLevel )
+	switch ( activeLevel )
 	{
-	case CurrentLevel::LEVEL_1: level1.Update( mouse, keyboard, dt ); break;
-	case CurrentLevel::LEVEL_2: level2.Update( mouse, keyboard, dt ); break;
-	case CurrentLevel::LEVEL_3: /*level3.Update( mouse, keyboard, dt );*/ break;
+	case ActiveLevel::LEVEL_1: level1.Update( mouse, keyboard, dt ); break;
+	case ActiveLevel::LEVEL_2: level2.Update( mouse, keyboard, dt ); break;
+	case ActiveLevel::LEVEL_3: level3.Update( mouse, keyboard, dt ); break;
 	default: __debugbreak(); break;
 	}
 }
@@ -56,11 +60,11 @@ void Application::Update()
 void Application::Render()
 {
 	// render current level
-	switch ( currentLevel )
+	switch ( activeLevel )
 	{
-	case CurrentLevel::LEVEL_1: level1.Render( gfx ); break;
-	case CurrentLevel::LEVEL_2: level2.Render( gfx ); break;
-	case CurrentLevel::LEVEL_3: /*level3.Render( gfx );*/ break;
+	case ActiveLevel::LEVEL_1: level1.Render( gfx ); break;
+	case ActiveLevel::LEVEL_2: level2.Render( gfx ); break;
+	case ActiveLevel::LEVEL_3: level3.Render( gfx ); break;
 	default: __debugbreak(); break;
 	}
 }

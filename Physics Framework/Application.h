@@ -8,7 +8,7 @@
 #include "Level3.h"
 #include "WindowContainer.h"
 
-static enum class CurrentLevel
+static enum class ActiveLevel
 {
 	LEVEL_1,
 	LEVEL_2,
@@ -33,7 +33,7 @@ private:
 	Level1 level1;
 	Level2 level2;
 	Level3 level3;
-	CurrentLevel currentLevel;
+	ActiveLevel activeLevel;
 };
 
 #endif

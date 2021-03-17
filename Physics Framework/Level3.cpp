@@ -10,7 +10,7 @@ void Level3::Initialize( Graphics& gfx )
 	rigidCubes.resize( NUMBER_OF_RIGID_CUBES );
 	for ( uint32_t i = 0; i < NUMBER_OF_RIGID_CUBES; i++ )
 	{
-		rigidCubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
+		rigidCubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ), true );
 
 		if ( i == 0 )
 		{
@@ -54,11 +54,11 @@ void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
 	UpdateInput( mouse, keyboard, dt );
 
-	// Update Cubes
+	// update cubes
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
-		rigidCubes[i]->Update( dt / 50.0f );
+		rigidCubes[i]->Update( dt / 50.0f, true );
 
-	// Update Rigid Bodies
+	// update rigid bodies
 	topCube->CalculateInternals();
 	bottomCube->CalculateInternals();
 
@@ -78,6 +78,8 @@ void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 		rigidCubes[i]->UpdateTransforms();
+
+	LevelManager::Update( mouse, keyboard, dt );
 }
 
 void Level3::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
@@ -87,6 +89,8 @@ void Level3::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 
 void Level3::Render( Graphics& gfx )
 {
+	LevelManager::BeginRender( gfx );
+
 	// Render Scene Objects
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 	{
@@ -111,6 +115,8 @@ void Level3::Render( Graphics& gfx )
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		rigidCubes[i]->Draw( GetContext( gfx ) );
 	}
+
+	LevelManager::EndRender( gfx );
 }
 
 void Level3::SpawnControlWindow()

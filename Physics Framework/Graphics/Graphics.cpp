@@ -6,7 +6,6 @@
 #include "Rasterizer.h"
 #include "Viewport.h"
 #include "Sampler.h"
-//#include <imgui/imgui.h>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {

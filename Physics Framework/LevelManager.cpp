@@ -133,13 +133,13 @@ void LevelManager::InitializeObjects( Graphics& gfx )
 	basicLight.LightVecW = { 0.0f, 1.0f, -1.0f };
 	
 	// initialize ground
-	ground = std::make_unique<GameObject>( "Ground" );
+	ground = std::make_unique<GameObject>( "Ground", false );
 	ground->GetAppearance()->SetTextureRV( textureSand.Get() );
 	ground->GetAppearance()->SetGeometryData( planeGeometry );
 	ground->GetAppearance()->SetMaterial( noSpecMaterial );
 
 	// initialize torus
-	torus = std::make_unique<GameObject>( "Torus" );
+	torus = std::make_unique<GameObject>( "Torus", false );
 	torus->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 	torus->GetTransform()->SetInitialPosition( 0.0f, 5.0f, 10.0f );
 	torus->GetAppearance()->SetTextureRV( textureHercules.Get() );
@@ -147,7 +147,7 @@ void LevelManager::InitializeObjects( Graphics& gfx )
 	torus->GetAppearance()->SetMaterial( shinyMaterial );
 
 	// initialize skysphere
-	skysphere = std::make_unique<GameObject>( "Skysphere" );
+	skysphere = std::make_unique<GameObject>( "Skysphere", false );
 	skysphere->GetTransform()->SetScale( 200.0f, 200.0f, 200.0f );
 	skysphere->GetAppearance()->SetTextureRV( textureBeach.Get() );
 	skysphere->GetAppearance()->SetGeometryData( sphereGeometry );
@@ -175,16 +175,16 @@ void LevelManager::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 			count++;
 		}
 	}
-	ground->Update( dt );
+	ground->Update( dt, false );
 
 	// update torus
 	static float rotation = 0.0f;
 	rotation += dt;
 	torus->GetTransform()->SetRotation( XMConvertToRadians( rotation ), 0.0f, 0.0f );
-	torus->Update( dt );
+	torus->Update( dt, false );
 
 	// update skysphere
-	skysphere->Update( dt );
+	skysphere->Update( dt, false );
 }
 
 void LevelManager::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
@@ -258,7 +258,7 @@ void LevelManager::EndRender( Graphics& gfx )
 	cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 	cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
 
-	// Render Instanced Plane
+	// render instanced plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < planeMatrices.size(); i++ )
 	{
@@ -268,14 +268,14 @@ void LevelManager::EndRender( Graphics& gfx )
 		ground->Draw( GetContext( gfx ) );
 	}
 
-	// Render Torus
+	// render torus
 	cb_vs_matrix.data.UseLighting = 0.0f;
 	cb_vs_matrix.data.World = XMMatrixTranspose( torus->GetTransform()->GetWorldMatrix() );
 	GetContext( gfx )->PSSetShaderResources( 0, 1, torus->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	torus->Draw( GetContext( gfx ) );
 
-	// Render Cubemap
+	// render cubemap
 	gfx.GetRasterizer( "Cubemap" )->Bind( gfx );
 	skysphere->GetTransform()->SetPosition( camera->GetPositionVector3() );
 	skysphere->GetTransform()->SetRotation( 0.0f, 0.0f, XM_PI );

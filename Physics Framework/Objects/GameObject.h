@@ -10,10 +10,10 @@ using namespace DirectX;
 class GameObject
 {
 public:
-	GameObject( const std::string& id );
+	GameObject( const std::string& id, bool useRigidBodies );
 
 	void UpdateTransforms();
-	virtual void Update( const float dt );
+	virtual void Update( const float dt, bool useRigidBodies );
 	virtual void Draw( ID3D11DeviceContext* pImmediateContext );
 	const std::string& GetID() const noexcept { return _id; }
 

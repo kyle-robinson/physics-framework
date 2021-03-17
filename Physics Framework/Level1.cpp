@@ -11,7 +11,7 @@ void Level1::Initialize( Graphics& gfx )
 	cubes.resize( NUMBER_OF_CUBES );
 	for ( uint32_t i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
-		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
+		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ), false );
 		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
@@ -48,11 +48,11 @@ void Level1::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
 	UpdateInput( mouse, keyboard, dt );
 
-	// Update Cubes
+	// update cubes
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
-		cubes[i]->Update( dt );
+		cubes[i]->Update( dt, false );
 
-	// Check Collisions
+	// check collisions
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
 	{
 		for ( uint32_t j = 0; j < cubes.size(); j++ )
@@ -129,17 +129,17 @@ void Level1::Render( Graphics& gfx )
 {
 	LevelManager::BeginRender( gfx );
 
-	// Render Scene Objects
+	// render scene objects
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
 	{
-		// Get Materials
+		// get materials
 		Material material = cubes[i]->GetAppearance()->GetMaterial();
 		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
 		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
 		cb_vs_matrix.data.World = XMMatrixTranspose( cubes[i]->GetTransform()->GetWorldMatrix() );
 
-		// Set Textures
+		// set textures
 		if ( cubes[i]->GetAppearance()->HasTexture() )
 		{
 			GetContext( gfx )->PSSetShaderResources( 0, 1, cubes[i]->GetAppearance()->GetTextureRV() );

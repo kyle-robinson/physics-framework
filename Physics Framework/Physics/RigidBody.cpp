@@ -73,11 +73,7 @@ void RigidBody::Update( const float dt )
 	_rotation *= powf( _angularDamping, dt );
 	
 	//Updates position
-	//v3df position = _transform->GetPosition();
-	//position.AddScaledVector( _velocity, dt );
-	//_transform->SetPosition( position );
 	_position.AddScaledVector( _velocity, dt );
-	//_transform->GetPosition().AddScaledVector( _velocity, dt );
 
 	//Updates Orientation
 	_orientation.AddScaledVector( _rotation, dt );

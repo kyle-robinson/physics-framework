@@ -20,33 +20,38 @@ public:
 	{
 		XMStoreFloat4x4( &_worldMatrix, XMMatrixIdentity() );
 		XMStoreFloat4x4( &_rotationMatrix, XMMatrixIdentity() );
-		//XMStoreFloat4x4( &_transform, XMMatrixIdentity() );
+		XMStoreFloat4x4( &_transform, XMMatrixIdentity() );
 	}
 
-	void Update()
+	void Update( bool useRigidBodies )
 	{
-		// Calculate world matrix
-		XMMATRIX scale = XMMatrixScaling( GetScale().x, GetScale().y, GetScale().z );
-		XMMATRIX rotation = XMMatrixRotationX( GetRotation().x ) * XMMatrixRotationY( GetRotation().y ) * XMMatrixRotationZ( GetRotation().z );
-		XMMATRIX translation = XMMatrixTranslation( GetPosition().x, GetPosition().y, GetPosition().z );
-		XMStoreFloat4x4( &_worldMatrix, scale * rotation * translation );
+		if ( !useRigidBodies )
+		{
+			// Calculate world matrix
+			XMMATRIX scale = XMMatrixScaling( GetScale().x, GetScale().y, GetScale().z );
+			XMMATRIX rotation = XMMatrixRotationX( GetRotation().x ) * XMMatrixRotationY( GetRotation().y ) * XMMatrixRotationZ( GetRotation().z );
+			XMMATRIX translation = XMMatrixTranslation( GetPosition().x, GetPosition().y, GetPosition().z );
+			XMStoreFloat4x4( &_worldMatrix, scale * rotation * translation );
 
-		// Calculate rotation matrix
-		XMStoreFloat4x4( &_rotationMatrix, scale * rotation );
+			// Calculate rotation matrix
+			XMStoreFloat4x4( &_rotationMatrix, scale * rotation );
+		}
+		else
+		{
+			//Loads the transform matrix
+			XMMATRIX transformMatrix = XMLoadFloat4x4( &_transform );
 
-		//Loads the transform matrix
-		/*XMMATRIX transformMatrix = XMLoadFloat4x4( &_transform );
+			//Sets the scale, position and rotation matrices
+			XMMATRIX objectScale = XMMatrixScaling( _scale.x, _scale.y, _scale.z );
+			XMMATRIX objectPosition = XMMatrixTranslation( _position.x, _position.y, _position.z );
+			XMMATRIX objectRotation = XMMatrixRotationRollPitchYaw( _rotation.x, _rotation.y, _rotation.z );
 
-		//Sets the scale, position and rotation matrices
-		XMMATRIX objectScale = XMMatrixScaling( _scale.x, _scale.y, _scale.z );
-		XMMATRIX objectPosition = XMMatrixTranslation( _position.x, _position.y, _position.z );
-		XMMATRIX objectRotation = XMMatrixRotationRollPitchYaw( _rotation.x, _rotation.y, _rotation.z );
+			//Calculates the transform
+			XMMATRIX calculatedTransform = XMMatrixMultiply( transformMatrix, objectScale );
 
-		//Calculates the transform
-		XMMATRIX calculatedTransform = XMMatrixMultiply( transformMatrix, objectScale );
-
-		//Stores the transform
-		XMStoreFloat4x4( &_transform, calculatedTransform );*/
+			//Stores the transform
+			XMStoreFloat4x4( &_transform, calculatedTransform );
+		}
 	}
 
 	void SetInitialPosition( v3df initialPosition ) { _initialPosition = initialPosition; _position = _initialPosition; }

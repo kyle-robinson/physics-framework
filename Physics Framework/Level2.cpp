@@ -46,7 +46,7 @@ void Level2::Render( Graphics& gfx )
 {
 	LevelManager::BeginRender( gfx );
 
-	// Render Particles
+	// render particles
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
