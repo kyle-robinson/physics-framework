@@ -2,20 +2,27 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include "Graphics/GraphicsResource.h"
+#include "GraphicsResource.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "GameObject.h"
+#include "Keyboard.h"
+#include "Mouse.h"
+
+class Camera;
 
 class LevelManager : public GraphicsResource
 {
 public:
 	virtual void Initialize( Graphics& gfx );
-	virtual void Update( float dt );
+	virtual void Update( Mouse& mouse, Keyboard& keyboard, float dt );
 
 	void BeginRender( Graphics& gfx );
 	virtual void Render( Graphics& gfx ) {}
 	void EndRender( Graphics& gfx );
-
-	std::shared_ptr<Camera> GetCamera() noexcept { return camera; }
 protected:
+	virtual void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt );
+
 	// Buffers
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	VertexBuffer<SimpleVertex> vb_cube;

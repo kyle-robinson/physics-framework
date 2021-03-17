@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "LevelManager.h"
+#include "DDSTextureLoader.h"
 #include "Rasterizer.h"
+#include "OBJLoader.h"
 #include "Vertices.h"
 #include "Indices.h"
+#include "Camera.h"
 
 void LevelManager::Initialize( Graphics& gfx )
 {
@@ -151,7 +154,7 @@ void LevelManager::InitializeObjects( Graphics& gfx )
 	skysphere->GetAppearance()->SetMaterial( noSpecMaterial );
 }
 
-void LevelManager::Update( float dt )
+void LevelManager::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
 	// update plane
 	int count = 0;
@@ -182,6 +185,53 @@ void LevelManager::Update( float dt )
 
 	// update skysphere
 	skysphere->Update( dt );
+}
+
+void LevelManager::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
+{
+	while ( !mouse.EventBufferIsEmpty() )
+	{
+		Mouse::MouseEvent me = mouse.ReadEvent();
+		if ( mouse.IsRightDown() )
+		{
+			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
+			{
+				camera->AdjustRotation(
+					static_cast< float >( me.GetPosY() ) * 0.005f,
+					static_cast< float >( me.GetPosX() ) * 0.005f,
+					0.0f
+				);
+			}
+		}
+	}
+
+	// camera movement
+	camera->SetCameraSpeed( 0.05f );
+	if ( keyboard.KeyIsPressed( VK_SHIFT ) ) camera->UpdateCameraSpeed( 0.05f );
+	if ( keyboard.KeyIsPressed( 'W' ) ) Camera::MoveForward( camera, dt );
+	if ( keyboard.KeyIsPressed( 'A' ) ) Camera::MoveLeft( camera, dt );
+	if ( keyboard.KeyIsPressed( 'S' ) ) Camera::MoveBackward( camera, dt );
+	if ( keyboard.KeyIsPressed( 'D' ) ) Camera::MoveRight( camera, dt );
+	if ( keyboard.KeyIsPressed( VK_SPACE ) ) Camera::MoveUp( camera, dt );
+	if ( keyboard.KeyIsPressed( VK_CONTROL ) ) Camera::MoveDown( camera, dt );
+
+	// x world collisions
+	if ( camera->GetPositionFloat3().x <= -15.0f )
+		camera->SetPosition( -15.0f, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z );
+	if ( camera->GetPositionFloat3().x >= 15.0f )
+		camera->SetPosition( 15.0f, camera->GetPositionFloat3().y, camera->GetPositionFloat3().z );
+
+	// y world collisions
+	if ( camera->GetPositionFloat3().y <= 1.0f )
+		camera->SetPosition( camera->GetPositionFloat3().x, 1.0f, camera->GetPositionFloat3().z );
+	if ( camera->GetPositionFloat3().y >= 10.0f )
+		camera->SetPosition( camera->GetPositionFloat3().x, 10.0f, camera->GetPositionFloat3().z );
+
+	// z world collisions
+	if ( camera->GetPositionFloat3().z <= -15.0f )
+		camera->SetPosition( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, -15.0f );
+	if ( camera->GetPositionFloat3().z >= 15.0f )
+		camera->SetPosition( camera->GetPositionFloat3().x, camera->GetPositionFloat3().y, 15.0f );
 }
 
 void LevelManager::BeginRender( Graphics& gfx )

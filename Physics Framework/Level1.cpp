@@ -44,8 +44,10 @@ void Level1::CollisionResolution( std::unique_ptr<GameObject>& cube1, std::uniqu
 	cube2->GetParticleModel()->AddForce( force );
 }
 
-void Level1::Update( float dt )
+void Level1::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
+	UpdateInput( mouse, keyboard, dt );
+
 	// Update Cubes
 	for ( uint32_t i = 0; i < cubes.size(); i++ )
 		cubes[i]->Update( dt );
@@ -74,11 +76,13 @@ void Level1::Update( float dt )
 		}
 	}
 
-	LevelManager::Update( dt );
+	LevelManager::Update( mouse, keyboard, dt );
 }
 
-void Level1::UpdateInput( Keyboard& keyboard )
+void Level1::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 {
+	LevelManager::UpdateInput( mouse, keyboard, dt );
+	
 	while ( !keyboard.KeyBufferIsEmpty() )
 	{
 		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();

@@ -17,14 +17,29 @@ void Level2::Initialize( Graphics& gfx )
 	}
 }
 
-void Level2::Update( float dt )
+void Level2::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
-	// Update Particles
+	UpdateInput( mouse, keyboard, dt );
+
+	// particle movement
+	for ( uint32_t i = 0; i < particles.size(); i++ )
+	{
+		float randomNum = fmod( static_cast< float >( rand() ), xDist + 1.0f ) - ( xDist / 2.0f );
+		if ( particles[i]->GetStartTimer() < 0 )
+			particles[i]->GetParticleModel()->Move( fmod( randomNum, i ), 1.5f, 0.0f );
+	}
+	
+	// update particles
 	if ( useParticles )
 		for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 			particles[i]->Update( dt );
 
-	LevelManager::Update( dt );
+	LevelManager::Update( mouse, keyboard, dt );
+}
+
+void Level2::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
+{
+	LevelManager::UpdateInput( mouse, keyboard, dt );
 }
 
 void Level2::Render( Graphics& gfx )
@@ -32,14 +47,16 @@ void Level2::Render( Graphics& gfx )
 	LevelManager::BeginRender( gfx );
 
 	// Render Particles
+	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetTransformMatrix() );
 		GetContext( gfx )->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
-		if ( useParticles )
-			particles[i]->Draw( GetContext( gfx ) );
+		if ( useParticles ) particles[i]->Draw( GetContext( gfx ) );
 	}
+
+	SpawnControlWindow( particles );
 
 	LevelManager::EndRender( gfx );
 }

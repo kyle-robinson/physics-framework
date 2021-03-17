@@ -2,27 +2,9 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Camera.h"
 #include "Shaders.h"
-#include "resource.h"
-#include "Particle.h"
-#include "OBJLoader.h"
-#include "GameObject.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
 #include "ImGuiManager.h"
 #include "ConstantBuffer.h"
-#include "DDSTextureLoader.h"
-
-#include "../Contact.h"
-#include "../CollisionData.h"
-#include "../ContactResolver.h"
-#include "../CollisionDetector.h"
-#include "../CollisionPrimitives.h"
-
-#define PARTICLE_COUNT 20
-#define NUMBER_OF_CUBES 5
-#define MAX_CONTACTS 10
 
 namespace Bind
 {

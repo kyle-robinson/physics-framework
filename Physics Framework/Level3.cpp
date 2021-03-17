@@ -7,8 +7,8 @@ void Level3::Initialize( Graphics& gfx )
 	LevelManager::Initialize( gfx );
 
 	// initialize cubes
-	rigidCubes.resize( NUMBER_OF_CUBES );
-	for ( auto i = 0; i < NUMBER_OF_CUBES; i++ )
+	rigidCubes.resize( NUMBER_OF_RIGID_CUBES );
+	for ( uint32_t i = 0; i < NUMBER_OF_RIGID_CUBES; i++ )
 	{
 		rigidCubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ) );
 
@@ -50,8 +50,10 @@ void Level3::Initialize( Graphics& gfx )
 	collisionData._tolerance = 0.1f;
 }
 
-void Level3::Update( float dt )
+void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
+	UpdateInput( mouse, keyboard, dt );
+
 	// Update Cubes
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 		rigidCubes[i]->Update( dt / 50.0f );
@@ -76,6 +78,11 @@ void Level3::Update( float dt )
 
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 		rigidCubes[i]->UpdateTransforms();
+}
+
+void Level3::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
+{
+	LevelManager::UpdateInput( mouse, keyboard, dt );
 }
 
 void Level3::Render( Graphics& gfx )
