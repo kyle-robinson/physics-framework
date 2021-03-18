@@ -3,11 +3,11 @@
 #define LEVEL3_H
 
 #include "LevelManager.h"
-#include "Contact.h"
-#include "CollisionData.h"
-#include "ContactResolver.h"
-#include "CollisionDetector.h"
-#include "CollisionPrimitives.h"
+#include "../Physics/Collisions/Contact.h"
+#include "../Physics/Collisions/CollisionData.h"
+#include "../Physics/Collisions/ContactResolver.h"
+#include "../Physics/Collisions/CollisionDetector.h"
+#include "../Physics/Collisions/CollisionPrimitives.h"
 
 #define MAX_CONTACTS 10
 #define NUMBER_OF_RIGID_CUBES 2

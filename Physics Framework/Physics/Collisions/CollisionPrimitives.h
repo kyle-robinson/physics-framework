@@ -2,8 +2,7 @@
 #ifndef COLLISIONPRIMITIVES_H
 #define COLLISIONPRIMITIVES_H
 
-#include "Math/Vector.h"
-#include "Physics/RigidBody.h"
+#include "../RigidBody.h"
 
 class CollisionPrimitive {
 public:

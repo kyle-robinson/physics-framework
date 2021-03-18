@@ -3,7 +3,7 @@
 #define LEVEL1_H
 
 #include "LevelManager.h"
-#include "ParticleModel.h"
+#include "../Physics/ParticleModel.h"
 
 #define NUMBER_OF_CUBES 5
 

@@ -92,7 +92,7 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <SourcePath>$(ProjectDir)DirectXTK\Src;$(SourcePath)</SourcePath>
-    <IncludePath>$(SolutionDir)External;$(ProjectDir)Window;$(ProjectDir)Input;$(ProjectDir)Utility;$(ProjectDir)Resources;$(ProjectDir)Physics;$(ProjectDir)Objects;$(ProjectDir)Model;$(ProjectDir)Math;$(ProjectDir)Graphics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Utility;$(SolutionDir)External;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -405,48 +405,47 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="CollisionDetector.cpp" />
-    <ClCompile Include="Contact.cpp" />
-    <ClCompile Include="ContactResolver.cpp" />
+    <ClCompile Include="Graphics\Bindables\ImGuiManager.cpp" />
+    <ClCompile Include="Graphics\Bindables\Shaders.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
-    <ClCompile Include="Graphics\ImGuiManager.cpp" />
-    <ClCompile Include="Graphics\Shaders.cpp" />
-    <ClCompile Include="Input\Keyboard.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Input\Mouse.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="IntersectionTests.cpp" />
-    <ClCompile Include="Level1.cpp" />
-    <ClCompile Include="Level2.cpp" />
-    <ClCompile Include="Level3.cpp" />
-    <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="Graphics\Model\DDSTextureLoader.cpp" />
+    <ClCompile Include="Graphics\Model\OBJLoader.cpp" />
+    <ClCompile Include="Graphics\Objects\Camera.cpp" />
+    <ClCompile Include="Graphics\Objects\GameObject.cpp" />
+    <ClCompile Include="Graphics\Window\RenderWindow.cpp" />
+    <ClCompile Include="Graphics\Window\WindowContainer.cpp" />
+    <ClCompile Include="Levels\Level1.cpp" />
+    <ClCompile Include="Levels\Level2.cpp" />
+    <ClCompile Include="Levels\Level3.cpp" />
+    <ClCompile Include="Levels\LevelManager.cpp" />
+    <ClCompile Include="Physics\Collisions\CollisionDetector.cpp" />
+    <ClCompile Include="Physics\Collisions\Contact.cpp" />
+    <ClCompile Include="Physics\Collisions\ContactResolver.cpp" />
+    <ClCompile Include="Physics\Collisions\IntersectionTests.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
-    <ClCompile Include="Utility\Timer.cpp">
+    <ClCompile Include="Utility\Input\Keyboard.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Window\RenderWindow.cpp" />
-    <ClCompile Include="Window\WindowContainer.cpp" />
+    <ClCompile Include="Utility\Input\Mouse.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\ErrorLogger.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\StringConverter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\Timer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="WinMain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Model\DDSTextureLoader.cpp" />
-    <ClCompile Include="Model\OBJLoader.cpp" />
-    <ClCompile Include="Objects\Camera.cpp" />
-    <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Physics\Particle.cpp" />
     <ClCompile Include="Physics\ParticleModel.cpp" />
-    <ClCompile Include="Physics\ParticleSystem.cpp" />
-    <ClCompile Include="Utility\ErrorLogger.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Utility\stdafx.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Utility\StringConverter.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -475,68 +474,71 @@
     <ClInclude Include="..\External\imgui\imstb_textedit.h" />
     <ClInclude Include="..\External\imgui\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
-    <ClInclude Include="CollisionData.h" />
-    <ClInclude Include="CollisionDetector.h" />
-    <ClInclude Include="CollisionPrimitives.h" />
-    <ClInclude Include="Contact.h" />
-    <ClInclude Include="ContactResolver.h" />
-    <ClInclude Include="Graphics\ConstantBuffer.h" />
-    <ClInclude Include="Graphics\ConstantBufferTypes.h" />
-    <ClInclude Include="Graphics\DepthStencil.h" />
+    <ClInclude Include="Graphics\Bindables\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\Bindables\ConstantBufferTypes.h" />
+    <ClInclude Include="Graphics\Bindables\DepthStencil.h" />
+    <ClInclude Include="Graphics\Bindables\GraphicsResource.h" />
+    <ClInclude Include="Graphics\Bindables\ImGuiManager.h" />
+    <ClInclude Include="Graphics\Bindables\IndexBuffer.h" />
+    <ClInclude Include="Graphics\Bindables\Rasterizer.h" />
+    <ClInclude Include="Graphics\Bindables\RenderTarget.h" />
+    <ClInclude Include="Graphics\Bindables\Sampler.h" />
+    <ClInclude Include="Graphics\Bindables\Shaders.h" />
+    <ClInclude Include="Graphics\Bindables\Structures.h" />
+    <ClInclude Include="Graphics\Bindables\SwapChain.h" />
+    <ClInclude Include="Graphics\Bindables\VertexBuffer.h" />
+    <ClInclude Include="Graphics\Bindables\Viewport.h" />
     <ClInclude Include="Graphics\Graphics.h" />
-    <ClInclude Include="Graphics\GraphicsResource.h" />
-    <ClInclude Include="Graphics\ImGuiManager.h" />
-    <ClInclude Include="Graphics\IndexBuffer.h" />
-    <ClInclude Include="Graphics\Rasterizer.h" />
-    <ClInclude Include="Graphics\RenderTarget.h" />
-    <ClInclude Include="Graphics\Sampler.h" />
-    <ClInclude Include="Graphics\Shaders.h" />
-    <ClInclude Include="Graphics\SwapChain.h" />
-    <ClInclude Include="Graphics\VertexBuffer.h" />
-    <ClInclude Include="Graphics\Viewport.h" />
-    <ClInclude Include="Input\Keyboard.h" />
-    <ClInclude Include="Input\Mouse.h" />
-    <ClInclude Include="IntersectionTests.h" />
-    <ClInclude Include="Level1.h" />
-    <ClInclude Include="Level2.h" />
-    <ClInclude Include="Level3.h" />
-    <ClInclude Include="LevelManager.h" />
-    <ClInclude Include="Math\Matrix.h" />
-    <ClInclude Include="Math\Matrix3.h" />
-    <ClInclude Include="Math\Matrix4.h" />
-    <ClInclude Include="Math\Quaternion.h" />
-    <ClInclude Include="Math\Vector.h" />
-    <ClInclude Include="Model\Appearance.h" />
-    <ClInclude Include="Model\DDSTextureLoader.h" />
-    <ClInclude Include="Model\OBJLoader.h" />
-    <ClInclude Include="Model\Transform.h" />
-    <ClInclude Include="Objects\Camera.h" />
-    <ClInclude Include="Objects\GameObject.h" />
-    <ClInclude Include="Objects\Indices.h" />
-    <ClInclude Include="Objects\Light.h" />
-    <ClInclude Include="Objects\Vertex.h" />
-    <ClInclude Include="Objects\Vertices.h" />
+    <ClInclude Include="Graphics\Model\Appearance.h" />
+    <ClInclude Include="Graphics\Model\DDSTextureLoader.h" />
+    <ClInclude Include="Graphics\Model\OBJLoader.h" />
+    <ClInclude Include="Graphics\Model\Transform.h" />
+    <ClInclude Include="Graphics\Objects\Camera.h" />
+    <ClInclude Include="Graphics\Objects\Data\Indices.h" />
+    <ClInclude Include="Graphics\Objects\Data\Vertex.h" />
+    <ClInclude Include="Graphics\Objects\Data\Vertices.h" />
+    <ClInclude Include="Graphics\Objects\GameObject.h" />
+    <ClInclude Include="Graphics\Objects\Light.h" />
+    <ClInclude Include="Graphics\Window\RenderWindow.h" />
+    <ClInclude Include="Graphics\Window\WindowContainer.h" />
+    <ClInclude Include="Levels\Level1.h" />
+    <ClInclude Include="Levels\Level2.h" />
+    <ClInclude Include="Levels\Level3.h" />
+    <ClInclude Include="Levels\LevelManager.h" />
+    <ClInclude Include="Physics\Collisions\CollisionData.h" />
+    <ClInclude Include="Physics\Collisions\CollisionDetector.h" />
+    <ClInclude Include="Physics\Collisions\CollisionPrimitives.h" />
+    <ClInclude Include="Physics\Collisions\Contact.h" />
+    <ClInclude Include="Physics\Collisions\ContactResolver.h" />
+    <ClInclude Include="Physics\Collisions\IntersectionTests.h" />
     <ClInclude Include="Physics\Particle.h" />
     <ClInclude Include="Physics\ParticleModel.h" />
-    <ClInclude Include="Physics\ParticleSystem.h" />
     <ClInclude Include="Physics\RigidBody.h" />
-    <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="Utility\COMException.h" />
-    <ClInclude Include="Utility\ErrorLogger.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Utility\Input\Keyboard.h" />
+    <ClInclude Include="Utility\Input\Mouse.h" />
+    <ClInclude Include="Utility\Logging\COMException.h" />
+    <ClInclude Include="Utility\Logging\ErrorLogger.h" />
+    <ClInclude Include="Utility\Logging\StringConverter.h" />
+    <ClInclude Include="Utility\Logging\Timer.h" />
+    <ClInclude Include="Utility\Math\Matrix.h" />
+    <ClInclude Include="Utility\Math\Matrix3.h" />
+    <ClInclude Include="Utility\Math\Matrix4.h" />
+    <ClInclude Include="Utility\Math\Quaternion.h" />
+    <ClInclude Include="Utility\Math\Vector.h" />
     <ClInclude Include="Utility\stdafx.h" />
-    <ClInclude Include="Utility\StringConverter.h" />
-    <ClInclude Include="Utility\Structures.h" />
-    <ClInclude Include="Utility\Timer.h" />
-    <ClInclude Include="Window\RenderWindow.h" />
-    <ClInclude Include="Window\WindowContainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="directx.ico" />
     <Image Include="Resources\Textures\floor.dds" />
     <Image Include="Resources\Textures\Hercules_COLOR.dds" />
     <Image Include="Resources\Textures\stone.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Physics Framework.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "resource.h"
+#include "../resource.h"
 #include "WindowContainer.h"
 
 bool RenderWindow::Initialize( WindowContainer* pWindowContainer, HINSTANCE hInstance, const std::string& windowName, const std::string& windowClass, int width, int height )
@@ -134,12 +134,14 @@ void RenderWindow::RegisterWindowClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon( hInstance, (LPCTSTR)IDI_TUTORIAL1 );
+	//wc.hIcon = LoadIcon( hInstance, (LPCTSTR)IDI_ICON1 );
+	wc.hIcon = static_cast<HICON>( LoadImage( hInstance, MAKEINTRESOURCE( IDI_ICON1 ), IMAGE_ICON, 32, 32, 0 ) );
     wc.hCursor = LoadCursor( hInstance, IDC_ARROW );
     wc.hbrBackground = (HBRUSH)( COLOR_WINDOW + 1 );
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = windowClass_Wide.c_str();
-	wc.hIconSm = LoadIcon( wc.hInstance, (LPCTSTR)IDI_TUTORIAL1 );
+	//wc.hIconSm = LoadIcon( wc.hInstance, (LPCTSTR)IDI_ICON1 );
+	wc.hIconSm = static_cast< HICON >( LoadImage( hInstance, MAKEINTRESOURCE( IDI_ICON1 ), IMAGE_ICON, 16, 16, 0 ) );
 	RegisterClassEx( &wc );
 }
 

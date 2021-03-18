@@ -2,12 +2,12 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include "GraphicsResource.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "GameObject.h"
-#include "Keyboard.h"
-#include "Mouse.h"
+#include "../Graphics/Bindables/GraphicsResource.h"
+#include "../Graphics/Bindables/VertexBuffer.h"
+#include "../Graphics/Bindables/IndexBuffer.h"
+#include "../Graphics/Objects/GameObject.h"
+#include "Input/Keyboard.h"
+#include "Input/Mouse.h"
 
 class Camera;
 

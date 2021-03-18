@@ -2,10 +2,8 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
-#include "Math/Vector.h"
-#include "Math/Matrix.h"
+#include "../RigidBody.h"
 #include "ContactResolver.h"
-#include "Physics/RigidBody.h"
 
 class Contact
 {

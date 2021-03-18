@@ -2,7 +2,7 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
-#include "Vector.h"
+#include "Math/Vector.h"
 
 struct Light
 {

@@ -3,7 +3,7 @@
 #define LEVEL2_H
 
 #include "LevelManager.h"
-#include "Particle.h"
+#include "../Physics/Particle.h"
 
 #define PARTICLE_COUNT 20
 

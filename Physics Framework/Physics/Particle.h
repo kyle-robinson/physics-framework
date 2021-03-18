@@ -2,8 +2,8 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "Transform.h"
-#include "Appearance.h"
+#include "../Graphics/Model/Transform.h"
+#include "../Graphics/Model/Appearance.h"
 #include "ParticleModel.h"
 
 class Particle

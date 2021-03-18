@@ -14,33 +14,15 @@
     <Filter Include="Resource Files\Textures">
       <UniqueIdentifier>{84a4d56f-682d-4b12-a7c9-064cc08bce09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Objects">
-      <UniqueIdentifier>{a7e32460-d714-4f62-b22d-658d078a9a32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Utility">
       <UniqueIdentifier>{e20c9b2d-749a-45d5-ae98-4609e70dc1c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Objects">
-      <UniqueIdentifier>{03a925da-314a-40ea-8a98-a1f59eeffde7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Utility">
       <UniqueIdentifier>{803398c2-eaf4-4359-aca0-d2164b37e2d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Model">
-      <UniqueIdentifier>{34e2995e-f451-44c9-abc5-81fcdf205a48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Math">
-      <UniqueIdentifier>{f81e1943-ba46-4b85-8071-c7d120cd73db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Model">
-      <UniqueIdentifier>{61ca7639-b814-40e3-9686-fb12c0b48b1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{2c3d4c8c-5d1a-459a-a05a-a4e4b608a44e}</UniqueIdentifier>
       <Extensions>fx;fxh;hlsl</Extensions>
-    </Filter>
-    <Filter Include="Headers\Objects\Data">
-      <UniqueIdentifier>{7bdfa029-d215-413b-9f3b-e9e5c32f2566}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Graphics">
       <UniqueIdentifier>{08a56681-9b42-4f3c-adb1-015dde3fb4bd}</UniqueIdentifier>
@@ -54,23 +36,8 @@
     <Filter Include="Source\Physics">
       <UniqueIdentifier>{705de03d-c607-4815-bac8-fee92aac3a42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Input">
-      <UniqueIdentifier>{09f45da6-9deb-4c40-b3fa-f6cfd4732982}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Input">
-      <UniqueIdentifier>{f60faba5-5bda-40d5-869e-22e5fc4c6424}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Miscellaneous">
-      <UniqueIdentifier>{2f2b713e-c4ca-4ad3-ae76-7d380af809df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\ImGui">
       <UniqueIdentifier>{c5141d88-08d5-4fca-baa4-35b3f151b87b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Window">
-      <UniqueIdentifier>{4a0a9c57-391d-407f-8a93-aca1c97a98f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Window">
-      <UniqueIdentifier>{91c4e7fa-0d28-48da-b024-358a6dd3b51e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Levels">
       <UniqueIdentifier>{f8d968ee-7326-4798-9fb5-688612d5730f}</UniqueIdentifier>
@@ -78,62 +45,59 @@
     <Filter Include="Source\Levels">
       <UniqueIdentifier>{d52524e5-c94b-495f-afb4-0dbf041fcdf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\Physics\Collisions">
-      <UniqueIdentifier>{9609beb0-c6cd-44b3-a86f-026e983d4a88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Physics\Collisions">
       <UniqueIdentifier>{87b25e6a-68e9-4775-aef2-d2cfedbab494}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Utility\Input">
+      <UniqueIdentifier>{09f45da6-9deb-4c40-b3fa-f6cfd4732982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utility\Input">
+      <UniqueIdentifier>{f60faba5-5bda-40d5-869e-22e5fc4c6424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Window">
+      <UniqueIdentifier>{91c4e7fa-0d28-48da-b024-358a6dd3b51e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Bindables">
+      <UniqueIdentifier>{8476de50-11fb-4452-9d6c-85f9034c833f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Bindables">
+      <UniqueIdentifier>{9541f939-0a1e-42b2-83e0-3e703e306156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Window">
+      <UniqueIdentifier>{4a0a9c57-391d-407f-8a93-aca1c97a98f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utility\Math">
+      <UniqueIdentifier>{f81e1943-ba46-4b85-8071-c7d120cd73db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Physics\Collisions">
+      <UniqueIdentifier>{9609beb0-c6cd-44b3-a86f-026e983d4a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Model">
+      <UniqueIdentifier>{61ca7639-b814-40e3-9686-fb12c0b48b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Objects">
+      <UniqueIdentifier>{03a925da-314a-40ea-8a98-a1f59eeffde7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Objects\Data">
+      <UniqueIdentifier>{7bdfa029-d215-413b-9f3b-e9e5c32f2566}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Model">
+      <UniqueIdentifier>{34e2995e-f451-44c9-abc5-81fcdf205a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Objects">
+      <UniqueIdentifier>{a7e32460-d714-4f62-b22d-658d078a9a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utility\Logging">
+      <UniqueIdentifier>{134bb661-d847-4e48-8784-673c96307fb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utility\Logging">
+      <UniqueIdentifier>{197db6bc-794c-49ad-9bea-eb9dfffff7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Resources">
+      <UniqueIdentifier>{2f2b713e-c4ca-4ad3-ae76-7d380af809df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\VertexBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\IndexBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shaders.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Matrix.h">
-      <Filter>Headers\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Quaternion.h">
-      <Filter>Headers\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector.h">
-      <Filter>Headers\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\Transform.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\Appearance.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\DDSTextureLoader.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\OBJLoader.h">
-      <Filter>Headers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Vertices.h">
-      <Filter>Headers\Objects\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Indices.h">
-      <Filter>Headers\Objects\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Vertex.h">
-      <Filter>Headers\Objects\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\GameObject.h">
-      <Filter>Headers\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Light.h">
-      <Filter>Headers\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\ParticleSystem.h">
-      <Filter>Headers\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\ParticleModel.h">
       <Filter>Headers\Physics</Filter>
     </ClInclude>
@@ -143,59 +107,11 @@
     <ClInclude Include="Utility\stdafx.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\StringConverter.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\COMException.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\ErrorLogger.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\GraphicsResource.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\SwapChain.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\RenderTarget.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\DepthStencil.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Viewport.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Sampler.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Rasterizer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\ConstantBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\ConstantBufferTypes.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Structures.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Graphics.h">
       <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\Keyboard.h">
-      <Filter>Headers\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\Mouse.h">
-      <Filter>Headers\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources\resource.h">
-      <Filter>Resource Files\Miscellaneous</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imgui.h">
       <Filter>Resource Files\ImGui</Filter>
@@ -221,88 +137,160 @@
     <ClInclude Include="..\External\imgui\imconfig.h">
       <Filter>Resource Files\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\ImGuiManager.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Timer.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\RigidBody.h">
       <Filter>Headers\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Camera.h">
-      <Filter>Headers\Objects</Filter>
+    <ClInclude Include="Graphics\Bindables\GraphicsResource.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Window\WindowContainer.h">
-      <Filter>Headers\Window</Filter>
+    <ClInclude Include="Graphics\Bindables\ImGuiManager.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Window\RenderWindow.h">
-      <Filter>Headers\Window</Filter>
+    <ClInclude Include="Graphics\Bindables\IndexBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Matrix3.h">
-      <Filter>Headers\Math</Filter>
+    <ClInclude Include="Graphics\Bindables\Rasterizer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Matrix4.h">
-      <Filter>Headers\Math</Filter>
+    <ClInclude Include="Graphics\Bindables\RenderTarget.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionPrimitives.h">
-      <Filter>Headers\Objects</Filter>
+    <ClInclude Include="Graphics\Bindables\Sampler.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="IntersectionTests.h">
-      <Filter>Headers\Physics\Collisions</Filter>
+    <ClInclude Include="Graphics\Bindables\Shaders.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionDetector.h">
-      <Filter>Headers\Physics\Collisions</Filter>
+    <ClInclude Include="Graphics\Bindables\SwapChain.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Contact.h">
-      <Filter>Headers\Physics\Collisions</Filter>
+    <ClInclude Include="Graphics\Bindables\VertexBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="ContactResolver.h">
-      <Filter>Headers\Physics\Collisions</Filter>
+    <ClInclude Include="Graphics\Bindables\Viewport.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionData.h">
-      <Filter>Headers\Physics\Collisions</Filter>
+    <ClInclude Include="Graphics\Bindables\ConstantBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
+    <ClInclude Include="Graphics\Bindables\ConstantBufferTypes.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Bindables\DepthStencil.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\Appearance.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\DDSTextureLoader.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\OBJLoader.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\Transform.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\Camera.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\GameObject.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\Light.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\Data\Indices.h">
+      <Filter>Headers\Graphics\Objects\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\Data\Vertex.h">
+      <Filter>Headers\Graphics\Objects\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Objects\Data\Vertices.h">
+      <Filter>Headers\Graphics\Objects\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Levels\Level1.h">
       <Filter>Headers\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="Level2.h">
+    <ClInclude Include="Levels\Level2.h">
       <Filter>Headers\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="Level1.h">
+    <ClInclude Include="Levels\Level3.h">
       <Filter>Headers\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="Level3.h">
+    <ClInclude Include="Levels\LevelManager.h">
       <Filter>Headers\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Input\Keyboard.h">
+      <Filter>Headers\Utility\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Input\Mouse.h">
+      <Filter>Headers\Utility\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math\Matrix.h">
+      <Filter>Headers\Utility\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math\Matrix3.h">
+      <Filter>Headers\Utility\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math\Matrix4.h">
+      <Filter>Headers\Utility\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math\Quaternion.h">
+      <Filter>Headers\Utility\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math\Vector.h">
+      <Filter>Headers\Utility\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Logging\COMException.h">
+      <Filter>Headers\Utility\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Logging\ErrorLogger.h">
+      <Filter>Headers\Utility\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Logging\StringConverter.h">
+      <Filter>Headers\Utility\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Logging\Timer.h">
+      <Filter>Headers\Utility\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\CollisionData.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\CollisionDetector.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\CollisionPrimitives.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\Contact.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\ContactResolver.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collisions\IntersectionTests.h">
+      <Filter>Headers\Physics\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Bindables\Structures.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Window\RenderWindow.h">
+      <Filter>Headers\Graphics\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Window\WindowContainer.h">
+      <Filter>Headers\Graphics\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\Shaders.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\OBJLoader.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\DDSTextureLoader.cpp">
-      <Filter>Source\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\GameObject.cpp">
-      <Filter>Source\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\Particle.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Physics\ParticleModel.cpp">
       <Filter>Source\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\ParticleSystem.cpp">
-      <Filter>Source\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\StringConverter.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\ErrorLogger.cpp">
-      <Filter>Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Utility\stdafx.cpp">
       <Filter>Source\Utility</Filter>
@@ -312,12 +300,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\Graphics.cpp">
       <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Input\Mouse.cpp">
-      <Filter>Source\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Input\Keyboard.cpp">
-      <Filter>Source\Input</Filter>
     </ClCompile>
     <ClCompile Include="WinMain.cpp">
       <Filter>Source</Filter>
@@ -337,47 +319,71 @@
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
       <Filter>Resource Files\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\ImGuiManager.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Timer.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\RigidBody.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Camera.cpp">
-      <Filter>Source\Objects</Filter>
+    <ClCompile Include="Graphics\Bindables\ImGuiManager.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="Window\WindowContainer.cpp">
-      <Filter>Source\Window</Filter>
+    <ClCompile Include="Graphics\Bindables\Shaders.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="Window\RenderWindow.cpp">
-      <Filter>Source\Window</Filter>
+    <ClCompile Include="Graphics\Model\OBJLoader.cpp">
+      <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
-    <ClCompile Include="IntersectionTests.cpp">
-      <Filter>Source\Physics\Collisions</Filter>
+    <ClCompile Include="Graphics\Model\DDSTextureLoader.cpp">
+      <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
-    <ClCompile Include="ContactResolver.cpp">
-      <Filter>Source\Physics\Collisions</Filter>
+    <ClCompile Include="Graphics\Objects\GameObject.cpp">
+      <Filter>Source\Graphics\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Contact.cpp">
-      <Filter>Source\Physics\Collisions</Filter>
+    <ClCompile Include="Graphics\Objects\Camera.cpp">
+      <Filter>Source\Graphics\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionDetector.cpp">
-      <Filter>Source\Physics\Collisions</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
+    <ClCompile Include="Levels\LevelManager.cpp">
       <Filter>Source\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="Level1.cpp">
+    <ClCompile Include="Levels\Level3.cpp">
       <Filter>Source\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="Level2.cpp">
+    <ClCompile Include="Levels\Level2.cpp">
       <Filter>Source\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="Level3.cpp">
+    <ClCompile Include="Levels\Level1.cpp">
       <Filter>Source\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Input\Keyboard.cpp">
+      <Filter>Source\Utility\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Input\Mouse.cpp">
+      <Filter>Source\Utility\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\Timer.cpp">
+      <Filter>Source\Utility\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\StringConverter.cpp">
+      <Filter>Source\Utility\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Logging\ErrorLogger.cpp">
+      <Filter>Source\Utility\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collisions\IntersectionTests.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collisions\ContactResolver.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collisions\Contact.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collisions\CollisionDetector.cpp">
+      <Filter>Source\Physics\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Window\WindowContainer.cpp">
+      <Filter>Source\Graphics\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Window\RenderWindow.cpp">
+      <Filter>Source\Graphics\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +396,9 @@
     <Image Include="Resources\Textures\stone.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="directx.ico">
+      <Filter>Resource Files\Resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\DX11 Framework.fx">
@@ -398,7 +407,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClassDiagram.cd">
-      <Filter>Resource Files\Miscellaneous</Filter>
+      <Filter>Resource Files\Resources</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Physics Framework.rc">
+      <Filter>Resource Files\Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

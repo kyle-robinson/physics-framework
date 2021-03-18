@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "LevelManager.h"
-#include "DDSTextureLoader.h"
-#include "Rasterizer.h"
-#include "OBJLoader.h"
-#include "Vertices.h"
-#include "Indices.h"
-#include "Camera.h"
+#include "../Graphics/Model/OBJLoader.h"
+#include "../Graphics/Bindables/Rasterizer.h"
+#include "../Graphics/Model/DDSTextureLoader.h"
+#include "../Graphics/Objects/Data/Vertices.h"
+#include "../Graphics/Objects/Data/Indices.h"
+#include "../Graphics/Objects/Camera.h"
 
 void LevelManager::Initialize( Graphics& gfx )
 {

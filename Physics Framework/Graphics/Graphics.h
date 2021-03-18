@@ -2,9 +2,9 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Shaders.h"
-#include "ImGuiManager.h"
-#include "ConstantBuffer.h"
+#include "Bindables/Shaders.h"
+#include "Bindables/ImGuiManager.h"
+#include "Bindables/ConstantBuffer.h"
 
 namespace Bind
 {

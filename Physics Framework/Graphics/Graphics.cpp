@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Graphics.h"
-#include "SwapChain.h"
-#include "DepthStencil.h"
-#include "RenderTarget.h"
-#include "Rasterizer.h"
-#include "Viewport.h"
-#include "Sampler.h"
+#include "Bindables/SwapChain.h"
+#include "Bindables/DepthStencil.h"
+#include "Bindables/RenderTarget.h"
+#include "Bindables/Rasterizer.h"
+#include "Bindables/Viewport.h"
+#include "Bindables/Sampler.h"
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {

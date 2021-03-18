@@ -3,8 +3,8 @@
 #define RIGIDBODY_H
 
 #include "ParticleModel.h"
-#include "Matrix3.h"
-#include "Matrix4.h"
+#include "Math/Matrix3.h"
+#include "Math/Matrix4.h"
 
 class RigidBody : public ParticleModel
 {

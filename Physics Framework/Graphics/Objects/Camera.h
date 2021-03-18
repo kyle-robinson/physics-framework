@@ -2,8 +2,6 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-using namespace DirectX;
-
 class Camera
 {
 public:

@@ -2,8 +2,6 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "stdafx.h"
-
 struct Light
 {
 	v4df AmbientLight;

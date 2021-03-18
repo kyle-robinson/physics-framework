@@ -2,7 +2,7 @@
 #ifndef GRAPHICSRESOURCE_H
 #define GRAPHICSRESOURCE_H
 
-#include "Graphics.h"
+#include "../Graphics.h"
 class Graphics;
 
 class GraphicsResource

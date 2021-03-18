@@ -2,7 +2,7 @@
 #ifndef PARTICLEMODEL_H
 #define PARTICLEMODEL_H
 
-#include "Transform.h"
+#include "../Graphics/Model/Transform.h"
 
 class ParticleModel
 {

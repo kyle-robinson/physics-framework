@@ -25,9 +25,9 @@
 using namespace DirectX;
 
 // Classes
-#include "Matrix.h"
-#include "Vector.h"
-#include "Vertex.h"
-#include "ErrorLogger.h"
+#include "Math/Matrix.h"
+#include "Math/Vector.h"
+#include "Logging/ErrorLogger.h"
+#include "../Graphics/Objects/Data/Vertex.h"
 
 #endif

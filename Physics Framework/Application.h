@@ -2,11 +2,11 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "Timer.h"
-#include "Level1.h"
-#include "Level2.h"
-#include "Level3.h"
-#include "WindowContainer.h"
+#include "Logging/Timer.h"
+#include "Levels/Level1.h"
+#include "Levels/Level2.h"
+#include "Levels/Level3.h"
+#include "Graphics/Window/WindowContainer.h"
 
 static enum class ActiveLevel
 {

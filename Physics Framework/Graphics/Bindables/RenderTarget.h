@@ -3,7 +3,7 @@
 #define RENDERTARGET_H
 
 #include "GraphicsResource.h"
-#include "ErrorLogger.h"
+#include "Logging/ErrorLogger.h"
 
 namespace Bind
 {
