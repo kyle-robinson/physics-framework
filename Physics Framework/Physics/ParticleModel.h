@@ -85,11 +85,11 @@ private:
 	void DragTurbulent();
 
 	void ComputePosition( const float dt );
-	void CheckWorldCollisions();
+	void CheckWorldCollisions( const float dt );
 
 	// Constants
 	float _gravity = 9.81f;
-	float _limiter = 0.001f;
+	float _limiter = 0.002f;
 	float _boundingSphere = 1.0f;
 	float _frictionMultiplier = 0.0002f;
 

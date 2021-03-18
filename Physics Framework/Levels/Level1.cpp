@@ -12,6 +12,7 @@ void Level1::Initialize( Graphics& gfx )
 	for ( uint32_t i = 0; i < NUMBER_OF_CUBES; i++ )
 	{
 		cubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ), false );
+		cubes[i]->GetParticleModel()->SetMass( 20.0f );
 		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
 		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
@@ -82,7 +83,7 @@ void Level1::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 void Level1::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 {
 	LevelManager::UpdateInput( mouse, keyboard, dt );
-	
+
 	while ( !keyboard.KeyBufferIsEmpty() )
 	{
 		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();
@@ -90,7 +91,6 @@ void Level1::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 
 		if ( kbe.IsPress() )
 		{
-			static int cubeToUse = 0;
 
 			// select cube to move
 			switch ( kbe.GetKeyCode() )
@@ -101,18 +101,58 @@ void Level1::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 			case '4': cubeToUse = 3; break;
 			case '5': cubeToUse = 4; break;
 			}
-
-			// object movement
-			switch ( kbe.GetKeyCode() )
-			{
-			case VK_UP: cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f,  0.1f }, 25.0f ); break;
-			case VK_LEFT: cubes[cubeToUse]->GetParticleModel()->AddThrust( { -0.1f, 0.0f,  0.0f }, 25.0f ); break;
-			case VK_DOWN: cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f, -0.1f }, 25.0f ); break;
-			case VK_RIGHT: cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.1f, 0.0f,  0.0f }, 25.0f ); break;
-			case VK_HOME: cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.5f, 0.0f }, 25.0f ); break;
-			}
 		}
 	}
+
+	// object movement
+	if ( useThrustMovement )
+	{
+		// move cubes using thrust forces
+		if ( keyboard.KeyIsPressed( VK_UP ) )
+			cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f,  0.1f }, 0.25f );
+		if ( keyboard.KeyIsPressed( VK_LEFT ) )
+			cubes[cubeToUse]->GetParticleModel()->AddThrust( { -0.1f, 0.0f,  0.0f }, 0.25f );
+		if ( keyboard.KeyIsPressed( VK_DOWN ) )
+			cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.0f, -0.1f }, 0.25f );
+		if ( keyboard.KeyIsPressed( VK_RIGHT ) )
+			cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.1f, 0.0f,  0.0f }, 0.25f );
+	}
+	else
+	{
+		// move cubes using constant acceleration
+		static v3df acceleration = { 0.0f, 0.0f, 0.0f };
+		if ( keyboard.KeyIsPressed( VK_UP ) )
+		{
+			if ( acceleration.z < 0.0f ) acceleration.z = 0.0f;
+			acceleration.z += 0.01f;
+			cubes[cubeToUse]->GetParticleModel()->AddForce( { 0.0f, 0.0f, acceleration.z } );
+			cubes[cubeToUse]->GetParticleModel()->SetAcceleration( cubes[cubeToUse]->GetParticleModel()->GetAcceleration() + acceleration );
+		}
+		if ( keyboard.KeyIsPressed( VK_LEFT ) )
+		{
+			if ( acceleration.x > 0.0f ) acceleration.x = 0.0f;
+			acceleration.x -= 0.01f;
+			cubes[cubeToUse]->GetParticleModel()->AddForce( { acceleration.x, 0.0f, 0.0f } );
+			cubes[cubeToUse]->GetParticleModel()->SetAcceleration( cubes[cubeToUse]->GetParticleModel()->GetAcceleration() + acceleration );
+		}
+		if ( keyboard.KeyIsPressed( VK_DOWN ) )
+		{
+			if ( acceleration.z > 0.0f ) acceleration.z = 0.0f;
+			acceleration.z -= 0.01f;
+			cubes[cubeToUse]->GetParticleModel()->AddForce( { 0.0f, 0.0f, acceleration.z } );
+			cubes[cubeToUse]->GetParticleModel()->SetAcceleration( cubes[cubeToUse]->GetParticleModel()->GetAcceleration() + acceleration );
+		}
+		if ( keyboard.KeyIsPressed( VK_RIGHT ) )
+		{
+			if ( acceleration.x < 0.0f ) acceleration.x = 0.0f;
+			acceleration.x += 0.01f;
+			cubes[cubeToUse]->GetParticleModel()->AddForce( { acceleration.x, 0.0f,  0.0f } );
+			cubes[cubeToUse]->GetParticleModel()->SetAcceleration( cubes[cubeToUse]->GetParticleModel()->GetAcceleration() + acceleration );
+		}
+	}
+
+	if ( keyboard.KeyIsPressed( VK_HOME ) )
+		cubes[cubeToUse]->GetParticleModel()->AddThrust( { 0.0f, 0.6f, 0.0f }, 0.75f );
 
 	// reset object position
 	if ( keyboard.KeyIsPressed( 'R' ) )
@@ -161,8 +201,29 @@ void Level1::Render( Graphics& gfx )
 
 void Level1::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 {
-	if ( ImGui::Begin( "Cube Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
+	if ( ImGui::Begin( "Cube Physics", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
+		ImGui::PushItemWidth( 300.0f );
+
+		// select cube to use
+		for ( uint32_t i = 0; i < vec.size(); i++ )
+		{
+			ImGui::SameLine();
+			if ( ImGui::Button( vec[i]->GetID().c_str() ) )
+				cubeToUse = i;
+		}
+
+		// update cube movement type
+		ImGui::Text( "Movement Model:" );
+		ImGui::SameLine();
+		static int movementGroup = 0;
+		if ( ImGui::RadioButton( "Thrust", &movementGroup, 0 ) )
+			useThrustMovement = true;
+		ImGui::SameLine();
+		if ( ImGui::RadioButton( "Constant Acceleration", &movementGroup, 1 ) )
+			useThrustMovement = false;
+		
+		// update cube collision type
 		ImGui::Text( "Collision Type:" );
 		ImGui::SameLine();
 		static int collisionGroup = 0;
@@ -172,33 +233,62 @@ void Level1::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 		if ( ImGui::RadioButton( "Circle", &collisionGroup, 1 ) )
 			useAABB = false;
 
-		// update individual cube properties
-		for ( uint32_t i = 0; i < vec.size(); i++ )
+		if ( ImGui::CollapsingHeader( "Cube Properties" ) )
 		{
-			if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str() ) )
+			// update all cube properties
+			ImGui::Text( "Drag Type:" );
+			ImGui::SameLine();
+			static int dragFactorGroup = 0;
+			static bool dragLaminar = true;
+			if ( ImGui::RadioButton( "Laminar", &dragFactorGroup, 0 ) )
+				dragLaminar = true;
+			ImGui::SameLine();
+			if ( ImGui::RadioButton( "Turbulent", &dragFactorGroup, 1 ) )
+				dragLaminar = false;
+
+			static float dragFactor = vec[0]->GetParticleModel()->GetDragFactor();
+			ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
+
+			static float friction = vec[0]->GetParticleModel()->GetFriction();
+			ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0002f, "%.7f", 10 );
+
+			// update individual cube properties
+			for ( uint32_t i = 0; i < vec.size(); i++ )
 			{
-				float mass = vec[i]->GetParticleModel()->GetMass();
-				ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 1.0f, 100.0f, "%1.f" );
-				vec[i]->GetParticleModel()->SetMass( mass );
+				if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str(), ImGuiTreeNodeFlags_OpenOnDoubleClick ) )
+				{
+					float mass = vec[i]->GetParticleModel()->GetMass();
+					ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 5.0f, 20.0f, "%1.f" );
+					vec[i]->GetParticleModel()->SetMass( mass );
 
-				float friction = vec[i]->GetParticleModel()->GetFriction();
-				ImGui::SliderFloat( std::string( "Friction##" ).append( std::to_string( i ) ).c_str(), &friction, 0.0f, 0.0008f, "%.7f", 10 );
+					v3df acceleration = vec[i]->GetParticleModel()->GetAcceleration();
+					ImGui::Text( std::string( "Acceleration: " )
+						.append( std::string( "x(" ).append( std::to_string( acceleration.x ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "y(" ).append( std::to_string( acceleration.y ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "z(" ).append( std::to_string( acceleration.z ).c_str() ).append( ") " ).c_str() ).c_str()
+					);
+
+					v3df velocity = vec[i]->GetParticleModel()->GetVelocity();
+					ImGui::Text( std::string( "Velocity:     " )
+						.append( std::string( "x(" ).append( std::to_string( velocity.x ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "y(" ).append( std::to_string( velocity.y ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "z(" ).append( std::to_string( velocity.z ).c_str() ).append( ") " ).c_str() ).c_str()
+					);
+
+					v3df netForce = vec[i]->GetParticleModel()->GetNetForce();
+					ImGui::Text( std::string( "Net Force:    " )
+						.append( std::string( "x(" ).append( std::to_string( netForce.x ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "y(" ).append( std::to_string( netForce.y ).c_str() ).append( "), " ).c_str() )
+						.append( std::string( "z(" ).append( std::to_string( netForce.z ).c_str() ).append( ") " ).c_str() ).c_str()
+					);
+				}
 				vec[i]->GetParticleModel()->SetFriction( friction );
-
-				float dragFactor = vec[i]->GetParticleModel()->GetDragFactor();
-				ImGui::SliderFloat( std::string( "Drag Factor##" ).append( std::to_string( i ) ).c_str(), &dragFactor, 0.0f, 10.0f, "%1.f" );
 				vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
-
-				ImGui::Text( "Drag Type: " );
-				ImGui::SameLine();
-				static int dragFactorGroup = 0;
-				if ( ImGui::RadioButton( std::string( "Laminar##" ).append( std::to_string( i ) ).c_str(), &dragFactorGroup + i, 0 ) )
-					vec[i]->GetParticleModel()->SetLaminar( true );
-				ImGui::SameLine();
-				if ( ImGui::RadioButton( std::string( "Turbulent##" ).append( std::to_string( i ) ).c_str(), &dragFactorGroup + i, 1 ) )
-					vec[i]->GetParticleModel()->SetLaminar( false );
+				vec[i]->GetParticleModel()->SetLaminar( dragLaminar );
 			}
 		}
+
+		ImGui::PopItemWidth();
 	}
 	ImGui::End();
 }

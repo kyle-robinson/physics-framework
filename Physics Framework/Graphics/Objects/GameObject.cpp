@@ -64,9 +64,6 @@ void GameObject::Update( const float dt, bool useRigidBodies )
 	{
 		_rigidBody->SetPosition( _transform->GetPosition() );
 		_rigidBody->Update( dt );
-		//if ( _transform->GetParent() != nullptr )
-		//	XMStoreFloat4x4( &_transform->GetTransform(),
-		//		_transform->GetTransformMatrix() * _transform->GetParent()->GetTransform()->GetTransformMatrix() );
 	}
 
 }

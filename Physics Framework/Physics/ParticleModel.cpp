@@ -53,7 +53,7 @@ void ParticleModel::Update( const float dt )
 	Velocity( dt );
 	DragForce( dt );
 	ComputePosition( dt );
-	CheckWorldCollisions();
+	CheckWorldCollisions( dt );
 
 	_netForce = { 0.0f, 0.0f, 0.0f };
 }
@@ -180,7 +180,7 @@ void ParticleModel::ComputePosition( const float dt )
 	_transform->SetPosition( position );
 }
 
-void ParticleModel::CheckWorldCollisions()
+void ParticleModel::CheckWorldCollisions( const float dt )
 {
 	v3df position = _transform->GetPosition();
 	
@@ -189,20 +189,26 @@ void ParticleModel::CheckWorldCollisions()
 	{
 		_velocity.y = 0.0f;
 		position.y = _transform->GetInitialPosition().y;
-		_transform->SetPosition( { position } );
 	}
 	else if ( position.y > 7.5f )
 	{
-		_velocity.y = -0.05f;
+		_velocity.y = 0.0f;
+		position.y = 7.5f;
 	}
 
 	// left/right collisions
-	if ( position.x < -6.5f ) _velocity.x = 0.01f;
-	else if ( position.x > 6.5f ) _velocity.x = -0.01f;
+	if ( position.x < -6.5f )
+		position.x = -6.5f;
+	else if ( position.x > 6.5f )
+		position.x = 6.5f;
 
 	// front/back collisions
-	if ( position.z < 0.0f ) _velocity.z = 0.01f;
-	else if ( position.z > 15.0f ) _velocity.z = -0.01f;
+	if ( position.z < 0.0f )
+		position.z = 0.0f;
+	else if ( position.z > 15.0f )
+		position.z = 15.0f;
+
+	_transform->SetPosition( position );
 }
 
 void ParticleModel::ResetForces()
