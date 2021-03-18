@@ -8,13 +8,6 @@
 #include "Levels/Level3.h"
 #include "Graphics/Window/WindowContainer.h"
 
-static enum class ActiveLevel
-{
-	LEVEL_1,
-	LEVEL_2,
-	LEVEL_3
-};
-
 class Application : public WindowContainer
 {
 public:
@@ -29,11 +22,19 @@ public:
 	void Update();
 	void Render();
 private:
+	void SpawnControlWindow();
+
+	enum ActiveLevel
+	{
+		LEVEL_1,
+		LEVEL_2,
+		LEVEL_3
+	} activeLevel = LEVEL_1;
+
 	Timer timer;
 	Level1 level1;
 	Level2 level2;
 	Level3 level3;
-	ActiveLevel activeLevel;
 };
 
 #endif

@@ -17,10 +17,10 @@ public:
 	const XMFLOAT3& GetRotationFloat3() const noexcept { return rotation; };
 	const v3df& GetRotationVector3() const noexcept { return { rotation.x, rotation.y, rotation.z }; };
 
-	const XMVECTOR& GetForwardVector( BOOL omitY = false ) noexcept;
-	const XMVECTOR& GetBackwardVector( BOOL omitY = false ) noexcept;
-	const XMVECTOR& GetLeftVector( BOOL omitY = false ) noexcept;
-	const XMVECTOR& GetRightVector( BOOL omitY = false ) noexcept;
+	const XMVECTOR& GetForwardVector( BOOL omitY = true ) noexcept;
+	const XMVECTOR& GetBackwardVector( BOOL omitY = true ) noexcept;
+	const XMVECTOR& GetLeftVector( BOOL omitY = true ) noexcept;
+	const XMVECTOR& GetRightVector( BOOL omitY = true ) noexcept;
 	const XMVECTOR& GetUpVector() noexcept;
 
 	void SetPosition( const XMFLOAT3& pos ) noexcept;

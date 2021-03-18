@@ -14,6 +14,13 @@
 
 class Level3 : public LevelManager
 {
+private:
+	enum ActiveSimulation
+	{
+		SIMULATION_1,
+		SIMULATION_2,
+		SIMULATION_3
+	} activeSimulation = SIMULATION_1;
 public:
 	void Initialize( Graphics& gfx ) override;
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
@@ -21,14 +28,7 @@ public:
 	void SpawnControlWindow( Graphics& gfx );
 private:
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
-
-	static enum class ActiveSimulation
-	{
-		SIMULATION_1,
-		SIMULATION_2,
-		SIMULATION_3
-	};
-	ActiveSimulation activeSimulation = ActiveSimulation::SIMULATION_1;
+	void LoadSimulation( ActiveSimulation simulation );
 
 	// Rigid Bodies
 	Box* topCube;

@@ -6,6 +6,7 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transfor
 	_mass = 50.0f;
 	_useLaminar = true;
 	_isParticle = false;
+	_ignoreWorldCollisions = false;
 
 	_drag = 2.0f;
 	_friction = { 0.0f, 0.0f, 0.0f };
@@ -53,7 +54,8 @@ void ParticleModel::Update( const float dt )
 	Velocity( dt );
 	DragForce( dt );
 	ComputePosition( dt );
-	CheckWorldCollisions( dt );
+	if ( !_ignoreWorldCollisions )
+		CheckWorldCollisions( dt );
 
 	_netForce = { 0.0f, 0.0f, 0.0f };
 }
@@ -205,23 +207,23 @@ void ParticleModel::CheckWorldCollisions( const float dt )
 		_velocity.y = 0.0f;
 		position.y = _transform->GetInitialPosition().y;
 	}
-	else if ( position.y > 7.5f )
+	else if ( position.y > 9.5f )
 	{
 		_velocity.y = 0.0f;
-		position.y = 7.5f;
+		position.y = 9.5f;
 	}
 
 	// x collisions
-	if ( position.x < -6.5f )
-		position.x = -6.5f;
-	else if ( position.x > 6.5f )
-		position.x = 6.5f;
+	if ( position.x < -9.5f )
+		position.x = -9.5f;
+	else if ( position.x > 9.5f )
+		position.x = 9.5f;
 
 	// z collisions
-	if ( position.z < 0.0f )
-		position.z = 0.0f;
-	else if ( position.z > 15.0f )
-		position.z = 15.0f;
+	if ( position.z < -4.5f )
+		position.z = -4.5f;
+	else if ( position.z > 19.5f )
+		position.z = 19.5f;
 
 	_transform->SetPosition( position );
 }

@@ -23,6 +23,14 @@ public:
 protected:
 	virtual void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt );
 
+	enum ActiveScene
+	{
+		SUMMER,
+		WINTER,
+		APERATURE,
+		MINECRAFT
+	} activeScene = SUMMER;
+
 	// Buffers
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	VertexBuffer<SimpleVertex> vb_cube;
@@ -41,30 +49,23 @@ protected:
 	Geometry planeGeometry;
 
 	// Textures
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSand;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureLava;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureBeach;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureMarble;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureGround;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureHercules;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textures;
 private:
 	void InitializeMaterials( Graphics& gfx );
 	void InitializeGeometry( Graphics& gfx );
 	bool InitializeTextures( Graphics& gfx );
 	bool InitializeBuffers( Graphics& gfx );
 	void InitializeObjects( Graphics& gfx );
-
-	// Local Variables	
-	const int planeWidth = 8;
-	const int planeHeight = 6;
+	void SpawnControlWindow();
 
 	// Local Objects
 	Light basicLight;
+	bool changeScene = false;
 	std::shared_ptr<Camera> camera;
 	std::unique_ptr<GameObject> torus;
 	std::unique_ptr<GameObject> ground;
 	std::unique_ptr<GameObject> skysphere;
-	std::vector<XMFLOAT4X4> planeMatrices;
+	std::vector<std::unique_ptr<GameObject>> walls;
 };
 
 #endif

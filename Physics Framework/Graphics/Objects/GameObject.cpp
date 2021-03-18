@@ -16,13 +16,9 @@ GameObject::GameObject( const std::string& id, bool useRigidBodies ) : _id( id )
 
 		_rigidBody->SetMass( 5.0f );
 		_rigidBody->SetInverseMass( 5.0f );
-		_rigidBody->SetOrientation( 1.0f, 0.0f, 0.0f, 0.0f );
-		_rigidBody->SetRotation( 0.0f, 0.0f, 0.0f );
 		_rigidBody->SetCanSleep( true );
-		_rigidBody->SetAwake( false );
 		_rigidBody->SetAngularDamping( 0.8f );
 		_rigidBody->SetLinearDamping( 0.95f );
-		_rigidBody->SetVelocity( 0.0f, 0.0f, 0.0f );
 		_rigidBody->SetAcceleration( 0.0f, -10.0f, 0.0f );
 
 		Matrix3 tensor;

@@ -10,7 +10,7 @@ Particle::Particle( const std::string& id ) : id( id )
 	
 	_transform = std::make_shared<Transform>();
 	_transform->SetScale( 0.5f, 0.5f, 0.5f );
-	_transform->SetInitialPosition( 0.0f, 0.5f, 0.5f );
+	_transform->SetInitialPosition( 0.0f, 0.5f, 5.0f );
 	_particleModel = std::make_shared<ParticleModel>( _transform );
 	_particleModel->SetIsParticle( true );
 	_appearance = std::make_shared<Appearance>();

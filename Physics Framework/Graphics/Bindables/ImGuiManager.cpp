@@ -37,27 +37,33 @@ void ImGuiManager::EndRender() const noexcept
 
 void ImGuiManager::SpawnInstructionWindow() const noexcept
 {
-    if ( ImGui::Begin( "Scene Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    if ( ImGui::Begin( "Scene Instructions", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         if ( ImGui::CollapsingHeader( "Camera Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
         {
-            ImGui::Text( "WASD    ->  Move Camera" );
-            ImGui::Text( "SPACE   ->  Move Up" );
-            ImGui::Text( "CONTROL ->  Move Down" );
-            ImGui::Text( "SHIFT   ->  Move Faster" );
-            ImGui::Text( "RMB     ->  Rotate Camera" );
+            ImGui::Text( "WASD    ->  Walk" );
+            ImGui::Text( "SHIFT   ->  Run" );
+            ImGui::Text( "RMB     ->  Turn" );
         }
 
         if ( ImGui::CollapsingHeader( "Cube Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
         {
+            ImGui::TextColored( { 1.0f, 0.0f, 0.0f, 1.0f }, "Level 1 Only" );
             ImGui::Text( "12345   ->  Select Cube" );
-            ImGui::Text( "UP      ->  Move Cube Forward" );
-            ImGui::Text( "DOWN    ->  Move Cube Backward" );
-            ImGui::Text( "LEFT    ->  Move Cube Left" );
-            ImGui::Text( "RIGHT   ->  Move Cube Right" );
-            ImGui::Text( "HOME    ->  Move Cube Up" );
+            ImGui::Text( "UP      ->  Forward" );
+            ImGui::Text( "DOWN    ->  Backward" );
+            ImGui::Text( "LEFT    ->  Left" );
+            ImGui::Text( "RIGHT   ->  Right" );
+            ImGui::Text( "HOME    ->  Up" );
             ImGui::Text( "R       ->  Reset Position" );
             ImGui::Text( "F       ->  Reset Forces" );
+        }
+
+        if ( ImGui::CollapsingHeader( "Level System", ImGuiTreeNodeFlags_DefaultOpen ) )
+        {
+            ImGui::Text( "F1      ->  Level 1: Forces" );
+            ImGui::Text( "F2      ->  Level 2: Particles" );
+            ImGui::Text( "F3      ->  Level 3: Rigid Bodies" );
         }
     }
     ImGui::End();

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Application.h"
+#include <imgui/imgui.h>
 
 bool Application::Initialize(
 	HINSTANCE hInstance,
@@ -21,9 +22,6 @@ bool Application::Initialize(
 	level2.Initialize( gfx );
 	level3.Initialize( gfx );
 
-	// starting level
-	activeLevel = ActiveLevel::LEVEL_1;
-
 	keyboard.DisableAutoRepeatKeys();
 	keyboard.DisableAutoRepeatChars();
 
@@ -43,28 +41,44 @@ void Application::Update()
 	dt *= 0.05f;
 
 	// change current level
-	if ( keyboard.KeyIsPressed( VK_F1 ) ) activeLevel = ActiveLevel::LEVEL_1;
-	if ( keyboard.KeyIsPressed( VK_F2 ) ) activeLevel = ActiveLevel::LEVEL_2;
-	if ( keyboard.KeyIsPressed( VK_F3 ) ) activeLevel = ActiveLevel::LEVEL_3;
+	if ( keyboard.KeyIsPressed( VK_F1 ) ) activeLevel = LEVEL_1;
+	if ( keyboard.KeyIsPressed( VK_F2 ) ) activeLevel = LEVEL_2;
+	if ( keyboard.KeyIsPressed( VK_F3 ) ) activeLevel = LEVEL_3;
 
 	// update current level
 	switch ( activeLevel )
 	{
-	case ActiveLevel::LEVEL_1: level1.Update( mouse, keyboard, dt ); break;
-	case ActiveLevel::LEVEL_2: level2.Update( mouse, keyboard, dt ); break;
-	case ActiveLevel::LEVEL_3: level3.Update( mouse, keyboard, dt ); break;
+	case LEVEL_1: level1.Update( mouse, keyboard, dt ); break;
+	case LEVEL_2: level2.Update( mouse, keyboard, dt ); break;
+	case LEVEL_3: level3.Update( mouse, keyboard, dt ); break;
 	default: __debugbreak(); break;
 	}
 }
 
 void Application::Render()
 {
+	gfx.BeginFrame();
+
 	// render current level
 	switch ( activeLevel )
 	{
-	case ActiveLevel::LEVEL_1: level1.Render( gfx ); break;
-	case ActiveLevel::LEVEL_2: level2.Render( gfx ); break;
-	case ActiveLevel::LEVEL_3: level3.Render( gfx ); break;
+	case LEVEL_1: level1.Render( gfx ); break;
+	case LEVEL_2: level2.Render( gfx ); break;
+	case LEVEL_3: level3.Render( gfx ); break;
 	default: __debugbreak(); break;
 	}
+
+	SpawnControlWindow();
+	gfx.EndFrame();
+}
+
+void Application::SpawnControlWindow()
+{
+	if ( ImGui::Begin( "Active Level" ) )
+	{
+		if ( ImGui::Button( "Level 1: Forces/Collisions", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_1;
+		if ( ImGui::Button( "Level 2: Particle System", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_2;
+		if ( ImGui::Button( "Level 3: Rigid Bodies", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_3;
+	}
+	ImGui::End();
 }

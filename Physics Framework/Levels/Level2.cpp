@@ -11,7 +11,6 @@ void Level2::Initialize( Graphics& gfx )
 	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
-		particles[i]->GetAppearance()->SetTextureRV( textureLava.Get() );
 		particles[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		particles[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
@@ -50,6 +49,14 @@ void Level2::Render( Graphics& gfx )
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
 	{
+		// update textures
+		switch ( activeScene )
+		{
+		case SUMMER: particles[i]->GetAppearance()->SetTextureRV( textures["Water"].Get() ); break;
+		case WINTER: particles[i]->GetAppearance()->SetTextureRV( textures["Snow"].Get() ); break;
+		case APERATURE: particles[i]->GetAppearance()->SetTextureRV( textures["Gas"].Get() ); break;
+		case MINECRAFT: particles[i]->GetAppearance()->SetTextureRV( textures["Lava"].Get() ); break;
+		}
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
 		GetContext( gfx )->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;

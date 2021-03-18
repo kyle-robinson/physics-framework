@@ -16,6 +16,7 @@ public:
 	bool CollisionCheckCircle( v3df position, float radius );
 	float GetCollisionRadius() const noexcept { return _boundingSphere; }
 	void SetCollisionRadius( float radius ) noexcept { _boundingSphere = radius; }
+	void IgnoreWorldCollisions( bool ignoreCollisions = true ) { _ignoreWorldCollisions = ignoreCollisions; }
 
 	// particle movement/positioning
 	void Move( float x, float y, float z ) noexcept { _netForce = { x, y, z }; }
@@ -95,6 +96,7 @@ private:
 
 	// Local Variables
 	float _weight;
+	bool _ignoreWorldCollisions;
 	std::vector<std::pair<v3df, float>> _thrustForces;
 };
 

@@ -15,7 +15,6 @@ void Level1::Initialize( Graphics& gfx )
 		cubes[i]->GetParticleModel()->SetMass( 20.0f );
 		cubes[i]->GetTransform()->SetScale( 0.5f, 0.5f, 0.5f );
 		cubes[i]->GetTransform()->SetInitialPosition( -4.0f + ( i * 2.0f ), 0.5f, 10.0f );
-		cubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		cubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		cubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
@@ -29,12 +28,12 @@ void Level1::CollisionResolution( std::unique_ptr<GameObject>& cube1, std::uniqu
 	float forceMagnitude = (
 		cube1->GetParticleModel()->GetMass() * velocityOne +
 		cube2->GetParticleModel()->GetMass() * velocityTwo
-		) / dt;
+	) / dt;
 
 	v3df force = (
 		cube2->GetTransform()->GetPosition() -
 		cube1->GetTransform()->GetPosition()
-		).normalize() * forceMagnitude * 0.0015f;
+	).normalize() * forceMagnitude * 0.0015f;
 
 	v3df inverseForce;
 	inverseForce.x = -force.x;
@@ -181,15 +180,20 @@ void Level1::Render( Graphics& gfx )
 
 		// set textures
 		if ( cubes[i]->GetAppearance()->HasTexture() )
-		{
-			GetContext( gfx )->PSSetShaderResources( 0, 1, cubes[i]->GetAppearance()->GetTextureRV() );
 			cb_vs_matrix.data.HasTexture = 1.0f;
-		}
 		else
-		{
 			cb_vs_matrix.data.HasTexture = 0.0f;
-		}
 
+
+		// update textures
+		switch ( activeScene )
+		{
+		case SUMMER: cubes[i]->GetAppearance()->SetTextureRV( textures["Marble"].Get() ); break;
+		case WINTER: cubes[i]->GetAppearance()->SetTextureRV( textures["Crate"].Get() ); break;
+		case APERATURE: cubes[i]->GetAppearance()->SetTextureRV( textures["Companion"].Get() ); break;
+		case MINECRAFT: cubes[i]->GetAppearance()->SetTextureRV( textures["Slime"].Get() ); break;
+		}
+		GetContext( gfx )->PSSetShaderResources( 0, 1, cubes[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		cubes[i]->Draw( GetContext( gfx ) );
 	}
@@ -206,6 +210,7 @@ void Level1::SpawnControlWindow()
 		ImGui::PushItemWidth( 300.0f );
 
 		// select cube to use
+		ImGui::Text( "Cube To Use:" );
 		for ( uint32_t i = 0; i < cubes.size(); i++ )
 		{
 			ImGui::SameLine();
@@ -255,7 +260,7 @@ void Level1::SpawnControlWindow()
 			// update individual cube properties
 			for ( uint32_t i = 0; i < cubes.size(); i++ )
 			{
-				if ( ImGui::CollapsingHeader( cubes[i]->GetID().c_str(), ImGuiTreeNodeFlags_OpenOnDoubleClick ) )
+				if ( ImGui::CollapsingHeader( cubes[i]->GetID().c_str(), ImGuiTreeNodeFlags_Leaf ) )
 				{
 					float mass = cubes[i]->GetParticleModel()->GetMass();
 					ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 5.0f, 20.0f, "%1.f" );
