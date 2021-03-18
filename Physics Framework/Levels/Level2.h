@@ -13,7 +13,7 @@ public:
 	void Initialize( Graphics& gfx ) override;
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void Render( Graphics& gfx ) override;
-	void SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec );
+	void SpawnControlWindow();
 private:
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 

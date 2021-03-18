@@ -194,22 +194,22 @@ void Level1::Render( Graphics& gfx )
 		cubes[i]->Draw( GetContext( gfx ) );
 	}
 
-	SpawnControlWindow( cubes );
+	SpawnControlWindow();
 
 	LevelManager::EndRender( gfx );
 }
 
-void Level1::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
+void Level1::SpawnControlWindow()
 {
 	if ( ImGui::Begin( "Cube Physics", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
 		ImGui::PushItemWidth( 300.0f );
 
 		// select cube to use
-		for ( uint32_t i = 0; i < vec.size(); i++ )
+		for ( uint32_t i = 0; i < cubes.size(); i++ )
 		{
 			ImGui::SameLine();
-			if ( ImGui::Button( vec[i]->GetID().c_str() ) )
+			if ( ImGui::Button( cubes[i]->GetID().c_str() ) )
 				cubeToUse = i;
 		}
 
@@ -246,45 +246,45 @@ void Level1::SpawnControlWindow( std::vector<std::unique_ptr<GameObject>>& vec )
 			if ( ImGui::RadioButton( "Turbulent", &dragFactorGroup, 1 ) )
 				dragLaminar = false;
 
-			static float dragFactor = vec[0]->GetParticleModel()->GetDragFactor();
+			static float dragFactor = cubes[0]->GetParticleModel()->GetDragFactor();
 			ImGui::SliderFloat( "Drag Factor", &dragFactor, 0.0f, 10.0f, "%1.f" );
 
-			static float friction = vec[0]->GetParticleModel()->GetFriction();
+			static float friction = cubes[0]->GetParticleModel()->GetFriction();
 			ImGui::SliderFloat( "Friction", &friction, 0.0f, 0.0002f, "%.7f", 10 );
 
 			// update individual cube properties
-			for ( uint32_t i = 0; i < vec.size(); i++ )
+			for ( uint32_t i = 0; i < cubes.size(); i++ )
 			{
-				if ( ImGui::CollapsingHeader( vec[i]->GetID().c_str(), ImGuiTreeNodeFlags_OpenOnDoubleClick ) )
+				if ( ImGui::CollapsingHeader( cubes[i]->GetID().c_str(), ImGuiTreeNodeFlags_OpenOnDoubleClick ) )
 				{
-					float mass = vec[i]->GetParticleModel()->GetMass();
+					float mass = cubes[i]->GetParticleModel()->GetMass();
 					ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 5.0f, 20.0f, "%1.f" );
-					vec[i]->GetParticleModel()->SetMass( mass );
+					cubes[i]->GetParticleModel()->SetMass( mass );
 
-					v3df acceleration = vec[i]->GetParticleModel()->GetAcceleration();
+					v3df acceleration = cubes[i]->GetParticleModel()->GetAcceleration();
 					ImGui::Text( std::string( "Acceleration: " )
 						.append( std::string( "x(" ).append( std::to_string( acceleration.x ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "y(" ).append( std::to_string( acceleration.y ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "z(" ).append( std::to_string( acceleration.z ).c_str() ).append( ") " ).c_str() ).c_str()
 					);
 
-					v3df velocity = vec[i]->GetParticleModel()->GetVelocity();
+					v3df velocity = cubes[i]->GetParticleModel()->GetVelocity();
 					ImGui::Text( std::string( "Velocity:     " )
 						.append( std::string( "x(" ).append( std::to_string( velocity.x ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "y(" ).append( std::to_string( velocity.y ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "z(" ).append( std::to_string( velocity.z ).c_str() ).append( ") " ).c_str() ).c_str()
 					);
 
-					v3df netForce = vec[i]->GetParticleModel()->GetNetForce();
+					v3df netForce = cubes[i]->GetParticleModel()->GetNetForce();
 					ImGui::Text( std::string( "Net Force:    " )
 						.append( std::string( "x(" ).append( std::to_string( netForce.x ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "y(" ).append( std::to_string( netForce.y ).c_str() ).append( "), " ).c_str() )
 						.append( std::string( "z(" ).append( std::to_string( netForce.z ).c_str() ).append( ") " ).c_str() ).c_str()
 					);
 				}
-				vec[i]->GetParticleModel()->SetFriction( friction );
-				vec[i]->GetParticleModel()->SetDragFactor( dragFactor );
-				vec[i]->GetParticleModel()->SetLaminar( dragLaminar );
+				cubes[i]->GetParticleModel()->SetFriction( friction );
+				cubes[i]->GetParticleModel()->SetDragFactor( dragFactor );
+				cubes[i]->GetParticleModel()->SetLaminar( dragLaminar );
 			}
 		}
 

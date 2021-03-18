@@ -56,23 +56,23 @@ void Level2::Render( Graphics& gfx )
 		if ( useParticles ) particles[i]->Draw( GetContext( gfx ) );
 	}
 
-	SpawnControlWindow( particles );
+	SpawnControlWindow();
 
 	LevelManager::EndRender( gfx );
 }
 
-void Level2::SpawnControlWindow( std::vector<std::unique_ptr<Particle>>& vec )
+void Level2::SpawnControlWindow()
 {
 	if ( ImGui::Begin( "Particle Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
 		ImGui::Checkbox( " Enable Particles", &useParticles );
 
-		float size = vec[0]->GetMaxSize();
+		float size = particles[0]->GetMaxSize();
 		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
 		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 5.0f, "%1.f" );
 
-		for ( uint32_t i = 0; i < vec.size(); i++ )
-			vec[i]->SetMaxSize( size );
+		for ( uint32_t i = 0; i < particles.size(); i++ )
+			particles[i]->SetMaxSize( size );
 	}
 	ImGui::End();
 }

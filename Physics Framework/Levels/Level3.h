@@ -18,9 +18,17 @@ public:
 	void Initialize( Graphics& gfx ) override;
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void Render( Graphics& gfx ) override;
-	void SpawnControlWindow();
+	void SpawnControlWindow( Graphics& gfx );
 private:
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
+
+	static enum class ActiveSimulation
+	{
+		SIMULATION_1,
+		SIMULATION_2,
+		SIMULATION_3
+	};
+	ActiveSimulation activeSimulation = ActiveSimulation::SIMULATION_1;
 
 	// Rigid Bodies
 	Box* topCube;

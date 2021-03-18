@@ -17,11 +17,11 @@ ParticleModel::ParticleModel( std::shared_ptr<Transform> transform ) : _transfor
 bool ParticleModel::CollisionCheckAABB( v3df position )
 {
 	static float offset = 0.5f;
-	if ( ( _transform->GetPosition().x - offset <= position.x + offset &&
+	if ( ( _transform->GetPosition().x - offset <= position.x + offset && // x collisions
 		   _transform->GetPosition().x + offset >= position.x - offset ) &&
-		 ( _transform->GetPosition().y - offset <= position.y + offset &&
+		 ( _transform->GetPosition().y - offset <= position.y + offset && // y collisions
 		   _transform->GetPosition().y + offset >= position.y - offset ) &&
-		 ( _transform->GetPosition().z - offset <= position.z + offset &&
+		 ( _transform->GetPosition().z - offset <= position.z + offset && // z collisions
 		   _transform->GetPosition().z + offset >= position.z - offset )
 	   )
 	{
@@ -33,11 +33,11 @@ bool ParticleModel::CollisionCheckAABB( v3df position )
 
 bool ParticleModel::CollisionCheckCircle( v3df position, float radius )
 {
-	if ( ( _transform->GetPosition().x - position.x ) *
+	if ( ( _transform->GetPosition().x - position.x ) * // x collisions
 		 ( _transform->GetPosition().x - position.x ) +
-		 ( _transform->GetPosition().y - position.y ) *
+		 ( _transform->GetPosition().y - position.y ) * // y collisions
 		 ( _transform->GetPosition().y - position.y ) +
-		 ( _transform->GetPosition().z - position.z ) *
+		 ( _transform->GetPosition().z - position.z ) * // z collisions
 		 ( _transform->GetPosition().z - position.z ) <= radius * radius )
 		 return true;
 	else
@@ -98,13 +98,18 @@ void ParticleModel::DragForce( const float dt )
 		else DragTurbulent();
 
 		// add to velocity and adjust for negative values
-		if ( _netForce.x < 0.0f ) _velocity.x *= 1.0f + _netForce.x;
-		else _velocity.x *= 1.0f - _netForce.x;
+		if ( _netForce.x < 0.0f ) // x values
+			_velocity.x *= 1.0f + _netForce.x;
+		else
+			_velocity.x *= 1.0f - _netForce.x;
 
-		if ( _netForce.y < 0.0f ) _velocity.y *= 1.0f + _netForce.y;
+		if ( _netForce.y < 0.0f ) // y values
+			_velocity.y *= 1.0f + _netForce.y;
 
-		if ( _netForce.z < 0.0f ) _velocity.z *= 1.0f + _netForce.z;
-		else _velocity.z *= 1.0f - _netForce.z;
+		if ( _netForce.z < 0.0f ) // z values
+			_velocity.z *= 1.0f + _netForce.z;
+		else
+			_velocity.z *= 1.0f - _netForce.z;
 	}
 }
 
@@ -124,14 +129,20 @@ void ParticleModel::DragTurbulent()
 	v3df newVelocity = unitVelocity * dragMagnitude;
 
 	// adjust for negative values
-	if ( newVelocity.x < 0.0f ) _netForce.x += newVelocity.x;
-	else _netForce.x -= newVelocity.x;
+	if ( newVelocity.x < 0.0f ) // x values
+		_netForce.x += newVelocity.x;
+	else
+		_netForce.x -= newVelocity.x;
 
-	if ( newVelocity.y < 0.0f ) _netForce.y += newVelocity.y;
-	else _netForce.y -= newVelocity.y;
+	if ( newVelocity.y < 0.0f ) // y values
+		_netForce.y += newVelocity.y;
+	else
+		_netForce.y -= newVelocity.y;
 
-	if ( newVelocity.z < 0.0f ) _netForce.z += newVelocity.z;
-	else _netForce.z -= newVelocity.z;
+	if ( newVelocity.z < 0.0f ) // z values
+		_netForce.z += newVelocity.z;
+	else
+		_netForce.z -= newVelocity.z;
 }
 
 void ParticleModel::Acceleration()
@@ -157,17 +168,21 @@ void ParticleModel::Velocity( const float dt )
 	// v = u + at
 	_velocity += _acceleration * dt;
 
-	// x-axis friction
-	if( _velocity.x > 0.0f ) _velocity.x -= _frictionMultiplier;
-	else if( _velocity.x < 0.0f ) _velocity.x += _frictionMultiplier;
+	// adjust for negative values
+	if( _velocity.x > 0.0f ) // x values
+		_velocity.x -= _frictionMultiplier;
+	else if( _velocity.x < 0.0f )
+		_velocity.x += _frictionMultiplier;
 
-	// y-axis friction
-	if( _velocity.y > 0.0f ) _velocity.y -= _frictionMultiplier;
-	else if( _velocity.y < 0.0f ) _velocity.y += _frictionMultiplier;
+	if( _velocity.y > 0.0f ) // y values
+		_velocity.y -= _frictionMultiplier;
+	else if( _velocity.y < 0.0f )
+		_velocity.y += _frictionMultiplier;
 
-	// z-axis friction
-	if( _velocity.z > 0.0f ) _velocity.z -= _frictionMultiplier;
-	else if( _velocity.z < 0.0f ) _velocity.z += _frictionMultiplier;
+	if( _velocity.z > 0.0f ) // z values
+		_velocity.z -= _frictionMultiplier;
+	else if( _velocity.z < 0.0f )
+		_velocity.z += _frictionMultiplier;
 }
 
 void ParticleModel::ComputePosition( const float dt )
@@ -183,8 +198,8 @@ void ParticleModel::ComputePosition( const float dt )
 void ParticleModel::CheckWorldCollisions( const float dt )
 {
 	v3df position = _transform->GetPosition();
-	
-	// floor/ceiling collisions
+
+	// y collisions
 	if ( position.y < _transform->GetInitialPosition().y )
 	{
 		_velocity.y = 0.0f;
@@ -196,13 +211,13 @@ void ParticleModel::CheckWorldCollisions( const float dt )
 		position.y = 7.5f;
 	}
 
-	// left/right collisions
+	// x collisions
 	if ( position.x < -6.5f )
 		position.x = -6.5f;
 	else if ( position.x > 6.5f )
 		position.x = 6.5f;
 
-	// front/back collisions
+	// z collisions
 	if ( position.z < 0.0f )
 		position.z = 0.0f;
 	else if ( position.z > 15.0f )

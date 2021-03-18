@@ -14,11 +14,11 @@ void Level3::Initialize( Graphics& gfx )
 
 		if ( i == 0 )
 		{
-			rigidCubes[i]->SetPosition( 1.0f, 6.0f, 1.0f );
+			rigidCubes[i]->SetPosition( 1.0f, 5.0f, 1.0f );
 			rigidCubes[i]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.25f, 0.0f );
 		}
 		if ( i == 1 )
-			rigidCubes[i]->SetPosition( 0.0f, 2.0f, 1.0f );
+			rigidCubes[i]->SetPosition( 0.0f, 0.0f, 1.0f );
 
 		rigidCubes[i]->GetAppearance()->SetTextureRV( textureMarble.Get() );
 		rigidCubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
@@ -116,10 +116,87 @@ void Level3::Render( Graphics& gfx )
 		rigidCubes[i]->Draw( GetContext( gfx ) );
 	}
 
+	SpawnControlWindow( gfx );
+
 	LevelManager::EndRender( gfx );
 }
 
-void Level3::SpawnControlWindow()
+void Level3::SpawnControlWindow( Graphics& gfx )
 {
+	if ( ImGui::Begin( "Rigid Body Controls" ) )
+	{
+		// set/reset rigid body simulation
+		static bool resetSimulation = false;
+		static std::string simulationString = "Reset Simulation";
+		if ( ImGui::Button( ( activeSimulation == ActiveSimulation::SIMULATION_1 ) ? simulationString.c_str() : "Simulation 1" ) )
+		{
+			activeSimulation = ActiveSimulation::SIMULATION_1;
+			resetSimulation = true;
+		}
+		if ( ImGui::Button( ( activeSimulation == ActiveSimulation::SIMULATION_2 ) ? simulationString.c_str() : "Simulation 2" ) )
+		{
+			activeSimulation = ActiveSimulation::SIMULATION_2;
+			resetSimulation = true;
+		}
+		if ( ImGui::Button( ( activeSimulation == ActiveSimulation::SIMULATION_3 ) ? simulationString.c_str() : "Simulation 3" ) )
+		{
+			activeSimulation = ActiveSimulation::SIMULATION_3;
+			resetSimulation = true;
+		}
 
+		// reset active simulation
+		if ( resetSimulation )
+		{
+			resetSimulation = false;
+			switch ( activeSimulation )
+			{
+			case ActiveSimulation::SIMULATION_1:
+			{
+				rigidCubes[0]->SetPosition( 1.0f, 5.0f, 1.0f );
+				rigidCubes[0]->GetRigidBody()->SetOrientation( 0.5f, 0.5f, 0.25f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->ResetForces();
+				rigidCubes[0]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->SetVelocity( 0.0f, 0.0f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->SetAwake( true );
+
+				rigidCubes[1]->SetPosition( 0.0f, 0.0f, 1.0f );
+				rigidCubes[1]->GetRigidBody()->SetOrientation( 0.0f, 0.0f, 0.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->ResetForces();
+				rigidCubes[1]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->SetVelocity( 0.0f, 0.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->SetAwake( true );
+				break;
+			}
+			case ActiveSimulation::SIMULATION_2:
+			{
+				rigidCubes[0]->SetPosition( -2.0f, 5.0f, 1.0f );
+				rigidCubes[0]->GetRigidBody()->SetOrientation( 1.0f, 0.25f, 0.75f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->ResetForces();
+				rigidCubes[0]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->SetVelocity( 0.0f, 0.0f, 0.0f );
+				rigidCubes[0]->GetRigidBody()->SetAwake( true );
+
+				rigidCubes[1]->SetPosition( 0.0f, 0.0f, 1.0f );
+				rigidCubes[1]->GetRigidBody()->SetOrientation( 0.5f, 0.0f, 0.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->ResetForces();
+				rigidCubes[1]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->SetVelocity( 0.0f, 0.0f, 0.0f );
+				rigidCubes[1]->GetRigidBody()->SetAwake( true );
+				break;
+			}
+			case ActiveSimulation::SIMULATION_3:
+			{
+
+				break;
+			}
+			}
+		}
+
+		if ( ImGui::Button( "Stop Simulation" ) )
+		{
+			rigidCubes[0]->GetRigidBody()->SetAwake( false );
+			rigidCubes[1]->GetRigidBody()->SetAwake( false );
+		}
+	}
+	ImGui::End();
 }
