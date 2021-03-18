@@ -60,6 +60,7 @@ private:
 
 	// Local Objects
 	Light basicLight;
+	bool updateWalls = true;
 	bool changeScene = false;
 	std::shared_ptr<Camera> camera;
 	std::unique_ptr<GameObject> torus;

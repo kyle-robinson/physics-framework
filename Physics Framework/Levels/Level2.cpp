@@ -54,7 +54,7 @@ void Level2::Render( Graphics& gfx )
 		{
 		case SUMMER: particles[i]->GetAppearance()->SetTextureRV( textures["Water"].Get() ); break;
 		case WINTER: particles[i]->GetAppearance()->SetTextureRV( textures["Snow"].Get() ); break;
-		case APERATURE: particles[i]->GetAppearance()->SetTextureRV( textures["Gas"].Get() ); break;
+		case APERATURE: particles[i]->GetAppearance()->SetTextureRV( textures["Smoke"].Get() ); break;
 		case MINECRAFT: particles[i]->GetAppearance()->SetTextureRV( textures["Lava"].Get() ); break;
 		}
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );

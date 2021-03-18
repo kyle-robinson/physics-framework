@@ -75,7 +75,7 @@ bool LevelManager::InitializeTextures( Graphics& gfx )
 		// particle textures
 		hr = CreateDDSTextureFromFile( GetDevice( gfx ), ( path + L"water.dds" ).c_str(), nullptr, &textures["Water"] );
 		hr = CreateDDSTextureFromFile( GetDevice( gfx ), ( path + L"snow.dds" ).c_str(), nullptr, &textures["Snow"] );
-		hr = CreateDDSTextureFromFile( GetDevice( gfx ), ( path + L"gas.dds" ).c_str(), nullptr, &textures["Gas"] );
+		hr = CreateDDSTextureFromFile( GetDevice( gfx ), ( path + L"smoke.dds" ).c_str(), nullptr, &textures["Smoke"] );
 		hr = CreateDDSTextureFromFile( GetDevice( gfx ), ( path + L"lava.dds" ).c_str(), nullptr, &textures["Lava"] );
 
 		// ground textures
@@ -198,7 +198,6 @@ void LevelManager::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 	ground->Update( dt, false );
 
 	// update walls
-	static bool updateWalls = true;
 	if ( activeScene == APERATURE && updateWalls )
 	{
 		for ( uint32_t i = 0; i < 5; i++ )
