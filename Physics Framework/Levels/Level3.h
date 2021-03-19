@@ -25,10 +25,12 @@ public:
 	void Initialize( Graphics& gfx ) override;
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void Render( Graphics& gfx ) override;
-	void SpawnControlWindow( Graphics& gfx );
 private:
+	void SpawnInstructionWindow();
+	void SpawnControlWindow( Graphics& gfx );
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void LoadSimulation( ActiveSimulation simulation );
+	void StopSimulation();
 
 	// Rigid Bodies
 	Box* topCube;

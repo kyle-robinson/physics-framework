@@ -199,6 +199,7 @@ void Level1::Render( Graphics& gfx )
 	}
 
 	SpawnControlWindow();
+	SpawnInstructionWindow();
 
 	LevelManager::EndRender( gfx );
 }
@@ -294,6 +295,25 @@ void Level1::SpawnControlWindow()
 		}
 
 		ImGui::PopItemWidth();
+	}
+	ImGui::End();
+}
+
+void Level1::SpawnInstructionWindow()
+{
+	if ( ImGui::Begin( "Scene Instructions", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
+	{
+		if ( ImGui::CollapsingHeader( "Cube Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
+		{
+			ImGui::Text( "12345   ->  Select Cube" );
+			ImGui::Text( "UP      ->  Forward" );
+			ImGui::Text( "DOWN    ->  Backward" );
+			ImGui::Text( "LEFT    ->  Left" );
+			ImGui::Text( "RIGHT   ->  Right" );
+			ImGui::Text( "HOME    ->  Up" );
+			ImGui::Text( "R       ->  Reset Position" );
+			ImGui::Text( "F       ->  Reset Forces" );
+		}
 	}
 	ImGui::End();
 }

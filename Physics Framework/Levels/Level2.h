@@ -13,8 +13,8 @@ public:
 	void Initialize( Graphics& gfx ) override;
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void Render( Graphics& gfx ) override;
-	void SpawnControlWindow();
 private:
+	void SpawnControlWindow();
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 
 	float xDist = 2.0f;

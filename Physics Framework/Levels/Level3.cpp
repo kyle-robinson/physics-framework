@@ -85,6 +85,12 @@ void Level3::LoadSimulation( ActiveSimulation simulation )
 	}
 }
 
+void Level3::StopSimulation()
+{
+	rigidCubes[0]->GetRigidBody()->SetAwake( false );
+	rigidCubes[1]->GetRigidBody()->SetAwake( false );
+}
+
 void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 {
 	UpdateInput( mouse, keyboard, dt );
@@ -124,6 +130,8 @@ void Level3::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 	if ( keyboard.KeyIsPressed( '1' ) ) LoadSimulation( SIMULATION_1 );
 	if ( keyboard.KeyIsPressed( '2' ) ) LoadSimulation( SIMULATION_2 );
 	if ( keyboard.KeyIsPressed( '3' ) ) LoadSimulation( SIMULATION_3 );
+	if ( keyboard.KeyIsPressed( 'R' ) ) LoadSimulation( activeSimulation );
+	if ( keyboard.KeyIsPressed( 'F' ) ) StopSimulation();
 }
 
 void Level3::Render( Graphics& gfx )
@@ -159,6 +167,7 @@ void Level3::Render( Graphics& gfx )
 		rigidCubes[i]->Draw( GetContext( gfx ) );
 	}
 
+	SpawnInstructionWindow();
 	SpawnControlWindow( gfx );
 
 	LevelManager::EndRender( gfx );
@@ -166,7 +175,7 @@ void Level3::Render( Graphics& gfx )
 
 void Level3::SpawnControlWindow( Graphics& gfx )
 {
-	if ( ImGui::Begin( "Rigid Body Controls" ), FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove )
+	if ( ImGui::Begin( "Simulation Controls" ), FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove )
 	{
 		// set/reset rigid body simulation
 		static bool resetSimulation = false;
@@ -176,38 +185,43 @@ void Level3::SpawnControlWindow( Graphics& gfx )
 			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
 		   ) )
 		{
-			activeSimulation = SIMULATION_1;
-			resetSimulation = true;
+			LoadSimulation( SIMULATION_1 );
 		}
 		if ( ImGui::Button(
 			 ( activeSimulation == SIMULATION_2 ) ? simulationString.c_str() : "Simulation 2",
 			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
 		   ) )
 		{
-			activeSimulation = SIMULATION_2;
-			resetSimulation = true;
+			LoadSimulation( SIMULATION_2 );
 		}
 		if ( ImGui::Button(
 			 ( activeSimulation == SIMULATION_3 ) ? simulationString.c_str() : "Simulation 3",
 			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
 		   ) )
 		{
-			activeSimulation = SIMULATION_3;
-			resetSimulation = true;
-		}
-
-		// reset active simulation
-		if ( resetSimulation )
-		{
-			resetSimulation = false;
-			LoadSimulation( activeSimulation );
+			LoadSimulation( SIMULATION_3 );
 		}
 
 		// pause current simulation
 		if ( ImGui::Button( "Stop Simulation", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
 		{
-			rigidCubes[0]->GetRigidBody()->SetAwake( false );
-			rigidCubes[1]->GetRigidBody()->SetAwake( false );
+			StopSimulation();
+		}
+	}
+	ImGui::End();
+}
+
+void Level3::SpawnInstructionWindow()
+{
+	if ( ImGui::Begin( "Scene Instructions", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
+	{
+		if ( ImGui::CollapsingHeader( "Rigid Body Simulations", ImGuiTreeNodeFlags_DefaultOpen ) )
+		{
+			ImGui::Text( "1       ->  Start Simulation 1" );
+			ImGui::Text( "2       ->  Start Simulation 2" );
+			ImGui::Text( "3       ->  Start Simulation 3" );
+			ImGui::Text( "F       ->  Stop Simulation" );
+			ImGui::Text( "R       ->  Reset Simulation" );
 		}
 	}
 	ImGui::End();

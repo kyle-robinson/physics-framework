@@ -45,20 +45,6 @@ void ImGuiManager::SpawnInstructionWindow() const noexcept
             ImGui::Text( "SHIFT   ->  Run" );
             ImGui::Text( "RMB     ->  Turn" );
         }
-
-        if ( ImGui::CollapsingHeader( "Cube Controls", ImGuiTreeNodeFlags_DefaultOpen ) )
-        {
-            ImGui::TextColored( { 1.0f, 0.0f, 0.0f, 1.0f }, "Level 1 Only" );
-            ImGui::Text( "12345   ->  Select Cube" );
-            ImGui::Text( "UP      ->  Forward" );
-            ImGui::Text( "DOWN    ->  Backward" );
-            ImGui::Text( "LEFT    ->  Left" );
-            ImGui::Text( "RIGHT   ->  Right" );
-            ImGui::Text( "HOME    ->  Up" );
-            ImGui::Text( "R       ->  Reset Position" );
-            ImGui::Text( "F       ->  Reset Forces" );
-        }
-
         if ( ImGui::CollapsingHeader( "Level System", ImGuiTreeNodeFlags_DefaultOpen ) )
         {
             ImGui::Text( "F1      ->  Level 1: Forces" );
