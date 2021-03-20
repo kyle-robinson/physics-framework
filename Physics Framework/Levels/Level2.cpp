@@ -50,7 +50,7 @@ void Level2::Render( Graphics& gfx )
 	for ( uint32_t i = 0u; i < particles.size(); i++ )
 	{
 		// update textures
-		switch ( activeScene )
+		switch ( activeTheme )
 		{
 		case SUMMER: particles[i]->GetAppearance()->SetTextureRV( textures["Water"].Get() ); break;
 		case WINTER: particles[i]->GetAppearance()->SetTextureRV( textures["Snow"].Get() ); break;

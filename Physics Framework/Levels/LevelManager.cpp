@@ -198,7 +198,7 @@ void LevelManager::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 	ground->Update( dt, false );
 
 	// update walls
-	if ( activeScene == APERATURE && updateWalls )
+	if ( activeTheme == APERATURE && updateWalls )
 	{
 		for ( uint32_t i = 0; i < 5; i++ )
 			walls[i]->Update( dt, false );
@@ -279,7 +279,7 @@ void LevelManager::EndRender( Graphics& gfx )
 	cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
 
 	// update textures
-	switch ( activeScene )
+	switch ( activeTheme )
 	{
 	case SUMMER:
 		ground->GetAppearance()->SetTextureRV( textures["Sand"].Get() );
@@ -301,7 +301,7 @@ void LevelManager::EndRender( Graphics& gfx )
 	// render plane
 	cb_vs_matrix.data.UseLighting = 1.0f;
 	GetContext( gfx )->PSSetShaderResources( 0, 1, ground->GetAppearance()->GetTextureRV() );
-	if ( activeScene == APERATURE )
+	if ( activeTheme == APERATURE )
 	{
 		for ( uint32_t i = 0; i < 5; i++ )
 		{
@@ -328,18 +328,4 @@ void LevelManager::EndRender( Graphics& gfx )
 	GetContext( gfx )->PSSetShaderResources( 0, 1, skysphere->GetAppearance()->GetTextureRV() );
 	if ( !cb_vs_matrix.ApplyChanges() ) return;
 	skysphere->Draw( GetContext( gfx ) );
-
-	SpawnControlWindow();
-}
-
-void LevelManager::SpawnControlWindow()
-{
-	if ( ImGui::Begin( "Theme" ), FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove )
-	{
-		if ( ImGui::Button( "Summer", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeScene = SUMMER;
-		if ( ImGui::Button( "Winter", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeScene = WINTER;
-		if ( ImGui::Button( "Aperature", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeScene = APERATURE;
-		if ( ImGui::Button( "Minecraft", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeScene = MINECRAFT;
-	}
-	ImGui::End();
 }

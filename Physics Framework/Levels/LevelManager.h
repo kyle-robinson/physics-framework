@@ -14,22 +14,27 @@ class Camera;
 class LevelManager : public GraphicsResource
 {
 public:
+	enum Theme
+	{
+		SUMMER,
+		WINTER,
+		APERATURE,
+		MINECRAFT
+	};
+
 	virtual void Initialize( Graphics& gfx );
 	virtual void Update( Mouse& mouse, Keyboard& keyboard, float dt );
 
 	void BeginRender( Graphics& gfx );
 	virtual void Render( Graphics& gfx ) {}
 	void EndRender( Graphics& gfx );
+
+	void SetTheme( Theme theme ) noexcept { activeTheme = theme; }
 protected:
 	virtual void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt );
-
-	enum ActiveScene
-	{
-		SUMMER,
-		WINTER,
-		APERATURE,
-		MINECRAFT
-	} activeScene = SUMMER;
+	
+	// Themes
+	Theme activeTheme;
 
 	// Buffers
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
@@ -56,7 +61,6 @@ private:
 	bool InitializeTextures( Graphics& gfx );
 	bool InitializeBuffers( Graphics& gfx );
 	void InitializeObjects( Graphics& gfx );
-	void SpawnControlWindow();
 
 	// Local Objects
 	Light basicLight;

@@ -186,7 +186,7 @@ void Level1::Render( Graphics& gfx )
 
 
 		// update textures
-		switch ( activeScene )
+		switch ( activeTheme )
 		{
 		case SUMMER: cubes[i]->GetAppearance()->SetTextureRV( textures["Marble"].Get() ); break;
 		case WINTER: cubes[i]->GetAppearance()->SetTextureRV( textures["Crate"].Get() ); break;

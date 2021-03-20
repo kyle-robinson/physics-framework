@@ -22,7 +22,9 @@ public:
 	void Update();
 	void Render();
 private:
+	void SetTheme( LevelManager::Theme theme );
 	void SpawnControlWindow();
+	void SpawnThemeWindow();
 
 	enum ActiveLevel
 	{

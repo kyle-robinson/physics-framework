@@ -22,6 +22,8 @@ bool Application::Initialize(
 	level2.Initialize( gfx );
 	level3.Initialize( gfx );
 
+	SetTheme( LevelManager::Theme::SUMMER );
+
 	keyboard.DisableAutoRepeatKeys();
 	keyboard.DisableAutoRepeatChars();
 
@@ -69,6 +71,7 @@ void Application::Render()
 	}
 
 	SpawnControlWindow();
+	SpawnThemeWindow();
 	gfx.EndFrame();
 }
 
@@ -79,6 +82,37 @@ void Application::SpawnControlWindow()
 		if ( ImGui::Button( "Level 1: Forces/Collisions", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_1;
 		if ( ImGui::Button( "Level 2: Particle System", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_2;
 		if ( ImGui::Button( "Level 3: Rigid Bodies", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) ) activeLevel = LEVEL_3;
+	}
+	ImGui::End();
+}
+
+void Application::SetTheme( LevelManager::Theme theme )
+{
+	level1.SetTheme( theme );
+	level2.SetTheme( theme );
+	level3.SetTheme( theme );
+}
+
+void Application::SpawnThemeWindow()
+{
+	if ( ImGui::Begin( "Theme" ), FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove )
+	{
+		if ( ImGui::Button( "Summer", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
+		{
+			SetTheme( LevelManager::Theme::SUMMER );
+		}
+		if ( ImGui::Button( "Winter", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
+		{
+			SetTheme( LevelManager::Theme::WINTER );
+		}
+		if ( ImGui::Button( "Aperature", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
+		{
+			SetTheme( LevelManager::Theme::APERATURE );
+		}
+		if ( ImGui::Button( "Minecraft", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
+		{
+			SetTheme( LevelManager::Theme::MINECRAFT );
+		}
 	}
 	ImGui::End();
 }

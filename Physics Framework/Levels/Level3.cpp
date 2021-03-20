@@ -168,7 +168,7 @@ void Level3::Render( Graphics& gfx )
 			cb_vs_matrix.data.HasTexture = 0.0f;
 
 		// update textures
-		switch ( activeScene )
+		switch ( activeTheme )
 		{
 		case SUMMER: rigidCubes[i]->GetAppearance()->SetTextureRV( textures["Marble"].Get() ); break;
 		case WINTER: rigidCubes[i]->GetAppearance()->SetTextureRV( textures["Crate"].Get() ); break;
