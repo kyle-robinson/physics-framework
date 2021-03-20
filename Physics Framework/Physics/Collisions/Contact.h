@@ -9,28 +9,27 @@ class Contact
 {
 	friend class ContactResolver;
 public:
-	void SetBodyData( RigidBody* a, RigidBody* b, float friction, float restitution ) {
+	void SetBodyData( RigidBody* a, RigidBody* b, float friction, float restitution )
+	{
 		_bodies[0] = a;
 		_bodies[1] = b;
 		_friction = friction;
 		_restitution = restitution;
 	}
 
-	RigidBody* _bodies[2];
-
 	float _friction;
 	float _restitution;
+	float _penetration;
 
 	v3df _contactPoint;
 	v3df _contactNormal;
-	float _penetration;
-
+	RigidBody* _bodies[2];
 protected:
 	void CalculateInternals( float dt );
 	void SwapBodies();
 	void MatchAwakeState();
 	void CalculateDesiredDeltaVelocity( float dt );
-	v3df CalculateLocalVelocity( unsigned bodyIndex, float dt );
+	v3df CalculateLocalVelocity( uint32_t bodyIndex, float dt );
 	void CalculateContactBasis();
 	void ApplyVelocityChange( v3df velocityChange[2], v3df rotationChange[2] );
 	void ApplyPositionChange( v3df linearChange[2], v3df angularChange[2], float penetration );

@@ -4,41 +4,38 @@
 
 #include "../RigidBody.h"
 
-class CollisionPrimitive {
+class CollisionPrimitive
+{
 public:
 	std::shared_ptr<RigidBody> _body;
 	Matrix4 _offset;
-
-	void CalculateInternals() {
-		_transform = _body->GetTransformMat() * _offset;
-	}
-
-	v3df GetAxis( unsigned index ) const {
-		return _transform.GetAxisVector( index );
-	}
-
-	const Matrix4& GetTransform() const {
-		return _transform;
-	}
-
+public:
+	const Matrix4& GetTransform() const noexcept { return _transform; }
+	void CalculateInternals() noexcept { _transform = _body->GetTransformMat() * _offset; }
+	v3df GetAxis( uint32_t index ) const noexcept { return _transform.GetAxisVector( index ); }
 protected:
 	Matrix4 _transform;
 };
 
-class Sphere : public CollisionPrimitive {
+#pragma region Primitives
+class CollisionSphere : public CollisionPrimitive
+{
 public:
 	float _radius;
 };
 
-class CollisionPlane {
+class CollisionPlane : public CollisionPrimitive
+{
 public:
 	v3df _direction;
 	float _offset = 0.0f;
 };
 
-class Box : public CollisionPrimitive {
+class CollisionCube : public CollisionPrimitive
+{
 public:
 	v3df _halfSize;
 };
+#pragma endregion
 
 #endif

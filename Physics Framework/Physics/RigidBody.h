@@ -4,7 +4,6 @@
 
 #include "ParticleModel.h"
 #include "Math/Matrix3.h"
-#include "Math/Matrix4.h"
 
 class RigidBody : public ParticleModel
 {
@@ -53,11 +52,11 @@ public:
 	void SetRotation( const float x, const float y, const float z );
 
 	// sleeping
-	void SetAwake( const bool awake = true );
-	void SetCanSleep( const bool canSleep );
-	bool GetAwake() const noexcept { return _isAwake; }
-	void SetSleepEpsilon( float sleepEpsilon ) noexcept { _sleepEpsilon = sleepEpsilon; }
-	float GetSleepEpsilon() const noexcept { return _sleepEpsilon; }
+	void SetActive( const bool active = true );
+	void SetCanRest( const bool canRest );
+	bool GetActive() const noexcept { return _isActive; }
+	void SetRestEpsilon( float restEpsilon ) noexcept { _restEpsilon = restEpsilon; }
+	float GetRestEpsilon() const noexcept { return _restEpsilon; }
 
 	// add forces
 	void AddVelocity( const v3df& velocity );
@@ -70,9 +69,9 @@ public:
 	void ResetForces() override;
 private:
 	float _motion;
-	bool _isAwake;
-	bool _canSleep;
-	float _sleepEpsilon = 0.1f;
+	bool _isActive;
+	bool _canRest;
+	float _restEpsilon;
 	v3df _previousAcceleration;
 	
 	v3df _torque;

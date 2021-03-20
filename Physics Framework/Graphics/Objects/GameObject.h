@@ -4,7 +4,6 @@
 
 #include "../../Physics/RigidBody.h"
 #include "../Model/Appearance.h"
-using namespace DirectX;
 
 class GameObject
 {

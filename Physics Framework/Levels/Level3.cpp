@@ -8,37 +8,34 @@ void Level3::Initialize( Graphics& gfx )
 
 	// initialize cubes
 	rigidCubes.resize( NUMBER_OF_RIGID_CUBES );
-	for ( uint32_t i = 0; i < NUMBER_OF_RIGID_CUBES; i++ )
+	for ( uint32_t i = 0u; i < rigidCubes.size(); i++ )
 	{
-		rigidCubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1 ), true );
+		rigidCubes[i] = std::make_unique<GameObject>( "Cube " + std::to_string( i + 1u ), true );
 		rigidCubes[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		rigidCubes[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
 	LoadSimulation( SIMULATION_1 );
 
 	// initialize rigid bodies
-	bottomCube = new Box();
+	bottomCube = std::make_unique<CollisionCube>();
 	bottomCube->_halfSize = v3df( 1.0f, 1.0f, 1.0f );
 	bottomCube->_body = rigidCubes[0]->GetRigidBody();
 	bottomCube->CalculateInternals();
 
-	topCube = new Box();
+	topCube = std::make_unique<CollisionCube>();
 	topCube->_halfSize = v3df( 1.0f, 1.0f, 1.0f );
 	topCube->_body = rigidCubes[1]->GetRigidBody();
 	topCube->CalculateInternals();
 
-	rigidCubes[0]->GetRigidBody()->SetAwake();
-	rigidCubes[1]->GetRigidBody()->SetAwake();
-
-	collisionPlane = new CollisionPlane();
+	collisionPlane = std::make_unique<CollisionPlane>();
 	collisionPlane->_direction = v3df( 0.0f, 1.0f, 0.0f );
 	collisionPlane->_offset = 0.0f;
 
-	contactResolver = new ContactResolver( MAX_CONTACTS );
+	contactResolver = std::make_unique<ContactResolver>( MAX_CONTACTS );
 	collisionData._contactArray = contacts;
-	collisionData._friction = 0.9f;
-	collisionData._restitution = 0.1f;
-	collisionData._tolerance = 0.1f;
+	collisionData._friction = friction;
+	collisionData._restitution = restitution;
+	collisionData._tolerance = tolerance;
 }
 
 void Level3::LoadSimulation( ActiveSimulation simulation )
@@ -48,8 +45,8 @@ void Level3::LoadSimulation( ActiveSimulation simulation )
 	rigidCubes[0]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
 	rigidCubes[1]->GetRigidBody()->SetAcceleration( 0.0f, -10.0f, 0.0f );
 
-	rigidCubes[0]->GetRigidBody()->SetAwake( true );
-	rigidCubes[1]->GetRigidBody()->SetAwake( true );
+	rigidCubes[0]->GetRigidBody()->SetActive();
+	rigidCubes[1]->GetRigidBody()->SetActive();
 
 	switch ( simulation )
 	{
@@ -87,8 +84,8 @@ void Level3::LoadSimulation( ActiveSimulation simulation )
 
 void Level3::StopSimulation()
 {
-	rigidCubes[0]->GetRigidBody()->SetAwake( false );
-	rigidCubes[1]->GetRigidBody()->SetAwake( false );
+	rigidCubes[0]->GetRigidBody()->SetActive( false );
+	rigidCubes[1]->GetRigidBody()->SetActive( false );
 }
 
 void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
@@ -103,20 +100,22 @@ void Level3::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 	topCube->CalculateInternals();
 	bottomCube->CalculateInternals();
 
+	// update collision data
 	collisionData.Reset( MAX_CONTACTS );
-	collisionData._friction = 0.9f;
-	collisionData._restitution = 0.1f;
-	collisionData._tolerance = 0.1f;
+	collisionData._friction = friction;
+	collisionData._restitution = restitution;
+	collisionData._tolerance = tolerance;
 
+	// resolve collisions
 	if ( collisionData.HasMoreContacts() )
 	{
-		CollisionDetector::BoxAndHalfSpace( *topCube, *collisionPlane, &collisionData );
-		CollisionDetector::BoxAndHalfSpace( *bottomCube, *collisionPlane, &collisionData );
-		CollisionDetector::BoxAndBox( *topCube, *bottomCube, &collisionData );
-
+		CollisionDetector::CubeAndHalfSpace( *topCube, *collisionPlane, &collisionData );
+		CollisionDetector::CubeAndHalfSpace( *bottomCube, *collisionPlane, &collisionData );
+		CollisionDetector::CubeAndCube( *topCube, *bottomCube, &collisionData );
 		contactResolver->ResolveContacts( collisionData._contactArray, collisionData._contactCount, dt );
 	}
 
+	// update positions
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 		rigidCubes[i]->UpdateTransforms();
 
@@ -138,17 +137,17 @@ void Level3::Render( Graphics& gfx )
 {
 	LevelManager::BeginRender( gfx );
 
-	// Render Scene Objects
+	// render cubes
 	for ( uint32_t i = 0; i < rigidCubes.size(); i++ )
 	{
-		// Get Materials
+		// get materials
 		Material material = rigidCubes[i]->GetAppearance()->GetMaterial();
 		cb_vs_matrix.data.surface.AmbientMtrl = material.ambient;
 		cb_vs_matrix.data.surface.DiffuseMtrl = material.diffuse;
 		cb_vs_matrix.data.surface.SpecularMtrl = material.specular;
 		cb_vs_matrix.data.World = XMMatrixTranspose( rigidCubes[i]->GetRigidBody()->GetTransform()->GetTransformMatrix() );
 
-		// Set Textures
+		// set textures
 		if ( rigidCubes[i]->GetAppearance()->HasTexture() )
 			cb_vs_matrix.data.HasTexture = 1.0f;
 		else
@@ -177,6 +176,12 @@ void Level3::SpawnControlWindow( Graphics& gfx )
 {
 	if ( ImGui::Begin( "Simulation Controls" ), FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove )
 	{
+		ImGui::Text( "Collision Count: %u", collisionData._contactCount );
+		ImGui::SliderFloat( "Friction", &friction, 0.0f, 2.0f, "%.1f" );
+		ImGui::SliderFloat( "Restitution", &restitution, 0.0f, 1.0f, "%.1f" );
+		ImGui::SliderFloat( "Tolerance", &tolerance, 0.0f, 1.0f, "%.1f" );
+		ImGui::NewLine();
+
 		// set/reset rigid body simulation
 		static bool resetSimulation = false;
 		static std::string simulationString = "Reset Simulation";

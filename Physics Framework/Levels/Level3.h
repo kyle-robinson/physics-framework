@@ -33,13 +33,17 @@ private:
 	void StopSimulation();
 
 	// Rigid Bodies
-	Box* topCube;
-	Box* bottomCube;
-	CollisionPlane* collisionPlane;
+	float friction = 0.9f;
+	float restitution = 0.1f;
+	float tolerance = 0.1f;
+
+	std::unique_ptr<CollisionCube> topCube;
+	std::unique_ptr<CollisionCube> bottomCube;
+	std::unique_ptr<CollisionPlane> collisionPlane;
 
 	CollisionData collisionData;
-	ContactResolver* contactResolver;
 	Contact contacts[MAX_CONTACTS];
+	std::unique_ptr<ContactResolver> contactResolver;
 
 	std::vector<std::unique_ptr<GameObject>> rigidCubes;
 };

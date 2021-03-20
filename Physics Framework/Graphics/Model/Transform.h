@@ -15,8 +15,7 @@ public:
 		_scale( 1.0f, 1.0f, 1.0f ),
 		_rotation( 0.0f, 0.0f, 0.0f ),
 		_position( 0.0f, 0.0f, 0.0f ),
-		_initialPosition( 0.0f, 0.0f, 0.0f ),
-		_parent( nullptr )
+		_initialPosition( 0.0f, 0.0f, 0.0f )
 	{
 		XMStoreFloat4x4( &_worldMatrix, XMMatrixIdentity() );
 		XMStoreFloat4x4( &_rotationMatrix, XMMatrixIdentity() );
@@ -71,8 +70,6 @@ public:
 	void SetRotation( float x, float y, float z ) { _rotation = { x, y, z }; }
 	v3df GetRotation() const noexcept { return _rotation; }
 
-	GameObject* GetParent() const noexcept { return _parent; }
-	void SetParent( GameObject* parent ) noexcept { _parent = parent; }
 	XMFLOAT4X4 GetWorldMatrixFloat4x4() const noexcept { return _worldMatrix; }
 	XMFLOAT4X4 GetRotationMatrixFloat4x4() const noexcept { return _rotationMatrix; }
 	const XMMATRIX& GetWorldMatrix() const noexcept { return XMLoadFloat4x4( &_worldMatrix ); }
@@ -90,7 +87,6 @@ private:
 	v3df _position;
 	v3df _initialPosition;
 
-	GameObject* _parent;
 	XMFLOAT4X4 _transform;
 	XMFLOAT4X4 _worldMatrix;
 	XMFLOAT4X4 _rotationMatrix;

@@ -8,9 +8,9 @@ void Level2::Initialize( Graphics& gfx )
 
 	// setup particle system
 	particles.resize( PARTICLE_COUNT );
-	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+	for ( uint32_t i = 0u; i < particles.size(); i++ )
 	{
-		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1 ) );
+		particles[i] = std::make_unique<Particle>( "Particle " + std::to_string( i + 1u ) );
 		particles[i]->GetAppearance()->SetGeometryData( cubeGeometry );
 		particles[i]->GetAppearance()->SetMaterial( shinyMaterial );
 	}
@@ -21,7 +21,7 @@ void Level2::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 	UpdateInput( mouse, keyboard, dt );
 
 	// particle movement
-	for ( uint32_t i = 0; i < particles.size(); i++ )
+	for ( uint32_t i = 0u; i < particles.size(); i++ )
 	{
 		float randomNum = fmod( static_cast< float >( rand() ), xDist + 1.0f ) - ( xDist / 2.0f );
 		if ( particles[i]->GetStartTimer() < 0 )
@@ -30,7 +30,7 @@ void Level2::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 	
 	// update particles
 	if ( useParticles )
-		for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+		for ( uint32_t i = 0u; i < particles.size(); i++ )
 			particles[i]->Update( dt );
 
 	LevelManager::Update( mouse, keyboard, dt );
@@ -47,7 +47,7 @@ void Level2::Render( Graphics& gfx )
 
 	// render particles
 	cb_vs_matrix.data.UseLighting = 1.0f;
-	for ( uint32_t i = 0; i < PARTICLE_COUNT; i++ )
+	for ( uint32_t i = 0u; i < particles.size(); i++ )
 	{
 		// update textures
 		switch ( activeScene )
@@ -58,7 +58,7 @@ void Level2::Render( Graphics& gfx )
 		case MINECRAFT: particles[i]->GetAppearance()->SetTextureRV( textures["Lava"].Get() ); break;
 		}
 		cb_vs_matrix.data.World = XMMatrixTranspose( particles[i]->GetTransform()->GetWorldMatrix() );
-		GetContext( gfx )->PSSetShaderResources( 0, 1, particles[i]->GetAppearance()->GetTextureRV() );
+		GetContext( gfx )->PSSetShaderResources( 0u, 1u, particles[i]->GetAppearance()->GetTextureRV() );
 		if ( !cb_vs_matrix.ApplyChanges() ) return;
 		if ( useParticles ) particles[i]->Draw( GetContext( gfx ) );
 	}
@@ -78,7 +78,7 @@ void Level2::SpawnControlWindow()
 		ImGui::SliderFloat( "Size", &size, 0.001f, 0.02f );
 		ImGui::SliderFloat( "Distribution", &xDist, 1.0f, 5.0f, "%1.f" );
 
-		for ( uint32_t i = 0; i < particles.size(); i++ )
+		for ( uint32_t i = 0u; i < particles.size(); i++ )
 			particles[i]->SetMaxSize( size );
 	}
 	ImGui::End();

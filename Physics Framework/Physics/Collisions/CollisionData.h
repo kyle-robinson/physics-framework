@@ -6,31 +6,28 @@
 
 struct CollisionData
 {
+	// variables
 	Contact* _contacts;
 	Contact* _contactArray;
-
+	uint32_t _contactCount;
 	int _contactsLeft;
-
-	unsigned _contactCount;
 
 	float _friction;
 	float _restitution;
 	float _tolerance;
 
-	bool HasMoreContacts() {
-		return _contactsLeft > 0;
-	}
-
-	void Reset( unsigned maxContacts ) {
+	// functions
+	bool HasMoreContacts() const noexcept { return _contactsLeft > 0; }
+	void Reset( uint32_t maxContacts )
+	{
 		_contactsLeft = maxContacts;
 		_contactCount = 0;
 		_contacts = _contactArray;
 	}
-
-	void AddContacts( unsigned count ) {
+	void AddContacts( uint32_t count )
+	{
 		_contactsLeft -= count;
 		_contactCount += count;
-
 		_contacts += count;
 	}
 };

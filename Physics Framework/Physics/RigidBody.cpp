@@ -1,50 +1,25 @@
 #include "stdafx.h"
 #include "RigidBody.h"
 
-RigidBody::RigidBody( std::shared_ptr<Transform> transform ) : ParticleModel( transform ) { }
-
-#pragma region Quaternion_Calculations
-static inline void CalculateTransformMatrix(
-	Matrix4& transformMatrix, const v3df& position, const Quaternion& orientation )
+RigidBody::RigidBody( std::shared_ptr<Transform> transform ) : ParticleModel( transform )
 {
-	transformMatrix._data[0] = 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k;
-	transformMatrix._data[1] = 2 * orientation.i * orientation.j - 2 * orientation.r * orientation.k;
-	transformMatrix._data[2] = 2 * orientation.i * orientation.k + 2 * orientation.r * orientation.j;
-	transformMatrix._data[3] = position.x;
-	transformMatrix._data[4] = 2 * orientation.i * orientation.j + 2 * orientation.r * orientation.k;
-	transformMatrix._data[5] = 1 - 2 * orientation.i * orientation.i - 2 * orientation.k * orientation.k;
-	transformMatrix._data[6] = 2 * orientation.j * orientation.k - 2 * orientation.r * orientation.i;
-	transformMatrix._data[7] = position.y;
-	transformMatrix._data[8] = 2 * orientation.i * orientation.k - 2 * orientation.r * orientation.j;
-	transformMatrix._data[9] = 2 * orientation.j * orientation.k + 2 * orientation.r * orientation.i;
-	transformMatrix._data[10] = 1 - 2 * orientation.i * orientation.i - 2 * orientation.j * orientation.j;
-	transformMatrix._data[11] = position.z;
+	_mass = 5.0f;
+	_inverseMass = 1.0f / 5.0f;
 
+	_drag = 0.95f;
+	_angularDamping = 0.8f;
+
+	_canRest = true;
+	_restEpsilon = 0.1f;
+
+	Matrix3 tensor;
+	float coeff = 0.4f * GetMass() * 1.0f * 1.0f;
+	tensor.SetInertiaTensorCoeffs( coeff, coeff, coeff );
+	tensor.SetBlockInertiaTensor( v3df( 1.0f, 1.0f, 1.0f ), 5.0f );
+	SetInertiaTensor( tensor );
+	ResetForces();
+	CalculateDerivedData();
 }
-
-static inline void CalculateInertiaTensor( Matrix3& iitWorld, const Quaternion& q, const Matrix3& iitBody, const Matrix4& rotmat ) {
-	float t4 = rotmat._data[0] * iitBody._data[0] + rotmat._data[1] * iitBody._data[3] + rotmat._data[2] * iitBody._data[6];
-	float t9 = rotmat._data[0] * iitBody._data[1] + rotmat._data[1] * iitBody._data[4] + rotmat._data[2] * iitBody._data[7];
-	float t14 = rotmat._data[0] * iitBody._data[2] + rotmat._data[1] * iitBody._data[5] + rotmat._data[2] * iitBody._data[8];
-	float t28 = rotmat._data[4] * iitBody._data[0] + rotmat._data[5] * iitBody._data[3] + rotmat._data[6] * iitBody._data[6];
-	float t33 = rotmat._data[4] * iitBody._data[1] + rotmat._data[5] * iitBody._data[4] + rotmat._data[6] * iitBody._data[7];
-	float t38 = rotmat._data[4] * iitBody._data[2] + rotmat._data[5] * iitBody._data[5] + rotmat._data[6] * iitBody._data[8];
-	float t52 = rotmat._data[8] * iitBody._data[0] + rotmat._data[9] * iitBody._data[3] + rotmat._data[10] * iitBody._data[6];
-	float t57 = rotmat._data[8] * iitBody._data[1] + rotmat._data[9] * iitBody._data[4] + rotmat._data[10] * iitBody._data[7];
-	float t62 = rotmat._data[8] * iitBody._data[2] + rotmat._data[9] * iitBody._data[5] + rotmat._data[10] * iitBody._data[8];
-
-
-	iitWorld._data[0] = t4 * rotmat._data[0] + t9 * rotmat._data[1] + t14 * rotmat._data[2];
-	iitWorld._data[1] = t4 * rotmat._data[4] + t9 * rotmat._data[5] + t14 * rotmat._data[6];
-	iitWorld._data[2] = t4 * rotmat._data[8] + t9 * rotmat._data[9] + t14 * rotmat._data[10];
-	iitWorld._data[3] = t28 * rotmat._data[0] + t33 * rotmat._data[1] + t38 * rotmat._data[2];
-	iitWorld._data[4] = t28 * rotmat._data[4] + t33 * rotmat._data[5] + t38 * rotmat._data[6];
-	iitWorld._data[5] = t28 * rotmat._data[8] + t33 * rotmat._data[9] + t38 * rotmat._data[10];
-	iitWorld._data[6] = t52 * rotmat._data[0] + t57 * rotmat._data[1] + t62 * rotmat._data[2];
-	iitWorld._data[7] = t52 * rotmat._data[4] + t57 * rotmat._data[5] + t62 * rotmat._data[6];
-	iitWorld._data[8] = t52 * rotmat._data[8] + t57 * rotmat._data[9] + t62 * rotmat._data[10];
-}
-#pragma endregion
 
 void RigidBody::CalculateDerivedData()
 {
@@ -55,43 +30,39 @@ void RigidBody::CalculateDerivedData()
 
 void RigidBody::Update( const float dt )
 {
-	if ( !_isAwake ) return;
+	if ( !_isActive ) return;
 
-	//Calculate linear acceleration from the force inputs
+	// calculate linear acceleration
 	_previousAcceleration = _acceleration;
 	_previousAcceleration.AddScaledVector( _netForce, _inverseMass );
 
-	//Calculate angular acceleration from torque forces
+	// calculate angular acceleration
 	v3df angularAcceleration = _inverseInertiaTensorWorld.Transform( _torque );
 
-	//Calculate Velocity and rotation changes
+	// calculate velocity/rotation
 	_velocity.AddScaledVector( _previousAcceleration, dt );
 	_rotation.AddScaledVector( angularAcceleration, dt );
 
-	//Applies damping to velocity a
+	// apply drag
 	_velocity *= powf( _drag, dt );
 	_rotation *= powf( _angularDamping, dt );
 	
-	//Updates position
+	// update position/orientation
 	_position.AddScaledVector( _velocity, dt );
-
-	//Updates Orientation
 	_orientation.AddScaledVector( _rotation, dt );
-
-	//Normalize the orientation and update the transform matrix
 	CalculateDerivedData();
-
-	//Clear the force accumulators
 	ResetForces();
 
-	if ( _canSleep ) {
+	if ( _canRest )
+	{
 		float currentMotion = _velocity.ScalarProduct( _velocity ) + _rotation.ScalarProduct( _rotation );
-		float bias = powf( 0.5, dt );
+		float bias = powf( 0.5f, dt );
 
-		_motion = bias * _motion + ( 1 - bias ) * currentMotion;
-
-		if ( _motion < _sleepEpsilon ) SetAwake( false );
-		else if ( _motion > 10 * _sleepEpsilon ) _motion = 10 * _sleepEpsilon;
+		_motion = bias * _motion + ( 1.0f - bias ) * currentMotion;
+		if ( _motion < _restEpsilon )
+			SetActive( false );
+		else if ( _motion > 10.0f * _restEpsilon )
+			_motion = 10.0f * _restEpsilon;
 	}
 }
 
@@ -133,12 +104,12 @@ void RigidBody::GetInverseInertiaTensorWorld( Matrix3* inverseInertiaTensor ) co
 void RigidBody::SetDamping( const float linearDamping, const float angularDamping )
 {
 	_angularDamping = angularDamping;
-	SetDragFactor( linearDamping );
+	_drag = linearDamping;
 }
 
 void RigidBody::SetLinearDamping( const float linearDamping )
 {
-	SetDragFactor( linearDamping );
+	_drag = linearDamping;
 }
 
 void RigidBody::SetAngularDamping( const float angularDamping )
@@ -243,25 +214,26 @@ void RigidBody::AddRotation( const v3df& deltaRotation )
 #pragma endregion
 
 #pragma region Sleeping
-void RigidBody::SetAwake( const bool awake )
+void RigidBody::SetActive( const bool active )
 {
-	if ( awake )
+	if ( active )
 	{
-		_isAwake = true;
-		_motion = _sleepEpsilon * 2.0f;
+		_isActive = true;
+		_motion = _restEpsilon * 2.0f;
 	}
 	else
 	{
-		_isAwake = false;
-		SetVelocity( 0.0f, 0.0f, 0.0f );
+		_isActive = false;
+		_velocity = { 0.0f, 0.0f, 0.0f };
 		_rotation = { 0.0f, 0.0f, 0.0f };
 	}
 }
 
-void RigidBody::SetCanSleep( const bool canSleep )
+void RigidBody::SetCanRest( const bool canSleep )
 {
-	_canSleep = canSleep;
-	if ( !canSleep && !_isAwake ) SetAwake();
+	_canRest = canSleep;
+	if ( !canSleep && !_isActive )
+		SetActive();
 }
 #pragma endregion
 
@@ -270,37 +242,35 @@ void RigidBody::AddVelocity( const v3df& deltaVelocity )
 {
 	v3df velocity = _velocity;
 	velocity += deltaVelocity;
-	SetVelocity( velocity );
+	_velocity = velocity;
 }
 
 void RigidBody::AddTorque( const v3df& torque )
 {
 	_torque += torque;
-	_isAwake = true;
+	_isActive = true;
 }
 
 void RigidBody::AddForce( const v3df& force )
 {
 	ParticleModel::AddForce( force );
-	_isAwake = true;
+	_isActive = true;
 }
 
 void RigidBody::AddForceAtPoint( const v3df& force, const v3df& point )
 {
 	v3df pt = point;
-
 	v3df newForce = _netForce + force;
 	newForce += pt % force;
-	SetNetForce( newForce );
-
-	_isAwake = true;
+	_netForce = newForce;
+	_isActive = true;
 }
 
 void RigidBody::AddForceAtBodyPoint( const v3df& force, const v3df& point )
 {
 	v3df pt = GetPointInWorldSpace( point );
 	AddForceAtPoint( force, pt );
-	_isAwake = true;
+	_isActive = true;
 }
 
 

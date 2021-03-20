@@ -7,20 +7,22 @@
 class IntersectionTests
 {
 public:
+	// sphere collisions
 	static bool SphereAndHalfSpace(
-		const Sphere& sphere,
+		const CollisionSphere& sphere,
 		const CollisionPlane& plane );
 
 	static bool SphereAndSphere(
-		const Sphere& a,
-		const Sphere& b );
+		const CollisionSphere& a,
+		const CollisionSphere& b );
 
-	static bool BoxAndBox(
-		const Box& a,
-		const Box& b );
+	// cube intersections
+	static bool CubeAndCube(
+		const CollisionCube& a,
+		const CollisionCube& b );
 
-	static bool BoxAndHalfSpace(
-		const Box& box,
+	static bool CubeAndHalfSpace(
+		const CollisionCube& box,
 		const CollisionPlane& plane );
 };
 

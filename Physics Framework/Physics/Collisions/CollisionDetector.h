@@ -8,39 +8,41 @@
 class CollisionDetector
 {
 public:
-	static unsigned SphereAndHalfSpace(
-		const Sphere& sphere,
+	// sphere collisions
+	static void SphereAndHalfSpace(
+		const CollisionSphere& sphere,
 		const CollisionPlane& plane,
 		CollisionData* data );
 
-	static unsigned SphereAndTruePlane(
-		const Sphere& sphere,
+	static void SphereAndTruePlane(
+		const CollisionSphere& sphere,
 		const CollisionPlane& plane,
 		CollisionData* data );
 
-	static unsigned SphereAndSphere(
-		const Sphere& a,
-		const Sphere& b,
+	static void SphereAndSphere(
+		const CollisionSphere& a,
+		const CollisionSphere& b,
 		CollisionData* data );
 
-	static unsigned BoxAndHalfSpace(
-		const Box& box,
+	// cube collisions
+	static uint32_t CubeAndHalfSpace(
+		const CollisionCube& box,
 		const CollisionPlane& plane,
 		CollisionData* data );
 
-	static unsigned BoxAndBox(
-		const Box& a,
-		const Box& b,
+	static void CubeAndCube(
+		const CollisionCube& a,
+		const CollisionCube& b,
 		CollisionData* data );
 
-	static unsigned BoxAndPoint(
-		const Box& box,
+	static void CubeAndPoint(
+		const CollisionCube& box,
 		const v3df& point,
 		CollisionData* data );
 
-	static unsigned BoxAndSphere(
-		const Box& box,
-		const Sphere& sphere,
+	static void CubeAndSphere(
+		const CollisionCube& box,
+		const CollisionSphere& sphere,
 		CollisionData* data );
 };
 
