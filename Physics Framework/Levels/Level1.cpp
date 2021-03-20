@@ -261,7 +261,7 @@ void Level1::SpawnControlWindow()
 			// update individual cube properties
 			for ( uint32_t i = 0; i < cubes.size(); i++ )
 			{
-				if ( ImGui::CollapsingHeader( cubes[i]->GetID().c_str(), ImGuiTreeNodeFlags_Leaf ) )
+				if ( ImGui::CollapsingHeader( cubes[i]->GetID().c_str(), ImGuiTreeNodeFlags_OpenOnDoubleClick ) )
 				{
 					float mass = cubes[i]->GetParticleModel()->GetMass();
 					ImGui::SliderFloat( std::string( "Mass##" ).append( std::to_string( i ) ).c_str(), &mass, 5.0f, 20.0f, "%1.f" );

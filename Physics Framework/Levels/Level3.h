@@ -27,8 +27,9 @@ public:
 	void Update( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void Render( Graphics& gfx ) override;
 private:
+	void SpawnControlWindow();
 	void SpawnInstructionWindow();
-	void SpawnControlWindow( Graphics& gfx );
+	void SpawnSimulationWindow( Graphics& gfx );
 	void UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt ) override;
 	void LoadSimulation( ActiveSimulation simulation );
 	void StopSimulation();
