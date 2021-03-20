@@ -19,7 +19,8 @@ private:
 	{
 		SIMULATION_1,
 		SIMULATION_2,
-		SIMULATION_3
+		SIMULATION_3,
+		SIMULATION_4
 	} activeSimulation = SIMULATION_1;
 public:
 	void Initialize( Graphics& gfx ) override;

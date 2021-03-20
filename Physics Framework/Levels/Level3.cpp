@@ -79,6 +79,18 @@ void Level3::LoadSimulation( ActiveSimulation simulation )
 		rigidCubes[1]->GetRigidBody()->SetAcceleration( -10.0f, -10.0f, 0.0f );		
 		break;
 	}
+	case SIMULATION_4:
+	{		
+		rigidCubes[0]->SetPosition( -2.0f, 5.0f, 6.0f );
+		rigidCubes[1]->SetPosition( 2.0f, 5.0f, 6.0f );
+
+		rigidCubes[0]->GetRigidBody()->SetOrientation( 0.0f, 0.0f, 0.0f, 0.0f );
+		rigidCubes[1]->GetRigidBody()->SetOrientation( 0.0f, 0.0f, 0.0f, 0.0f );
+
+		rigidCubes[0]->GetRigidBody()->SetAcceleration( 0.0f, 0.0f, 0.0f );
+		rigidCubes[1]->GetRigidBody()->SetAcceleration( 0.0f, 0.0f, 0.0f );
+		break;
+	}
 	}
 }
 
@@ -129,6 +141,7 @@ void Level3::UpdateInput( Mouse& mouse, Keyboard& keyboard, float dt )
 	if ( keyboard.KeyIsPressed( '1' ) ) LoadSimulation( SIMULATION_1 );
 	if ( keyboard.KeyIsPressed( '2' ) ) LoadSimulation( SIMULATION_2 );
 	if ( keyboard.KeyIsPressed( '3' ) ) LoadSimulation( SIMULATION_3 );
+	if ( keyboard.KeyIsPressed( '4' ) ) LoadSimulation( SIMULATION_4 );
 	if ( keyboard.KeyIsPressed( 'R' ) ) LoadSimulation( activeSimulation );
 	if ( keyboard.KeyIsPressed( 'F' ) ) StopSimulation();
 }
@@ -180,37 +193,69 @@ void Level3::SpawnControlWindow( Graphics& gfx )
 		ImGui::SliderFloat( "Friction", &friction, 0.0f, 2.0f, "%.1f" );
 		ImGui::SliderFloat( "Restitution", &restitution, 0.0f, 1.0f, "%.1f" );
 		ImGui::SliderFloat( "Tolerance", &tolerance, 0.0f, 1.0f, "%.1f" );
-		ImGui::NewLine();
-
-		// set/reset rigid body simulation
-		static bool resetSimulation = false;
-		static std::string simulationString = "Reset Simulation";
-		if ( ImGui::Button(
-			 ( activeSimulation == SIMULATION_1 ) ? simulationString.c_str() : "Simulation 1",
-			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
-		   ) )
-		{
-			LoadSimulation( SIMULATION_1 );
-		}
-		if ( ImGui::Button(
-			 ( activeSimulation == SIMULATION_2 ) ? simulationString.c_str() : "Simulation 2",
-			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
-		   ) )
-		{
-			LoadSimulation( SIMULATION_2 );
-		}
-		if ( ImGui::Button(
-			 ( activeSimulation == SIMULATION_3 ) ? simulationString.c_str() : "Simulation 3",
-			 ImVec2( ImGui::GetWindowSize().x, 0.0f )
-		   ) )
-		{
-			LoadSimulation( SIMULATION_3 );
-		}
 
 		// pause current simulation
 		if ( ImGui::Button( "Stop Simulation", ImVec2( ImGui::GetWindowSize().x, 0.0f ) ) )
-		{
 			StopSimulation();
+		ImGui::NewLine();
+
+		// set/reset rigid body simulation
+		static std::string simulationString = "Reset Simulation";
+		if ( ImGui::CollapsingHeader( "Load Simulations" ) )
+		{
+			if ( ImGui::Button(
+				 ( activeSimulation == SIMULATION_1 ) ? simulationString.c_str() : "Load Simulation 1",
+				 ImVec2( ImGui::GetWindowSize().x, 0.0f )
+			   ) )
+			{
+				LoadSimulation( SIMULATION_1 );
+			}
+			if ( ImGui::Button(
+				 ( activeSimulation == SIMULATION_2 ) ? simulationString.c_str() : "Load Simulation 2",
+				 ImVec2( ImGui::GetWindowSize().x, 0.0f )
+			   ) )
+			{
+				LoadSimulation( SIMULATION_2 );
+			}
+			if ( ImGui::Button(
+				 ( activeSimulation == SIMULATION_3 ) ? simulationString.c_str() : "Load Simulation 3",
+				 ImVec2( ImGui::GetWindowSize().x, 0.0f )
+			   ) )
+			{
+				LoadSimulation( SIMULATION_3 );
+			}
+			if ( ImGui::Button(
+				( activeSimulation == SIMULATION_4 ) ? simulationString.c_str() : "Load Simulation 4",
+				ImVec2( ImGui::GetWindowSize().x, 0.0f )
+			) )
+			{
+				LoadSimulation( SIMULATION_4 );
+			}
+		}
+
+		// set/reset angular rotation simulation
+		if ( activeSimulation == SIMULATION_4 )
+		{
+			if ( ImGui::CollapsingHeader( "Angular Rotation Simulation" ) )
+			{
+				ImGui::Text( "Apply Forces" );
+				ImGui::NewLine();
+				if ( ImGui::Button( "Front Face, Left Edge" ) )
+				{
+					rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, 100.0f, 0.0f } );
+					rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, 100.0f, 0.0f } );
+				}
+				if ( ImGui::Button( "Front Face, Top Edge" ) )
+				{
+					rigidCubes[0]->GetRigidBody()->AddTorque( { 100.0f, 0.0f, 0.0f } );
+					rigidCubes[1]->GetRigidBody()->AddTorque( { 100.0f, 0.0f, 0.0f } );
+				}
+				if ( ImGui::Button( "Front Face, Right Edge" ) )
+				{
+					rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, -100.0f, 0.0f } );
+					rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, -100.0f, 0.0f } );
+				}
+			}
 		}
 	}
 	ImGui::End();
@@ -225,6 +270,7 @@ void Level3::SpawnInstructionWindow()
 			ImGui::Text( "1       ->  Start Simulation 1" );
 			ImGui::Text( "2       ->  Start Simulation 2" );
 			ImGui::Text( "3       ->  Start Simulation 3" );
+			ImGui::Text( "3       ->  Start Simulation 4" );
 			ImGui::Text( "F       ->  Stop Simulation" );
 			ImGui::Text( "R       ->  Reset Simulation" );
 		}
