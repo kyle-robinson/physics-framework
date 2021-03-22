@@ -535,6 +535,7 @@
     <Image Include="Resources\Textures\stone.dds" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Resources\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>

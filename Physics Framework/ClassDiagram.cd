@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Level System">
+    <Position X="3.747" Y="1.351" Height="0.291" Width="0.897" />
+  </Comment>
+  <Comment CommentText="Rigid Body Objects">
+    <Position X="3.039" Y="4.96" Height="0.291" Width="1.287" />
+  </Comment>
+  <Comment CommentText="Mass Aggregate System">
+    <Position X="9.313" Y="4.154" Height="0.291" Width="1.542" />
+  </Comment>
+  <Comment CommentText="Graphics Components">
+    <Position X="10.194" Y="0.52" Height="0.291" Width="1.424" />
+  </Comment>
+  <Comment CommentText="Shader Management">
+    <Position X="1.734" Y="7.977" Height="0.291" Width="1.391" />
+  </Comment>
+  <Comment CommentText="Window Management">
+    <Position X="6.319" Y="7.966" Height="0.291" Width="1.46" />
+  </Comment>
+  <Comment CommentText="Error Logging">
+    <Position X="17.172" Y="7.657" Height="0.291" Width="0.968" />
+  </Comment>
+  <Comment CommentText="Math Functions">
+    <Position X="14.097" Y="4.391" Height="0.291" Width="1.048" />
+  </Comment>
+  <Comment CommentText="Rigid Body Collisions">
+    <Position X="18.42" Y="4.42" Height="0.291" Width="1.38" />
+  </Comment>
+  <Comment CommentText="Game Object Manager">
+    <Position X="13.52" Y="7.629" Height="0.291" Width="1.494" />
+  </Comment>
+  <Comment CommentText="User Input">
+    <Position X="10.42" Y="6.92" Height="0.291" Width="0.78" />
+  </Comment>
+  <Comment CommentText="Object Buffers">
+    <Position X="19.67" Y="7.67" Height="0.291" Width="0.991" />
+  </Comment>
+  <Comment CommentText="Delta Time">
+    <Position X="10.5" Y="9.25" Height="0.291" Width="0.778" />
+  </Comment>
+  <Class Name="Bind::DepthStencil" Collapsed="true">
+    <Position X="8" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEABAAAAQAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\DepthStencil.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::RenderTarget" Collapsed="true">
+    <Position X="17" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAEAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\RenderTarget.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Rasterizer" Collapsed="true">
+    <Position X="12.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAggAAAAAAAAACAAAACAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\Rasterizer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::SwapChain" Collapsed="true">
+    <Position X="14.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAACAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\SwapChain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Viewport" Collapsed="true">
+    <Position X="19.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\Viewport.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Sampler" Collapsed="true">
+    <Position X="10.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAAAAEAAAAAAAABAAAQAAACAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\Sampler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraphicsResource" Collapsed="true">
+    <Position X="10.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAAAAAAAAAAAAAAAAgAACAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\GraphicsResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Appearance" Collapsed="true">
+    <Position X="12.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAJEAAEAIAAAAAAEAAAAAAAgAQAAEECAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Model\Appearance.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Application" Collapsed="true">
+    <Position X="5.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAQAAAQAAAAAAAAAAAAEkAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="12.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBFDCAREAAAEYAAAJAKCIBaIACUASqgJZyEEgIAoAAA=</HashCode>
+      <FileName>Graphics\Objects\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionCube" Collapsed="true">
+    <Position X="0.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Physics\Collisions\CollisionPrimitives.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionDetector" Collapsed="true">
+    <Position X="19.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAgAKAAAAAAAAAAAAAEgAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Physics\Collisions\CollisionDetector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionPlane" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Physics\Collisions\CollisionPrimitives.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionPrimitive" Collapsed="true">
+    <Position X="3" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAQAAIQBAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Physics\Collisions\CollisionPrimitives.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionSphere" Collapsed="true">
+    <Position X="3" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Physics\Collisions\CollisionPrimitives.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="COMException" Collapsed="true">
+    <Position X="17" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Utility\Logging\COMException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConstantBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="19.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAQBAAAAAAAKAAAAAAAAAAAFQAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\ConstantBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Contact" Collapsed="true">
+    <Position X="19.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAEAAAAAACgIAAAAAQQCAQIBggAAgAAAEAAAAEAqCA=</HashCode>
+      <FileName>Physics\Collisions\Contact.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ContactResolver" Collapsed="true">
+    <Position X="17.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgAAEAAAAAABAAgAgAAAAABEAgAEAQAAAAAACAIAA=</HashCode>
+      <FileName>Physics\Collisions\ContactResolver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErrorLogger" Collapsed="true">
+    <Position X="17" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\Logging\ErrorLogger.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="14.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQCAAAQAAAAAgAAAQDAgAgAAAAAAggACAAAAAIEAAA=</HashCode>
+      <FileName>Graphics\Objects\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Graphics" Collapsed="true">
+    <Position X="8.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AISiEAADAAAgAQAAHgAAAABAQAAAAAJAAgAAAEAACIA=</HashCode>
+      <FileName>Graphics\Graphics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImGuiManager" Collapsed="true">
+    <Position X="1.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAACAAAAQAAAIAAAACAACAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Graphics\Bindables\ImGuiManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IndexBuffer" Collapsed="true">
+    <Position X="19.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQBAAAAAEAAAAQAAAAEAAAFAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\IndexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IntersectionTests" Collapsed="true">
+    <Position X="17.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgACAAAAAAAAAAAAAEAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Physics\Collisions\IntersectionTests.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Keyboard" Collapsed="true">
+    <Position X="10.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAwoiAAAAAEQAAACAAAAQAAwAAIAgQCAAAAAAFAAAQA=</HashCode>
+      <FileName>Utility\Input\Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Level1" Collapsed="true">
+    <Position X="1.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgYAAAAABAQFAQAAAAAQAAAAAAAgAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Levels\Level1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Level2" Collapsed="true">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAACAQAAAAgQAAAAAAAgAAAAABIAAAAAAAA=</HashCode>
+      <FileName>Levels\Level2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Level3" Collapsed="true">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ghQAAEYEAAAAAQAAAAQQEAAAAQEgAARoABAAAAAAAQA=</HashCode>
+      <FileName>Levels\Level3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelManager" Collapsed="true">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CIQQAAAAC0AQAxCIASAQCAQAKAESAoCAAJACAACAAAE=</HashCode>
+      <FileName>Levels\LevelManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matrix3" Collapsed="true">
+    <Position X="13" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAABAAAAGBAAAIAIQQAAAIAAAEAAAAgAggAAgA=</HashCode>
+      <FileName>Utility\Math\Matrix3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matrix4" Collapsed="true">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAABIAAAiIAAAIAAAwAIAQAAAAgAAAgAKIJAAA=</HashCode>
+      <FileName>Utility\Math\Matrix4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mouse" Collapsed="true">
+    <Position X="10.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAARAEICAQAAAgAEEAAUAwAADIAAAABAABgAAQAaAA=</HashCode>
+      <FileName>Utility\Input\Mouse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Particle" Collapsed="true">
+    <Position X="10.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAAAiCgQAAYDAgAEAAAAAACACCAAAAgAEAgA=</HashCode>
+      <FileName>Physics\Particle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ParticleModel" Collapsed="true">
+    <Position X="8.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQYBIBAEEOoQAEmIEQBBAAIQwXgACkUCAEQF4QQEAQM=</HashCode>
+      <FileName>Physics\ParticleModel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PixelShader" Collapsed="true">
+    <Position X="2.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAQAAAAAAAAAABAAAAAAAAABAAEAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quaternion" Collapsed="true">
+    <Position X="14.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAEoAEBAABQEAI=</HashCode>
+      <FileName>Utility\Math\Quaternion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenderWindow" Collapsed="true">
+    <Position X="7.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQQAQEAAIAYAAAAEAAAAQgIAAAAAAAI=</HashCode>
+      <FileName>Graphics\Window\RenderWindow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RigidBody" Collapsed="true">
+    <Position X="8.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oAQAEKBgAoCAIBgZAIAgAgIBAEEQBRlCgJAICKAQCJE=</HashCode>
+      <FileName>Physics\RigidBody.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shaders" Collapsed="true">
+    <Position X="1.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Bindables\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StringConverter" Collapsed="true">
+    <Position X="17" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAEAAAAE=</HashCode>
+      <FileName>Utility\Logging\StringConverter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Timer" Collapsed="true">
+    <Position X="10.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAACAAAABgAAAAAAAAAAAgAAAAIAAAAAAEAAA=</HashCode>
+      <FileName>Utility\Logging\Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Transform" Collapsed="true">
+    <Position X="14.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQKAAACGCiEAAAQEQhAAAQAAAAAQwgAICAAggQAACA=</HashCode>
+      <FileName>Graphics\Model\Transform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3D&lt;T&gt;" Collapsed="true">
+    <Position X="13" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQiEgAAAAIAUAAAgEAAIAEAQBgAQAEAAA=</HashCode>
+      <FileName>Utility\Math\Vector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="19.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQBAAQAAAAEAEAAAAQCAAAFgAAAAEIA=</HashCode>
+      <FileName>Graphics\Bindables\VertexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexShader" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAABAAAAAACAABAAEAAACA=</HashCode>
+      <FileName>Graphics\Bindables\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindowContainer" Collapsed="true">
+    <Position X="5.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAggAAAIAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Window\WindowContainer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

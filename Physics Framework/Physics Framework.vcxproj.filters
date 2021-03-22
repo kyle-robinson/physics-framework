@@ -409,6 +409,7 @@
     <None Include="Resources\ClassDiagram.cd">
       <Filter>Resource Files\Resources</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Physics Framework.rc">

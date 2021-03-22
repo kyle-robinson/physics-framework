@@ -15,7 +15,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	InitializeDirectX( hWnd );
 	if ( !InitializeShaders() ) return false;
 	imgui.Initialize( hWnd, device.Get(), context.Get() );
-
+	
 	return true;
 }
 
@@ -82,9 +82,9 @@ void Graphics::EndFrame()
 	// imgui windows
 	imgui.SpawnInstructionWindow();
 	imgui.EndRender();
-
+	
 	// display frame
-	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );
+	HRESULT hr = swapChain->GetSwapChain()->Present( 1u, NULL );
 	if ( FAILED( hr ) )
 	{
 		hr == DXGI_ERROR_DEVICE_REMOVED ?
