@@ -35,9 +35,10 @@ private:
 	void StopSimulation();
 
 	// Rigid Bodies
-	float friction = 0.9f;
-	float restitution = 0.1f;
-	float tolerance = 0.1f;
+	float friction = 1.0f;
+	float restitution = 0.0f;
+	float tolerance = 0.5f;
+	float impulse = 100.0f;
 
 	std::unique_ptr<CollisionCube> topCube;
 	std::unique_ptr<CollisionCube> bottomCube;

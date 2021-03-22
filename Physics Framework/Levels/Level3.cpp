@@ -231,7 +231,7 @@ void Level3::SpawnSimulationWindow( Graphics& gfx )
 
 void Level3::SpawnControlWindow()
 {
-	if ( ImGui::Begin( "Simulation Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	if ( ImGui::Begin( "Simulation Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
 		// set properties for rigid body cubes
 		if ( activeSimulation != SIMULATION_4 )
@@ -247,27 +247,28 @@ void Level3::SpawnControlWindow()
 			ImGui::Text( "Apply Torque" );
 			if ( ImGui::Button( "Left Edge" ) )
 			{
-				rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, 100.0f, 0.0f } );
-				rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, 100.0f, 0.0f } );
+				rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, impulse, 0.0f } );
+				rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, impulse, 0.0f } );
 			}
 			ImGui::SameLine();
 			if ( ImGui::Button( "Right Edge" ) )
 			{
-				rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, -100.0f, 0.0f } );
-				rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, -100.0f, 0.0f } );
+				rigidCubes[0]->GetRigidBody()->AddTorque( { 0.0f, -impulse, 0.0f } );
+				rigidCubes[1]->GetRigidBody()->AddTorque( { 0.0f, -impulse, 0.0f } );
 			}
 			ImGui::SameLine();
 			if ( ImGui::Button( "Top Edge" ) )
 			{
-				rigidCubes[0]->GetRigidBody()->AddTorque( { 100.0f, 0.0f, 0.0f } );
-				rigidCubes[1]->GetRigidBody()->AddTorque( { 100.0f, 0.0f, 0.0f } );
+				rigidCubes[0]->GetRigidBody()->AddTorque( { impulse, 0.0f, 0.0f } );
+				rigidCubes[1]->GetRigidBody()->AddTorque( { impulse, 0.0f, 0.0f } );
 			}
 			ImGui::SameLine();
 			if ( ImGui::Button( "Bottom Edge" ) )
 			{
-				rigidCubes[0]->GetRigidBody()->AddTorque( { -100.0f, 0.0f, 0.0f } );
-				rigidCubes[1]->GetRigidBody()->AddTorque( { -100.0f, 0.0f, 0.0f } );
+				rigidCubes[0]->GetRigidBody()->AddTorque( { -impulse, 0.0f, 0.0f } );
+				rigidCubes[1]->GetRigidBody()->AddTorque( { -impulse, 0.0f, 0.0f } );
 			}
+			ImGui::SliderFloat( "Impulse Amount", &impulse, 100.0f, 1000.0f );
 		}
 	}
 	ImGui::End();
