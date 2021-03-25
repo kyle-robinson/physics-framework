@@ -283,7 +283,7 @@ void Level3::SpawnInstructionWindow()
 			ImGui::Text( "1       ->  Start Simulation 1" );
 			ImGui::Text( "2       ->  Start Simulation 2" );
 			ImGui::Text( "3       ->  Start Simulation 3" );
-			ImGui::Text( "3       ->  Start Simulation 4" );
+			ImGui::Text( "4       ->  Start Simulation 4" );
 			ImGui::Text( "F       ->  Stop Simulation" );
 			ImGui::Text( "R       ->  Reset Simulation" );
 		}

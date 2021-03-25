@@ -13,7 +13,7 @@ public:
 
 	// collisions
 	bool CollisionCheckAABB( v3df position );
-	bool CollisionCheckCircle( v3df position, float radius );
+	bool CollisionCheckSphere( v3df position, float radius );
 	float GetCollisionRadius() const noexcept { return _boundingSphere; }
 	void SetCollisionRadius( float radius ) noexcept { _boundingSphere = radius; }
 	void IgnoreWorldCollisions( bool ignoreCollisions = true ) { _ignoreWorldCollisions = ignoreCollisions; }

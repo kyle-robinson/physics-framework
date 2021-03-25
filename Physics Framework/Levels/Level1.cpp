@@ -66,7 +66,7 @@ void Level1::Update( Mouse& mouse, Keyboard& keyboard, float dt )
 				}
 				else
 				{
-					if ( cubes[i]->GetParticleModel()->CollisionCheckCircle(
+					if ( cubes[i]->GetParticleModel()->CollisionCheckSphere(
 							cubes[j]->GetTransform()->GetPosition(),
 							cubes[j]->GetParticleModel()->GetCollisionRadius() )
 						)

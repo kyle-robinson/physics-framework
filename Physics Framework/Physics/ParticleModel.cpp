@@ -32,7 +32,7 @@ bool ParticleModel::CollisionCheckAABB( v3df position )
 		return false;
 }
 
-bool ParticleModel::CollisionCheckCircle( v3df position, float radius )
+bool ParticleModel::CollisionCheckSphere( v3df position, float radius )
 {
 	if ( ( _transform->GetPosition().x - position.x ) * // x collisions
 		 ( _transform->GetPosition().x - position.x ) +
