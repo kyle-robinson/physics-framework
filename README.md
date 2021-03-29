@@ -21,6 +21,6 @@ A physics framework created using DirectX 11 which implements numerous simulatio
         
         Code Reference:
                     Millington, I 2010, Game Physics Engine Development: How to Build a Robust Commercial-Grade Physics Engine for Your Game, 2nd Edition, CRC Press, Florida [ISBN-13: 978-0123819765]
-
-	Design Reference:
+		    
+	    Design Reference:
                     Nystrom, R 2014, Game Programming Patterns, 1st Edition, Genever Benning, Canada [ISBN-13: 978-0990582908]
