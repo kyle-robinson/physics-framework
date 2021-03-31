@@ -3,7 +3,9 @@
 A physics framework created using DirectX 11 which implements numerous simulations: a mass aggregate system, particle generation and rigid body rotations.
 
 *- Click image to view on YouTube -*
-<img src="physics-framework.png" alt="Physics Framework Thumbnail" border="10" />
+<a href="https://www.youtube.com/watch?v=23r29toUFZo" target="_blank">
+        <img src="physics-framework.png" alt="Physics Framework Thumbnail" border="10" />
+</a>
 
 ## List of Features
 
