@@ -1,5 +1,11 @@
 # Physics Framework
 
+[![MSBuild-Debug](https://github.com/kyle-robinson/physics-framework/actions/workflows/msbuild-debug.yml/badge.svg)](https://github.com/kyle-robinson/ray-tracer/actions/workflows/msbuild-debug.yml)
+&nbsp;
+[![MSBuild-Release](https://github.com/kyle-robinson/physics-framework/actions/workflows/msbuild-release.yml/badge.svg)](https://github.com/kyle-robinson/ray-tracer/actions/workflows/msbuild-release.yml)
+&nbsp;
+[![CodeQL](https://github.com/kyle-robinson/physics-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/kyle-robinson/ray-tracer/actions/workflows/codeql.yml)
+
 A physics framework created using DirectX 11 which implements numerous simulations: a mass aggregate system, particle generation and rigid body rotations.
 
 *- Click <a href="https://www.youtube.com/watch?v=23r29toUFZo" target="_blank">here</a> to view on YouTube -*
