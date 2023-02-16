@@ -8,7 +8,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     UNREFERENCED_PARAMETER( nCmdShow );
 
 	Application theApp;
-    if ( theApp.Initialize( hInstance, "DirectX 11 Physics Framwork", "TutorialWindowClass", 1280, 720 ) )
+    if ( theApp.Initialize( hInstance, "DirectX 11 Physics Framework", "TutorialWindowClass", 1280, 720 ) )
     {
         while ( theApp.ProcessMessages() == true )
         {
