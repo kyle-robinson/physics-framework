@@ -35,11 +35,6 @@ To use the framework, the following prerequisites must be met.
 The framework relies on the following libraries and APIs to function.
 * DirectX 11
 * ImGui
-* ImGuizmo
-* ImGuiFileDialog
-* M3d Loader
-* Assimp
-* rapidjson
 
 ### Installing
 
