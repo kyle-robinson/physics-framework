@@ -24,7 +24,7 @@ A physics framework created using DirectX 11 which implements numerous simulatio
 
 ## Getting Started
 
-The advanced graphics framework provides numerous tools for interacting with the graphics features that have been implemented. Refer to the following information on how to install and use the application.
+The physics framework provides numerous tools for interacting with the physics systems that have been implemented. Refer to the following information on how to install and use the application.
 
 ### Dependencies
 To use the framework, the following prerequisites must be met.
