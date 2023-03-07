@@ -10,7 +10,7 @@
 
 A physics framework created using DirectX 11 which implements numerous simulations: a mass aggregate system, particle generation and rigid body rotations.
 
-*- Click <a href="https://www.youtube.com/watch?v=23r29toUFZo" target="_blank">here</a> to view on YouTube -*
+*- Click <a href="https://kyle-robinson.github.io/html/directx-physics" target="_blank">here</a> to view project on website -*
 
 <img src="physics-framework.png" alt="Physics Framework Thumbnail" border="10" />
 
