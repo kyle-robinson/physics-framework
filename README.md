@@ -5,6 +5,8 @@
 [![MSBuild-Release](https://github.com/kyle-robinson/physics-framework/actions/workflows/msbuild-release.yml/badge.svg)](https://github.com/kyle-robinson/physics-framework/actions/workflows/msbuild-release.yml)
 &nbsp;
 [![CodeQL](https://github.com/kyle-robinson/physics-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/kyle-robinson/physics-framework/actions/workflows/codeql.yml)
+&nbsp;
+<img src="https://img.shields.io/static/v1?label=University&message=Year 2&color=49a1e5&style=flat&logo=nintendogamecube&logoColor=CCCCCC" />
 
 A physics framework created using DirectX 11 which implements numerous simulations: a mass aggregate system, particle generation and rigid body rotations.
 
